@@ -1,0 +1,38 @@
+{
+  "name": "Core3",
+  "short_name": "Core3",
+  "icons": [
+    {
+      "src": "assets/img/70x70.png",
+      "sizes": "70x70",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/150x150.png",
+      "sizes": "150x150",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/310x150.png",
+      "sizes": "310x150",
+      "type": "image/png"
+    }
+  ],
+  "lang": "ru-RU",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5000c3",
+  "shortcuts": [
+    {
+      "name": "Документы",
+      "short_name": "Документы",
+      "url": "/#"
+    }
+  ]
+}
