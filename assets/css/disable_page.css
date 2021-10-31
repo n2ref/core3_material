@@ -1,0 +1,29 @@
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+body > header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 52px;
+}
+body > #main-content {
+    min-height: 100%;
+    padding-top: 45px;
+}
+body > #main-content > .buffer-content {
+    height: 50px;
+    width: 100%;
+}
+body > footer {
+    margin-top: -50px;
+}
+.copyright {
+    background: #37474f;
+    color: #cecece;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
