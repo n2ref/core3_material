@@ -211,14 +211,14 @@ var auth = {
      */
     setAuthToken(token) {
 
-        localStorage.setItem('core-auth-token', token);
+        localStorage.setItem('core3-auth-token', token);
 
         let days    = 100;
         let date    = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         let expires = "; expires=" + date.toUTCString();
 
-        document.cookie = "Core3m=Bearer " + token + expires + "; path=/";
+        document.cookie = "Core3=Bearer " + token + expires + "; path=/";
 
         let myWorker = new Worker('sw.js');
 
@@ -235,7 +235,7 @@ var auth = {
      */
     getAuthToken() {
 
-        let authToken = localStorage.getItem('core-auth-token');
+        let authToken = localStorage.getItem('core3-auth-token');
 
         if ( ! authToken) {
             auth.clearAuthToken();
@@ -251,9 +251,9 @@ var auth = {
      */
     clearAuthToken() {
 
-        localStorage.removeItem('core-auth-token');
+        localStorage.removeItem('core3-auth-token');
 
-        document.cookie = 'Core3m=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = 'Core3=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
         let myWorker = new Worker('sw.js');
 
@@ -334,17 +334,20 @@ var auth = {
         $.ajax({
             url: main.options.basePath + "/auth/login",
             method: "GET",
-            headers: {
-                "Core2-Reg-Apikey": main.options.regApikey
-            },
+            // headers: {
+            //     "Core3-Reg-Apikey": main.options.regApikey
+            // },
             data: {
                 user: $('[name=login]', form).val(),
                 pass: MD5($('[name=password]', form).val())
             }
         })
             .done(function (result) {
-                if (typeof result.token !== 'string' || ! result.token) {
-                    $('.page-auth form .text-danger').text(result.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору");
+                if (typeof result.token !== 'string' || typeof result.refresh_token !== 'string' ||
+                    ! result.token || ! result.refresh_token
+                ) {
+                    let errorMessage = result.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
+                    $('.page-auth form .text-danger').text(errorMessage);
 
                 } else {
                     $('.page-auth form .text-danger').text('');
@@ -354,7 +357,7 @@ var auth = {
                     $('.page-auth [name=login]').val('');
                     $('.page-auth [name=password]').val('');
 
-                    main.viewPage('app');
+                    main.viewPage('menu');
                 }
             })
 
@@ -373,7 +376,7 @@ var auth = {
         $('.container-registration .text-danger').text('');
 
         $.ajax({
-            url: main.options.basePath + "/index.php?core=registration",
+            url: main.options.basePath + "/auth/registration",
             dataType: "json",
             method: "POST",
             data: $(form).serialize()
@@ -422,7 +425,7 @@ var auth = {
         let params = main.getParams();
 
         $.ajax({
-            url: main.options.basePath + "/index.php?core=registration_complete",
+            url: main.options.basePath + "/auth/registration_complete",
             dataType: "json",
             method: "POST",
             data: {

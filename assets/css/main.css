@@ -31,15 +31,6 @@ html, body {
     top: 35px;
     z-index: 10;
 }
-.mdc-text-field--outlined {
-    height: 40px;
-}
-.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
-    transform: translateY(-25.75px) scale(0.75);
-}
-.mdc-button {
-    height: 40px;
-}
 
 
 
@@ -124,6 +115,21 @@ html, body {
 }
 .page-auth .text-success {
     color: #43a047;
+}
+.page-auth .mdc-text-field--outlined {
+    height: 40px;
+    width: 238px;
+}
+.page-auth .mdc-text-field--outlined .mdc-floating-label,
+.page-auth .mdc-text-field--outlined .mdc-text-field__input {
+    font-size: 13px;
+}
+.page-auth .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    -webkit-transform: translateY(-26.75px) scale(0.75);
+    transform: translateY(-26.75px) scale(0.75);
+}
+.page-auth .mdc-button {
+    height: 40px;
 }
 
 

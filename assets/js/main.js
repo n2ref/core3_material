@@ -3,7 +3,7 @@ let main = {
 
     options: {
         regApikey: '45c0f6e4bfdcfd5211bdbc4978j7ed3f9e12a714',
-        basePath: '/cabinet/api/v1.0',
+        basePath: '/core3/api/v1.0',
     },
 
     _notify: null,
