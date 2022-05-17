@@ -4,7 +4,7 @@ var auth = {
          '<div class="container container-login" style="display: none">' +
              '<div class="mdc-card">' +
                  '<div class="mdc-card__content">' +
-                     '<img src="logo.png" alt="logo" class="logo">' +
+                     '<img src="logo.jpg" alt="logo" class="logo">' +
                      '<form>' +
                          '<span class="text-danger"></span>' +
                          '<div class="form-controls">' +
@@ -333,14 +333,16 @@ var auth = {
 
         $.ajax({
             url: main.options.basePath + "/auth/login",
-            method: "GET",
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
             // headers: {
             //     "Core3-Reg-Apikey": main.options.regApikey
             // },
-            data: {
-                user: $('[name=login]', form).val(),
-                pass: MD5($('[name=password]', form).val())
-            }
+            data: JSON.stringify({
+                login: $('[name=login]', form).val(),
+                password: MD5($('[name=password]', form).val())
+            })
         })
             .done(function (result) {
                 if (typeof result.token !== 'string' || typeof result.refresh_token !== 'string' ||
