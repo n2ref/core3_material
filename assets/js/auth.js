@@ -363,6 +363,20 @@ var auth = {
                 }
             })
 
+            .fail(function (response) {
+                let errorMessage = '';
+
+                if (response.responseJSON.status &&
+                    response.responseJSON.status === 'error'
+                ) {
+                    errorMessage = response.responseJSON.error_message;
+                }
+
+                errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
+
+                $('.container-login .text-danger').text(errorMessage);
+            })
+
             .always (function (jqXHR, textStatus) {
                 auth.preloader('hide');
             });
