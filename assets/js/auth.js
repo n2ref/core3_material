@@ -364,6 +364,8 @@ var auth = {
             })
 
             .fail(function (response) {
+                auth.preloader('hide');
+
                 let errorMessage = '';
 
                 if (response.responseJSON.status &&
