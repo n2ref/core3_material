@@ -8,7 +8,11 @@ var menu = {
     /**
      *
      */
-    menu: null,
+    user: null,
+
+    system: null,
+
+    modules: null,
 
     /**
      *
@@ -54,6 +58,17 @@ var menu = {
                 '<div class="container"></div>' +
             '</main>' +
         '</d>',
+
+
+    /**
+     * Получение страницы кабинета
+     * @returns {*}
+     */
+    getPageContent: function () {
+
+        return ejs.render(this._tpl, {});
+    },
+
 
     /**
      * @param target
@@ -126,7 +141,7 @@ var menu = {
         menu.loadingScreen('show');
 
         // Инициализация кнопок
-        let buttons = document.querySelectorAll('.page-app .mdc-button');
+        let buttons = document.querySelectorAll('.page-menu .mdc-button');
         for (let button of buttons) {
             new mdc.ripple.MDCRipple(button);
         }
@@ -134,7 +149,7 @@ var menu = {
 
         if (navigator.platform === 'web') {
             // Share
-            $('.page-app .button-share').show().on('click', function () {
+            $('.page-menu .button-share').show().on('click', function () {
                 navigator.share({
                     title: 'Сканер документов',
                     text : 'Приложение для сканирования и отправки документов в систему учета для их дальнейшей обработки.',
@@ -144,14 +159,14 @@ var menu = {
         }
 
         // Fullscreen
-        $('.page-app .button-fullscreen').on('click', menu.toggleFullscreen);
+        $('.page-menu .button-fullscreen').on('click', menu.toggleFullscreen);
 
 
         // Установка
         let install = function (event) {
             event.preventDefault();
 
-            let button = $('.page-app .install-button');
+            let button = $('.page-menu .install-button');
 
             if (event.platforms.includes('web')) {
                 button.show();
@@ -181,21 +196,21 @@ var menu = {
 
 
         // Выход
-        $('.page-app .menu-logout').on('click', function () {
+        $('.page-menu .menu-logout').on('click', function () {
             main.confirm('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
-                    auth.clearAuthToken();
+                    auth.clearAccessToken();
                     main.viewPage('auth');
-                    $('.page-app > aside .menu-logout').removeClass('mdc-list-item--activated');
+                    $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
                 },
                 onCancel: function () {
-                    $('.page-app > aside .menu-logout').removeClass('mdc-list-item--activated');
+                    $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
                 }
             });
         });
 
-        $('.page-app .main-content .container').html('')
+        $('.page-menu .main-content .container').html('')
 
 
         /**
@@ -204,21 +219,21 @@ var menu = {
         function initMenu() {
 
             if (window.screen.width <= 768) {
-                $('.page-app .mdc-drawer').removeClass('mdc-drawer--dismissible');
-                $('.page-app .mdc-drawer').addClass('mdc-drawer--modal');
+                $('.page-menu .mdc-drawer').removeClass('mdc-drawer--dismissible');
+                $('.page-menu .mdc-drawer').addClass('mdc-drawer--modal');
             }
 
             if (window.screen.width >= 769) {
-                $('.page-app .mdc-drawer').addClass('mdc-drawer--open');
+                $('.page-menu .mdc-drawer').addClass('mdc-drawer--open');
             }
 
-            const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-app .mdc-drawer'));
+            const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-menu .mdc-drawer'));
             drawer.foundation.handleScrimClick = function (){
                 drawer.open = false;
             }
 
-            const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.page-app .app-bar'));
-            topAppBar.setScrollTarget(document.querySelector('.page-app .main-content'));
+            const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.page-menu .app-bar'));
+            topAppBar.setScrollTarget(document.querySelector('.page-menu .main-content'));
             topAppBar.listen('MDCTopAppBar:nav', () => {
                 drawer.open = ! drawer.open;
             });
@@ -236,33 +251,41 @@ var menu = {
         }
 
 
-        let authToken  = auth.getAuthToken();
+        let authToken  = auth.getAccessToken();
 
 
         $.ajax({
-            url: main.options.basePath + '/index.php',
+            url: main.options.basePath + '/cabinet',
             method: "GET",
             headers: {
-                'CORE2M': 'Bearer ' + authToken
+                'Access-Token': authToken
             },
             dataType: "json",
             success: function (response) {
-                if (typeof response.id !== 'number' ||
-                    typeof response.login !== 'string' ||
-                    typeof response.system_name !== 'string'
+                if (typeof response.user !== 'object' ||
+                    typeof response.user.id !== 'number' ||
+                    typeof response.user.login !== 'string' ||
+                    typeof response.user.name !== 'string' ||
+                    typeof response.user.avatar !== 'string' ||
+                    typeof response.system !== 'object' ||
+                    typeof response.system.name !== 'string' ||
+                    typeof response.modules !== 'object'
                 ) {
                     console.warn(response);
                     main.alert('Ошибка', 'Попробуйте обновить приложение или обратитесь к администратору');
 
                 } else {
-                    menu.menu = response;
-                    menu.renderMenu(menu.menu);
+                    menu.user    = response.user;
+                    menu.system  = response.system;
+                    menu.modules = response.modules;
+
+                    menu.renderMenu();
 
                     if ( ! menu.isInitMenu) {
                         initMenu();
                         menu.isInitMenu = true;
                     } else {
-                        $('.page-app .mdc-drawer').removeClass('mdc-drawer--open');
+                        $('.page-menu .mdc-drawer').removeClass('mdc-drawer--open');
                     }
 
                     menu.loadingScreen('hide');
@@ -271,7 +294,7 @@ var menu = {
             },
             error: function (response) {
                 if (response.status === 403) {
-                    auth.clearAuthToken();
+                    auth.clearAccessToken();
                     main.viewPage('auth');
 
                 } else if (response.status === 0) {
@@ -313,7 +336,7 @@ var menu = {
         if (params.module) {
             menu.setActiveModule(params.module);
         } else {
-            let modules = Object.values(menu.menu.modules);
+            let modules = Object.values(menu.modules);
             if (modules.length > 0) {
                 menu.setActiveModule(modules[0].module_id);
 
@@ -322,18 +345,19 @@ var menu = {
         }
 
 
-        let authToken = auth.getAuthToken();
+
+        let authToken = auth.getAccessToken();
 
         $.ajax({
             url: main.options.basePath + url,
             method: "GET",
             headers: {
-                'CORE2M': 'Bearer ' + authToken
+                'Access-Token': 'Bearer ' + authToken
             },
             success: function (response) {
                 menu.preloader('hide');
 
-                $('.page-app .main-content .container').html(response)
+                $('.page-menu .main-content .container').html(response)
                     .css({
                         'opacity': '0',
                         'margin-top': '15px'
@@ -362,7 +386,7 @@ var menu = {
                 menu.preloader('hide');
 
                 if (response.status === 403) {
-                    auth.clearAuthToken();
+                    auth.clearAccessToken();
                     main.viewPage('auth');
 
                 } else if (response.status === 0) {
@@ -378,40 +402,39 @@ var menu = {
 
     /**
      *
-     * @param options
      */
-    renderMenu: function (options) {
+    renderMenu: function () {
 
-        if (options.avatar) {
-            $('.page-app > aside > .mdc-drawer__header img').attr('src', options.avatar).show();
+        if (menu.user.avatar) {
+            $('.page-menu > aside > .mdc-drawer__header img').attr('src', menu.user.avatar).show();
         }
-        if (options.name) {
-            $('.page-app > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(options.name));
+        if (menu.user.name) {
+            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(menu.user.name));
         }
-        if (options.login) {
-            $('.page-app > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(options.login));
+        if (menu.user.login) {
+            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(menu.user.login));
         }
 
-        $('.page-app > header .mdc-top-app-bar__title').text(options.system_name);
+        $('.page-menu > header .mdc-top-app-bar__title').text(menu.system.name);
 
         // Удаление бывших модулей
-        $('.page-app > aside .mdc-list .core-module').remove();
-        $('.page-app > aside .mdc-list .mdc-list-divider').remove();
+        $('.page-menu > aside .mdc-list .core-module').remove();
+        $('.page-menu > aside .mdc-list .mdc-list-divider').remove();
 
-        if (Object.values(options.modules).length > 0) {
+        if (Object.values(menu.modules).length > 0) {
             let params = main.getParams();
 
-            $.each(options.modules, function (key, module) {
+            $.each(menu.modules, function (key, module) {
 
-                if (typeof module.m_name !== 'string' || ! module.m_name ||
-                    typeof module.module_id !== 'string' || ! module.module_id
+                if (typeof module.name !== 'string' || ! module.name ||
+                    typeof module.title !== 'string' || ! module.title
                 ) {
                     main.notify('Не удалось показать некоторые модули из за ошибок!', {"textColor" : '#ff5722'});
                     return true;
                 }
 
-                let moduleName  = $.trim(module.module_id);
-                let moduleTitle = $.trim(module.m_name);
+                let moduleName  = $.trim(module.name);
+                let moduleTitle = $.trim(module.title);
                 let iconName    = '';
                 let activeClass = '';
                 let activeAttr  = '';
@@ -427,7 +450,7 @@ var menu = {
                     activeAttr  = 'tabindex="1"';
                 }
 
-                $('.page-app > aside .mdc-list').prepend(
+                $('.page-menu > aside .mdc-list').prepend(
                     '<a class="mdc-list-item core-module core-module-' + moduleName + ' ' + activeClass + '" ' + activeAttr + '' +
                        'onclick="if (location.hash === \'#/' + moduleName + '/index\') menu.load(\'/' + moduleName + '/index\');"' +
                        'href="#/' + moduleName + '/index">' +
@@ -439,8 +462,8 @@ var menu = {
             });
         }
 
-        if (Object.values(options.modules).length > 1) {
-            $('.page-app > aside .mdc-list .menu-logout').before('<hr class="mdc-list-divider">');
+        if (Object.values(menu.modules).length > 1) {
+            $('.page-menu > aside .mdc-list .menu-logout').before('<hr class="mdc-list-divider">');
         }
     },
 
@@ -451,8 +474,8 @@ var menu = {
      */
     setActiveModule: function (moduleName) {
 
-        $('.page-app > aside .core-module').removeClass('mdc-list-item--activated');
-        $('.page-app > aside .core-module-' + moduleName).addClass('mdc-list-item--activated');
+        $('.page-menu > aside .core-module').removeClass('mdc-list-item--activated');
+        $('.page-menu > aside .core-module-' + moduleName).addClass('mdc-list-item--activated');
     },
 
 
@@ -467,7 +490,7 @@ var menu = {
                     return false;
                 }
 
-                $('.page-app > header').append(
+                $('.page-menu > header').append(
                     '<div id="preloader">' +
                     '<div role="progressbar" class="mdc-linear-progress preloader-progress"' +
                     'aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">' +
@@ -510,7 +533,7 @@ var menu = {
                     return false;
                 }
 
-                $('.page-app').prepend(
+                $('.page-menu').prepend(
                     '<div id="loading-screen">' +
                         '<div class="loading-lock"></div>' +
                         '<div class="loading-block">' +
@@ -564,7 +587,7 @@ var menu = {
 $(function () {
 
     main.on('hashchange', function () {
-        if ($('.page-app.active')[0]) {
+        if ($('.page-menu.active')[0]) {
             menu.load(location.hash.substr(1));
         }
     });

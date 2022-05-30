@@ -27,7 +27,7 @@ const includeToCache = [
     '/assets/js/menu.js',
 
     '/assets/img/favicon.ico',
-    '/assets/img/logo.png',
+    '/assets/img/logo.jpg',
     '/assets/img/70x70.png',
     '/assets/img/150x150.png',
     '/assets/img/192x192.png',

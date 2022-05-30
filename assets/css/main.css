@@ -69,6 +69,7 @@ html, body {
 .page-auth .container .mdc-card .mdc-card__content {
     text-align: center;
     padding: 40px 10px 40px 10px;
+    word-break: break-word;
 }
 .page-auth .container .mdc-card .mdc-card__content .mdc-text-field {
     margin-bottom: 20px;

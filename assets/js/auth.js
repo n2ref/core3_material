@@ -44,7 +44,7 @@ var auth = {
          '<div class="container container-registration" style="display: none">' +
              '<div class="mdc-card">' +
                  '<div class="mdc-card__content">' +
-                     '<img src="logo.png" alt="logo" class="logo">' +
+                     '<img src="logo.kpg" alt="logo" class="logo">' +
                      '<p class="mdc-typography--headline5">Регистрация</p>' +
                      '<div class="text-danger mdc-typography--subtitle2"></div>' +
                      '<div class="text-success mdc-typography--subtitle2"></div>' +
@@ -206,25 +206,50 @@ var auth = {
 
     /**
      * Получение аутентификации
-     * @param token
+     * @param accessToken
      * @returns {boolean}
      */
-    setAuthToken(token) {
+    setAccessToken(accessToken) {
 
-        localStorage.setItem('core3-auth-token', token);
+        localStorage.setItem('core3_access_token', accessToken);
 
         let days    = 100;
         let date    = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         let expires = "; expires=" + date.toUTCString();
 
-        document.cookie = "Core3=Bearer " + token + expires + "; path=/";
+        document.cookie = "Core-Access-Token=" + accessToken + expires + "; path=/core";
 
         let myWorker = new Worker('sw.js');
 
         myWorker.postMessage({
-            topic: 'set-auth-token',
-            token: token
+            topic: 'set_access_token',
+            token: accessToken
+        });
+    },
+
+
+    /**
+     * Получение аутентификации
+     * @param refreshToken
+     * @returns {boolean}
+     */
+    setRefreshToken(refreshToken) {
+
+        localStorage.setItem('core3_refresh_token', refreshToken);
+
+        let days    = 100;
+        let date    = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        let expires = "; expires=" + date.toUTCString();
+
+        document.cookie = "Core-Refresh-Token=" + refreshToken + expires + "; path=/core";
+
+        let myWorker = new Worker('sw.js');
+
+        myWorker.postMessage({
+            topic: 'set_refresh_token',
+            token: refreshToken
         });
     },
 
@@ -233,12 +258,12 @@ var auth = {
      * Получение аутентификации
      * @returns {String|boolean}
      */
-    getAuthToken() {
+    getAccessToken() {
 
-        let authToken = localStorage.getItem('core3-auth-token');
+        let authToken = localStorage.getItem('core3_access_token');
 
         if ( ! authToken) {
-            auth.clearAuthToken();
+            auth.clearAccessToken();
             authToken = false;
         }
 
@@ -249,16 +274,16 @@ var auth = {
     /**
      * Очистка аутентификации
      */
-    clearAuthToken() {
+    clearAccessToken() {
 
-        localStorage.removeItem('core3-auth-token');
+        localStorage.removeItem('core3_access_token');
 
-        document.cookie = 'Core3=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = 'Core-Access-Token=; Path=/core; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
         let myWorker = new Worker('sw.js');
 
         myWorker.postMessage({
-            topic: 'set-auth-token',
+            topic: 'set_access_token',
             token: null
         });
     },
@@ -336,25 +361,26 @@ var auth = {
             method: "POST",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            // headers: {
-            //     "Core3-Reg-Apikey": main.options.regApikey
-            // },
             data: JSON.stringify({
                 login: $('[name=login]', form).val(),
                 password: MD5($('[name=password]', form).val())
             })
         })
-            .done(function (result) {
-                if (typeof result.token !== 'string' || typeof result.refresh_token !== 'string' ||
-                    ! result.token || ! result.refresh_token
+            .done(function (response) {
+                console.log(response)
+                if (typeof response.access_token !== 'string' ||
+                    typeof response.refresh_token !== 'string' ||
+                    ! response.access_token ||
+                    ! response.refresh_token
                 ) {
-                    let errorMessage = result.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
+                    let errorMessage = response.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
                     $('.page-auth form .text-danger').text(errorMessage);
 
                 } else {
                     $('.page-auth form .text-danger').text('');
 
-                    auth.setAuthToken(result.token);
+                    auth.setAccessToken(response.access_token);
+                    auth.setRefreshToken(response.refresh_token);
 
                     $('.page-auth [name=login]').val('');
                     $('.page-auth [name=password]').val('');
@@ -368,10 +394,10 @@ var auth = {
 
                 let errorMessage = '';
 
-                if (response.responseJSON.status &&
-                    response.responseJSON.status === 'error'
-                ) {
+                if (response.responseJSON && response.responseJSON.error_message) {
                     errorMessage = response.responseJSON.error_message;
+                } else {
+                    errorMessage = $(response.responseText).text();
                 }
 
                 errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
@@ -399,21 +425,36 @@ var auth = {
             method: "POST",
             data: $(form).serialize()
         })
-            .done(function (data) {
+            .done(function (response) {
                 auth.preloader('hide');
 
-                if (data.status === 'success') {
-                    $('.container-registration .text-success').text(data.message).css('margin-bottom', '50px');
+                if (response.status === 'success') {
+                    $('.container-registration .text-success').text(response.message).css('margin-bottom', '50px');
                     $(form).hide();
 
                 } else {
-                    $('.container-registration .text-danger').text(data.error_message);
+                    $('.container-registration .text-danger').text(response.error_message);
                 }
             })
 
-            .fail(function () {
+            .fail(function (response) {
                 auth.preloader('hide');
-                $('.container-registration .text-danger').text('Ошибка. Попробуйте позже, либо обратитесь к администратору');
+
+                let errorMessage = '';
+
+                if (response.responseJSON && response.responseJSON.error_message) {
+                    errorMessage = response.responseJSON.error_message;
+                } else {
+                    errorMessage = $(response.responseText).text();
+                }
+
+                errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
+
+                $('.container-registration .text-danger').text(errorMessage);
+            })
+
+            .always (function (jqXHR, textStatus) {
+                auth.preloader('hide');
             });
     },
 

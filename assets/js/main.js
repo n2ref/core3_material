@@ -2,7 +2,7 @@
 let main = {
 
     options: {
-        regApikey: '45c0f6e4bfdcfd5211bdbc4978j7ed3f9e12a714',
+        regApikey: '',
         basePath: '/core',
     },
 
@@ -389,7 +389,7 @@ $(function () {
     // Показ ошибок
     window.onerror = function(msg) {
         //navigator.vibrate([100]);
-        main.alert(msg);
+        main.alert('Ошибка', msg);
     };
 
     // Регистрация service worker
@@ -413,7 +413,7 @@ $(function () {
     });
 
 
-    if ( ! auth.getAuthToken()) {
+    if ( ! auth.getAccessToken()) {
         main.viewPage('auth');
     } else {
         main.viewPage('menu');

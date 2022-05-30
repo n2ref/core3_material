@@ -146,7 +146,7 @@ var app = {
             main.confirm('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
-                    auth.clearAuthToken();
+                    auth.clearAccessToken();
                     main.viewPage('auth');
                     $('.page-app > aside .menu-logout').removeClass('mdc-list-item--activated');
                 },
@@ -197,7 +197,7 @@ var app = {
         }
 
 
-        let authToken  = auth.getAuthToken();
+        let authToken  = auth.getAccessToken();
 
 
         $.ajax({
@@ -232,7 +232,7 @@ var app = {
             },
             error: function (response) {
                 if (response.status === 403) {
-                    auth.clearAuthToken();
+                    auth.clearAccessToken();
                     main.viewPage('auth');
 
                 } else if (response.status === 0) {
@@ -283,7 +283,7 @@ var app = {
         }
 
 
-        let authToken = auth.getAuthToken();
+        let authToken = auth.getAccessToken();
 
         $.ajax({
             url: main.options.basePath + url,
@@ -323,7 +323,7 @@ var app = {
                 app.preloader('hide');
 
                 if (response.status === 403) {
-                    auth.clearAuthToken();
+                    auth.clearAccessToken();
                     main.viewPage('auth');
 
                 } else if (response.status === 0) {
