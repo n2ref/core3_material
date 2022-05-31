@@ -397,7 +397,7 @@ var auth = {
                 if (response.responseJSON && response.responseJSON.error_message) {
                     errorMessage = response.responseJSON.error_message;
                 } else {
-                    errorMessage = $(response.responseText).text();
+                    errorMessage = $("<div>" + response.responseText + "</div>").text();
                 }
 
                 errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
