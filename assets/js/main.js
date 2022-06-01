@@ -381,6 +381,19 @@ let main = {
                 main.hashChangeCallbacks[i]();
             }
         }
+    },
+
+
+    /**
+     * @returns Promise
+     */
+    getFingerprint: function () {
+
+        return FingerprintJS.load()
+            .then((fp) => fp.get())
+            .then((result) => {
+                return result.visitorId;
+            });
     }
 }
 

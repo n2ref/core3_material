@@ -348,13 +348,21 @@ var auth = {
 
 
     /**
-     *
      * @param form
+     * @returns {Promise<boolean>}
      */
-    login: function (form) {
+    login: async function (form) {
 
         auth.preloader('show');
         $('.page-auth form .text-danger').text('');
+
+        let fp = await main.getFingerprint()
+
+        if ( ! fp) {
+            auth.preloader('hide');
+            $('.page-auth form .text-danger').text('Не удалось получить отпечаток');
+            return false;
+        }
 
         $.ajax({
             url: main.options.basePath + "/auth/login",
@@ -363,11 +371,11 @@ var auth = {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
                 login: $('[name=login]', form).val(),
-                password: MD5($('[name=password]', form).val())
+                password: MD5($('[name=password]', form).val()),
+                fp: fp
             })
         })
             .done(function (response) {
-                console.log(response)
                 if (typeof response.access_token !== 'string' ||
                     typeof response.refresh_token !== 'string' ||
                     ! response.access_token ||
@@ -527,6 +535,15 @@ var auth = {
 
         $('.page-auth > .container').hide();
         $('.page-auth > .container-' + name).fadeIn('fast');
+    },
+
+
+    /**
+     * @param token
+     * @returns {*}
+     */
+    jwtDecode: function (token) {
+        return jwt_decode(token);
     }
 }
 
