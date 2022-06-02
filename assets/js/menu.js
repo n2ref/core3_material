@@ -2,7 +2,7 @@
 var menu = {
 
     moduleIcons: {
-        documents: "text_snippet"
+        cron: "text_snippet"
     },
 
     /**
@@ -251,14 +251,14 @@ var menu = {
         }
 
 
-        let authToken  = auth.getAccessToken();
+        let accessToken = auth.getAccessToken();
 
 
         $.ajax({
             url: main.options.basePath + '/cabinet',
             method: "GET",
             headers: {
-                'Access-Token': authToken
+                'Access-Token': accessToken
             },
             dataType: "json",
             success: function (response) {
@@ -289,7 +289,10 @@ var menu = {
                     }
 
                     menu.loadingScreen('hide');
-                    menu.load(location.hash.substr(1));
+
+                    let uri = location.hash.substr(1) ? '/mod' + location.hash.substr(1) : '';
+
+                    menu.load(uri);
                 }
             },
             error: function (response) {
@@ -338,21 +341,21 @@ var menu = {
         } else {
             let modules = Object.values(menu.modules);
             if (modules.length > 0) {
-                menu.setActiveModule(modules[0].module_id);
+                menu.setActiveModule(modules[0].name);
 
-                url = '/' + modules[0].module_id
+                url = '/mod/' + modules[0].name + '/index'
             }
         }
 
 
 
-        let authToken = auth.getAccessToken();
+        let accessToken = auth.getAccessToken();
 
         $.ajax({
             url: main.options.basePath + url,
             method: "GET",
             headers: {
-                'Access-Token': 'Bearer ' + authToken
+                'Access-Token': accessToken
             },
             success: function (response) {
                 menu.preloader('hide');

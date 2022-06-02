@@ -238,12 +238,12 @@ var auth = {
 
         localStorage.setItem('core3_refresh_token', refreshToken);
 
-        let days    = 100;
-        let date    = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        let expires = "; expires=" + date.toUTCString();
+        // let days    = 100;
+        // let date    = new Date();
+        // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        // let expires = "; expires=" + date.toUTCString();
 
-        document.cookie = "Core-Refresh-Token=" + refreshToken + expires + "; path=/core";
+        //document.cookie = "Core-Refresh-Token=" + refreshToken + expires + "; path=/core";
 
         let myWorker = new Worker('sw.js');
 
