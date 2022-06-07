@@ -1,10 +1,6 @@
 
 var menu = {
 
-    moduleIcons: {
-        cron: "text_snippet"
-    },
-
     /**
      *
      */
@@ -32,6 +28,24 @@ var menu = {
                     '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-share">share</button>' +
                     '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button install-button" ' +
                             'style="display: none">mobile_friendly</button>' +
+
+                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-profile-menu">menu</button>' +
+
+                    '<div id="profile-menu" class="mdc-menu-surface--anchor">' +
+                        '<div class="mdc-menu mdc-menu-surface">' +
+                    '<ul class="mdc-list" role="menu" aria-hidden="false" aria-orientation="vertical" tabindex="-1">' +
+                        '<li class="mdc-list-item" role="menuitem">' +
+                            '<span class="mdc-list-item__ripple"></span>' +
+                            '<span class="mdc-list-item__text">A Menu Item</span>' +
+                        '</li>' +
+                        '<li class="mdc-list-item menu-logout" role="menuitem">' +
+                            '<span class="mdc-list-item__ripple"></span>' +
+                            '<i class="material-icons mdc-list-item__graphic" aria-hidden="true">logout</i>' +
+                            '<span class="mdc-list-item__text">Выйти</span>' +
+                        '</li>' +
+                    '</ul>' +
+                    '</div>' +
+                    '</div>' +
                 '</section>' +
             '</div>' +
         '</header>' +
@@ -42,22 +56,16 @@ var menu = {
                 '<h6 class="mdc-drawer__subtitle"></h6>' +
             '</div>' +
             '<div class="mdc-drawer__content">' +
-                '<nav class="mdc-list">' +
-                    '<a class="mdc-list-item menu-logout" href="#" tabindex="-1">' +
-                        '<span class="mdc-list-item__ripple"></span>' +
-                        '<i class="material-icons mdc-list-item__graphic" aria-hidden="true">logout</i>' +
-                        '<span class="mdc-list-item__text">Выйти</span>' +
-                    '</a>' +
-                '</nav>' +
+                '<nav class="mdc-list"></nav>' +
             '</div>' +
         '</aside>' +
         '<div class="mdc-drawer-scrim"></div>' +
         '<div class="mdc-drawer-swipe-area"></div>' +
-        '<d class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">' +
+        '<div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">' +
             '<main class="main-content">' +
                 '<div class="container"></div>' +
             '</main>' +
-        '</d>',
+        '</div>',
 
 
     /**
@@ -162,6 +170,19 @@ var menu = {
         $('.page-menu .button-fullscreen').on('click', menu.toggleFullscreen);
 
 
+
+        let element       = $('#profile-menu .mdc-menu-surface');
+        const profileMenu = new mdc.menu.MDCMenu(element[0]);
+
+        // menu
+        $('.page-menu .button-profile-menu').on('click', function () {
+
+            if ( ! profileMenu.open) {
+                profileMenu.open = true;
+            }
+        });
+
+
         // Установка
         let install = function (event) {
             event.preventDefault();
@@ -200,9 +221,29 @@ var menu = {
             main.confirm('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
-                    auth.clearAccessToken();
-                    main.viewPage('auth');
-                    $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
+
+                    $.ajax({
+                        url: main.options.basePath + '/auth/logout',
+                        method: "PUT",
+                        headers: {
+                            'Access-Token': auth.getAccessToken()
+                        },
+                        dataType: "json",
+                        success: function (response) {
+
+                            auth.clearAccessToken();
+                            main.viewPage('auth');
+                            $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
+                        },
+                        error: function (response) {
+                            if (response.status === 0) {
+                                main.alert('Ошибка', 'Проверьте подключение к интернету');
+
+                            } else {
+                                main.alert('Ошибка', 'Обновите приложение или обратитесь к администратору');
+                            }
+                        }
+                    });
                 },
                 onCancel: function () {
                     $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
@@ -438,13 +479,9 @@ var menu = {
 
                 let moduleName  = $.trim(module.name);
                 let moduleTitle = $.trim(module.title);
-                let iconName    = '';
+                let iconName    = $.trim(module.icon);
                 let activeClass = '';
                 let activeAttr  = '';
-
-                if (typeof menu.moduleIcons[moduleName] === 'string') {
-                    iconName = menu.moduleIcons[moduleName];
-                }
 
                 if (params.module && params.module === moduleName) {
                     activeClass = 'mdc-list-item--activated';

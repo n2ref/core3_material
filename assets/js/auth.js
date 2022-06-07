@@ -219,13 +219,6 @@ var auth = {
         let expires = "; expires=" + date.toUTCString();
 
         document.cookie = "Core-Access-Token=" + accessToken + expires + "; path=/core";
-
-        let myWorker = new Worker('sw.js');
-
-        myWorker.postMessage({
-            topic: 'set_access_token',
-            token: accessToken
-        });
     },
 
 
@@ -244,13 +237,6 @@ var auth = {
         // let expires = "; expires=" + date.toUTCString();
 
         //document.cookie = "Core-Refresh-Token=" + refreshToken + expires + "; path=/core";
-
-        let myWorker = new Worker('sw.js');
-
-        myWorker.postMessage({
-            topic: 'set_refresh_token',
-            token: refreshToken
-        });
     },
 
 
@@ -272,6 +258,23 @@ var auth = {
 
 
     /**
+     * Получение аутентификации
+     * @returns {String|boolean}
+     */
+    getRefreshToken() {
+
+        let refreshToken = localStorage.getItem('core3_refresh_token');
+
+        if ( ! refreshToken) {
+            auth.clearRefreshToken();
+            refreshToken = false;
+        }
+
+        return refreshToken;
+    },
+
+
+    /**
      * Очистка аутентификации
      */
     clearAccessToken() {
@@ -279,13 +282,18 @@ var auth = {
         localStorage.removeItem('core3_access_token');
 
         document.cookie = 'Core-Access-Token=; Path=/core; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    },
 
-        let myWorker = new Worker('sw.js');
 
-        myWorker.postMessage({
-            topic: 'set_access_token',
-            token: null
-        });
+
+    /**
+     * Очистка аутентификации
+     */
+    clearRefreshToken() {
+
+        localStorage.removeItem('core3_refresh_token');
+
+        document.cookie = 'Core-Access-Token=; Path=/core; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     },
 
 
@@ -411,6 +419,64 @@ var auth = {
                 errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
 
                 $('.container-login .text-danger').text(errorMessage);
+            })
+
+            .always (function (jqXHR, textStatus) {
+                auth.preloader('hide');
+            });
+    },
+
+
+    refreshToken: async function () {
+
+        let accessToken  = auth.jwtDecode(auth.getAccessToken());
+        let refreshToken = auth.jwtDecode(auth.getRefreshToken());
+
+        let accessTokenExp  = new Date(accessToken.exp * 1000);
+        let refreshTokenExp = new Date(refreshToken.exp * 1000);
+
+
+
+        $.ajax({
+            url: main.options.basePath + "/auth/refresh",
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                refresh_token: auth.getRefreshToken(),
+                fp: await main.getFingerprint()
+            })
+        })
+            .done(function (response) {
+                if (typeof response.access_token !== 'string' ||
+                    typeof response.refresh_token !== 'string' ||
+                    ! response.access_token ||
+                    ! response.refresh_token
+                ) {
+                    let errorMessage = response.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
+                    main.notify(errorMessage);
+
+                } else {
+
+                    auth.setAccessToken(response.access_token);
+                    auth.setRefreshToken(response.refresh_token);
+                }
+            })
+
+            .fail(function (response) {
+                auth.preloader('hide');
+
+                let errorMessage = '';
+
+                if (response.responseJSON && response.responseJSON.error_message) {
+                    errorMessage = response.responseJSON.error_message;
+                } else {
+                    errorMessage = $("<div>" + response.responseText + "</div>").text();
+                }
+
+                errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
+
+                main.notify(errorMessage);
             })
 
             .always (function (jqXHR, textStatus) {
