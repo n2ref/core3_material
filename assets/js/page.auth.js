@@ -1,4 +1,4 @@
-var auth = {
+var pageAuth = {
 
      _tpl:
          '<div class="container container-login" style="display: none">' +
@@ -143,16 +143,16 @@ var auth = {
         }
 
         $('.container-login form').on('submit', function () {
-            auth.login(this);
+            pageAuth.login(this);
             return false
         });
 
         $('.container-registration form').on('submit', function () {
-            auth.registration(this);
+            pageAuth.registration(this);
             return false
         });
 
-        auth.viewActualContainer();
+        pageAuth.viewActualContainer();
 
 
         // Установка
@@ -180,10 +180,10 @@ var auth = {
             });
         }
 
-        if (main.install.event) {
-            install(main.install.event);
+        if (coreMain.install.event) {
+            install(coreMain.install.event);
         } else {
-            main.install.promise.then(install);
+            coreMain.install.promise.then(install);
         }
     },
 
@@ -193,107 +193,14 @@ var auth = {
      */
     viewActualContainer: function () {
 
-        let params    = main.getParams();
+        let params    = coreTools.getParams();
         let authPanel = params.module;
 
         if (['login', 'registration', 'registration_complete'].indexOf(authPanel) === -1) {
             authPanel = 'login';
         }
 
-        auth._viewContainer(authPanel);
-    },
-
-
-    /**
-     * Получение аутентификации
-     * @param accessToken
-     * @returns {boolean}
-     */
-    setAccessToken(accessToken) {
-
-        localStorage.setItem('core3_access_token', accessToken);
-
-        let days    = 100;
-        let date    = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        let expires = "; expires=" + date.toUTCString();
-
-        document.cookie = "Core-Access-Token=" + accessToken + expires + "; path=/core";
-    },
-
-
-    /**
-     * Получение аутентификации
-     * @param refreshToken
-     * @returns {boolean}
-     */
-    setRefreshToken(refreshToken) {
-
-        localStorage.setItem('core3_refresh_token', refreshToken);
-
-        // let days    = 100;
-        // let date    = new Date();
-        // date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        // let expires = "; expires=" + date.toUTCString();
-
-        //document.cookie = "Core-Refresh-Token=" + refreshToken + expires + "; path=/core";
-    },
-
-
-    /**
-     * Получение аутентификации
-     * @returns {String|boolean}
-     */
-    getAccessToken() {
-
-        let authToken = localStorage.getItem('core3_access_token');
-
-        if ( ! authToken) {
-            auth.clearAccessToken();
-            authToken = false;
-        }
-
-        return authToken;
-    },
-
-
-    /**
-     * Получение аутентификации
-     * @returns {String|boolean}
-     */
-    getRefreshToken() {
-
-        let refreshToken = localStorage.getItem('core3_refresh_token');
-
-        if ( ! refreshToken) {
-            auth.clearRefreshToken();
-            refreshToken = false;
-        }
-
-        return refreshToken;
-    },
-
-
-    /**
-     * Очистка аутентификации
-     */
-    clearAccessToken() {
-
-        localStorage.removeItem('core3_access_token');
-
-        document.cookie = 'Core-Access-Token=; Path=/core; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    },
-
-
-
-    /**
-     * Очистка аутентификации
-     */
-    clearRefreshToken() {
-
-        localStorage.removeItem('core3_refresh_token');
-
-        document.cookie = 'Core-Access-Token=; Path=/core; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        pageAuth._viewContainer(authPanel);
     },
 
 
@@ -361,19 +268,19 @@ var auth = {
      */
     login: async function (form) {
 
-        auth.preloader('show');
+        pageAuth.preloader('show');
         $('.page-auth form .text-danger').text('');
 
-        let fp = await main.getFingerprint()
+        let fp = await coreTools.getFingerprint()
 
         if ( ! fp) {
-            auth.preloader('hide');
+            pageAuth.preloader('hide');
             $('.page-auth form .text-danger').text('Не удалось получить отпечаток');
             return false;
         }
 
         $.ajax({
-            url: main.options.basePath + "/auth/login",
+            url: coreMain.options.basePath + "/auth/login",
             method: "POST",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
@@ -395,18 +302,18 @@ var auth = {
                 } else {
                     $('.page-auth form .text-danger').text('');
 
-                    auth.setAccessToken(response.access_token);
-                    auth.setRefreshToken(response.refresh_token);
+                    coreTokens.setAccessToken(response.access_token);
+                    coreTokens.setRefreshToken(response.refresh_token);
 
                     $('.page-auth [name=login]').val('');
                     $('.page-auth [name=password]').val('');
 
-                    main.viewPage('menu');
+                    coreMain.viewPage('menu');
                 }
             })
 
             .fail(function (response) {
-                auth.preloader('hide');
+                pageAuth.preloader('hide');
 
                 let errorMessage = '';
 
@@ -422,65 +329,7 @@ var auth = {
             })
 
             .always (function (jqXHR, textStatus) {
-                auth.preloader('hide');
-            });
-    },
-
-
-    refreshToken: async function () {
-
-        let accessToken  = auth.jwtDecode(auth.getAccessToken());
-        let refreshToken = auth.jwtDecode(auth.getRefreshToken());
-
-        let accessTokenExp  = new Date(accessToken.exp * 1000);
-        let refreshTokenExp = new Date(refreshToken.exp * 1000);
-
-
-
-        $.ajax({
-            url: main.options.basePath + "/auth/refresh",
-            method: "POST",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({
-                refresh_token: auth.getRefreshToken(),
-                fp: await main.getFingerprint()
-            })
-        })
-            .done(function (response) {
-                if (typeof response.access_token !== 'string' ||
-                    typeof response.refresh_token !== 'string' ||
-                    ! response.access_token ||
-                    ! response.refresh_token
-                ) {
-                    let errorMessage = response.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
-                    main.notify(errorMessage);
-
-                } else {
-
-                    auth.setAccessToken(response.access_token);
-                    auth.setRefreshToken(response.refresh_token);
-                }
-            })
-
-            .fail(function (response) {
-                auth.preloader('hide');
-
-                let errorMessage = '';
-
-                if (response.responseJSON && response.responseJSON.error_message) {
-                    errorMessage = response.responseJSON.error_message;
-                } else {
-                    errorMessage = $("<div>" + response.responseText + "</div>").text();
-                }
-
-                errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
-
-                main.notify(errorMessage);
-            })
-
-            .always (function (jqXHR, textStatus) {
-                auth.preloader('hide');
+                pageAuth.preloader('hide');
             });
     },
 
@@ -490,17 +339,17 @@ var auth = {
      */
     registration: function (form) {
 
-        auth.preloader('show');
+        pageAuth.preloader('show');
         $('.container-registration .text-danger').text('');
 
         $.ajax({
-            url: main.options.basePath + "/auth/registration",
+            url: coreMain.options.basePath + "/auth/registration",
             dataType: "json",
             method: "POST",
             data: $(form).serialize()
         })
             .done(function (response) {
-                auth.preloader('hide');
+                pageAuth.preloader('hide');
 
                 if (response.status === 'success') {
                     $('.container-registration .text-success').text(response.message).css('margin-bottom', '50px');
@@ -512,7 +361,7 @@ var auth = {
             })
 
             .fail(function (response) {
-                auth.preloader('hide');
+                pageAuth.preloader('hide');
 
                 let errorMessage = '';
 
@@ -528,7 +377,7 @@ var auth = {
             })
 
             .always (function (jqXHR, textStatus) {
-                auth.preloader('hide');
+                pageAuth.preloader('hide');
             });
     },
 
@@ -552,13 +401,13 @@ var auth = {
             return false;
         }
 
-        auth.preloader('show');
+        pageAuth.preloader('show');
         $('.container-registration_complete .text-danger').text('');
 
-        let params = main.getParams();
+        let params = coreTools.getParams();
 
         $.ajax({
-            url: main.options.basePath + "/auth/registration_complete",
+            url: coreMain.options.basePath + "/auth/registration_complete",
             dataType: "json",
             method: "POST",
             data: {
@@ -566,7 +415,7 @@ var auth = {
                 password: MD5(form.password.value)
             }
         }).done(function (data) {
-            auth.preloader('hide');
+            pageAuth.preloader('hide');
 
             if (data.status === 'success') {
                 $('.container-registration_complete .text-success').html(data.message).css('margin-bottom', '50px');
@@ -577,7 +426,7 @@ var auth = {
             }
 
         }).fail(function (response) {
-            auth.preloader('hide');
+            pageAuth.preloader('hide');
 
             let errorMessage = '';
 
@@ -601,15 +450,6 @@ var auth = {
 
         $('.page-auth > .container').hide();
         $('.page-auth > .container-' + name).fadeIn('fast');
-    },
-
-
-    /**
-     * @param token
-     * @returns {*}
-     */
-    jwtDecode: function (token) {
-        return jwt_decode(token);
     }
 }
 
@@ -617,9 +457,9 @@ var auth = {
 
 $(function () {
 
-    main.on('hashchange', function () {
+    coreMain.on('hashchange', function () {
         if ($('.page-auth')[0]) {
-            auth.viewActualContainer();
+            pageAuth.viewActualContainer();
         }
     });
 });

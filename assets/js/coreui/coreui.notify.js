@@ -3,221 +3,147 @@ var CoreUI = typeof CoreUI !== 'undefined' ? CoreUI : {};
 
 CoreUI.notice = {
 
-    __autoincrement: 0,
 
     /**
+     * @param text
      * @param options
-     * @param type
-     * @param icon
-     * @returns {HTMLDivElement}
      */
-    create: function(options, type, icon) {
+    info: function (text, options) {
 
-        if (typeof options === 'string') {
-            var text = options;
-            options = {};
-            options.text = text;
-            options.type = type || 'default';
-            options.icon = icon || '';
-        }
+        this.create(text, options);
+    },
 
-        let limit = 3;
-        let container = document.getElementById("coreui-notice-container");
 
-        if ( ! container) {
-            const container = document.createElement("div");
-            container.id = "coreui-notice-container";
-            document.body.appendChild(container);
-        }
+    /**
+     * @param text
+     * @param options
+     */
+    warning: function (text, options) {
 
-        const toast = document.createElement("div");
-        toast.id = ++this.__autoincrement;
-        toast.id = "toast-" + toast.id;
-        if (options.animationIn) {
-            toast.className = "coreui-notice animated " + options.animationIn;
-        } else {
-            toast.className = "coreui-notice animated fadeIn";
-        }
+        options = typeof options === 'object' ? options : {};
+        options.color     = "#ff9800";
+        options.textColor = "#000000";
 
-        const containertoast = document.createElement("div");
-        containertoast.className = "vh";
-        toast.appendChild(containertoast);
+        this.create(text, options);
+    },
 
-        //imagen
-        if (options.image) {
-            const containerimage = document.createElement("span");
-            containerimage.className = "b4cimg";
-            containertoast.appendChild(containerimage);
-            const img = document.createElement("img");
-            img.src = options.image;
-            img.className = "bAimg";
-            containerimage.appendChild(img);
-            if (options.important) {
-                const important = document.createElement("i");
-                important.className = "important";
-                containerimage.appendChild(important);
-            }
-        }
 
-        //add icon
-        if (options.icon) {
-            const containericono = document.createElement("span");
-            containericono.className = "b4cicon";
-            containertoast.appendChild(containericono);
-            const icono = document.createElement("i");
-            icono.className = options.icon;
-            containericono.appendChild(icono);
-            if (options.important) {
-                const importanticon = document.createElement("i");
-                importanticon.className = "important";
-                containericono.appendChild(importanticon);
-            }
-        }
+    /**
+     * @param text
+     * @param options
+     */
+    danger: function (text, options) {
 
-        // descripcion texto
-        const p = document.createElement("span");
-        p.className = "bAq";
-        if (options.text) {
-            p.innerHTML = options.text;
-        } else {
-            p.innerHTML = "";
-        }
-        containertoast.appendChild(p);
+        options = typeof options === 'object' ? options : {};
+        options.color = "#f44336";
 
-        const buttoncontainer = document.createElement("span");
-        buttoncontainer.className = "bAo";
-        containertoast.appendChild(buttoncontainer);
+        this.create(text, options)
+    },
 
-        //button ok
 
-        if (typeof options.callbackOk === "function") {
-            const buttonOK = document.createElement("span");
-            if (options.buttonOk) {
-                buttonOK.innerHTML = options.buttonOk;
-            } else {
-                buttonOK.innerHTML = "OK";
-            }
-            buttonOK.className = "a8k";
-            buttoncontainer.appendChild(buttonOK);
+    /**s
+     * @param text
+     * @param options
+     */
+    success: function (text, options) {
 
-            buttonOK.addEventListener("click", function(event) {
-                event.stopPropagation();
-                options.callbackOk.call(removeSnackbar());
+        options = typeof options === 'object' ? options : {};
+        options.color = "#4caf50";
+
+        this.create(text, options);
+    },
+
+
+    /**
+     * @param text
+     * @param options
+     * @returns {*}
+     */
+    create: function(text, options) {
+
+        $('.mdc-snackbar').remove('');
+
+        options = options || {};
+
+        options['color'] = typeof options['color'] === 'string'
+            ? 'style="background-color:' + options['color'] + '"'
+            : '';
+
+        options['textColor'] = typeof options['textColor'] === 'string'
+            ? 'style="color:' + options['textColor'] + '"'
+            : '';
+
+        options['customClass'] = typeof options['customClass'] === 'string'
+            ? options['customClass']
+            : '';
+
+        options['timeout'] = typeof options['timeout'] === 'number'
+            ? options['timeout']
+            : 4000;
+
+        options['closeButton'] = typeof options['closeButton'] === 'boolean' && options['closeButton']
+            ? '<button class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button>'
+            : '';
+
+        let buttonText = typeof options['buttonText'] === 'string'
+            ? options['buttonText']
+            : '';
+
+        let buttonCallback = typeof options['buttonCallback'] === 'function'
+            ? options['buttonCallback']
+            : '';
+
+
+        let trlButton = buttonText && buttonCallback
+            ? '<button type="button" class="mdc-button mdc-snackbar__action">' +
+                '<div class="mdc-button__ripple"></div>' +
+                '<span class="mdc-button__label">' + buttonText + '</span>' +
+                '</button>'
+            : '';
+
+        let id = "snackbar-" + new Date().getTime()
+
+        $('body').prepend(
+            '<div class="mdc-snackbar ' + options['customClass'] + '" id="' + id + '">' +
+                '<div class="mdc-snackbar__surface" ' + options['color'] + ' role="status" aria-relevant="additions">' +
+                    '<div class="mdc-snackbar__label" ' + options['textColor'] + ' aria-atomic="false">' +
+                        text +
+                    '</div>' +
+                    trlButton +
+                    options['closeButton'] +
+                '</div>' +
+            '</div>'
+        );
+
+
+        let snackbarElement = $('#' + id);
+        let snackbar        = new mdc.snackbar.MDCSnackbar(snackbarElement[0]);
+        snackbar.timeoutMs = options['timeout'];
+
+
+        if (buttonText && buttonCallback) {
+            new mdc.ripple.MDCRipple($('#' + id + ' button')[0]);
+
+            $('#' + id + ' button').on('click', function (event) {
+                buttonCallback(event)
             });
         }
 
-        //botton cancelar
 
-        if (typeof options.callbackCancel === "function") {
-            const buttonCancel = document.createElement("span");
-            if (options.buttonCancel) {
-                buttonCancel.innerHTML = options.buttonCancel;
-            } else {
-                buttonCancel.innerHTML = "No";
-            }
-            buttonCancel.className = "a8k";
-            buttoncontainer.appendChild(buttonCancel);
 
-            buttonCancel.addEventListener("click", function(event) {
-                event.stopPropagation();
-                options.callbackCancel.call(removeSnackbar());
+        if (typeof options['onClose'] === 'function') {
+            snackbar.listen('MDCSnackbar:closing', function(data) {
+                options['onClose'](data);
             });
         }
 
 
-
-        //botton cerrar notificacion
-        const contenedorClose = document.createElement("div");
-        contenedorClose.className = "bBe";
-        containertoast.appendChild(contenedorClose);
-
-        const buttonClose = document.createElement("div");
-        buttonClose.className = "bBf";
-        contenedorClose.appendChild(buttonClose);
-
-        contenedorClose.addEventListener("click", function(event) {
-            event.stopPropagation();
-            removeSnackbar();
+        snackbar.listen('MDCSnackbar:closed', function(data) {
+            snackbarElement.remove();
         });
 
-        toast.hide = function() {
-            if (options.animationIn) {
-                toast.classList.remove(options.animationIn);
-            } else {
-                toast.classList.remove("fadeIn");
-            }
+        snackbar.open();
 
-            if (options.animationOut) {
-                toast.classList.add(options.animationOut);
-            } else {
-                toast.classList.add("fadeOut");
-            }
-            window.setTimeout(function() {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-            }, 200);
-        };
-
-        // auto close
-        if (typeof options.duration === 'number') {
-            if (options.duration > 0) {
-                window.setTimeout(toast.hide, options.duration);
-            }
-
-        } else {
-            window.setTimeout(toast.hide, 6000);
-        }
-
-        if (options.rounded) {
-            toast.className += " rounded";
-        }
-
-        if (options.type) {
-            toast.className += " coreui-notice-" + options.type;
-        } else {
-            toast.className += " coreui-notice-default";
-        }
-
-        if (options.classes) {
-            toast.className += " " + options.classes;
-        }
-
-        if (typeof options.limit === 'number') {
-            if (options.limit >= 0) {
-                limit = options.limit;
-            }
-        }
-
-        const removeSnackbar = function() {
-            if (options.animationIn) {
-                toast.classList.remove(options.animationIn);
-            } else {
-                toast.classList.remove("fadeIn");
-            }
-
-            if (options.animationOut) {
-                toast.classList.add(options.animationOut);
-            } else {
-                toast.classList.add("fadeOut");
-            }
-            window.setTimeout(
-                function () {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }.bind(this),
-                200
-            );
-        }
-
-        container = document.getElementById("coreui-notice-container");
-
-        if (limit > 0 && container && container.childNodes.length >= limit) {
-            container.childNodes[0].hide();
-        }
-
-        container.appendChild(toast);
-        return toast;
+        return snackbar;
     },
 }

@@ -1,0 +1,4 @@
+
+var coreTranslateEn = {
+    'Вход' : 'Login',
+}

@@ -1,5 +1,5 @@
 
-var menu = {
+var pageMenu = {
 
     /**
      *
@@ -146,7 +146,7 @@ var menu = {
      */
     init: function () {
 
-        menu.loadingScreen('show');
+        pageMenu.loadingScreen('show');
 
         // Инициализация кнопок
         let buttons = document.querySelectorAll('.page-menu .mdc-button');
@@ -167,7 +167,7 @@ var menu = {
         }
 
         // Fullscreen
-        $('.page-menu .button-fullscreen').on('click', menu.toggleFullscreen);
+        $('.page-menu .button-fullscreen').on('click', pageMenu.toggleFullscreen);
 
 
 
@@ -209,38 +209,38 @@ var menu = {
             });
         }
 
-        if (main.install.event) {
-            install(main.install.event);
+        if (coreMain.install.event) {
+            install(coreMain.install.event);
         } else {
-            main.install.promise.then(install);
+            coreMain.install.promise.then(install);
         }
 
 
         // Выход
         $('.page-menu .menu-logout').on('click', function () {
-            main.confirm('Уверены, что хотите выйти?', '', {
+            CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
 
                     $.ajax({
-                        url: main.options.basePath + '/auth/logout',
+                        url: coreMain.options.basePath + '/auth/logout',
                         method: "PUT",
                         headers: {
-                            'Access-Token': auth.getAccessToken()
+                            'Access-Token': coreTokens.getAccessToken()
                         },
                         dataType: "json",
                         success: function (response) {
 
-                            auth.clearAccessToken();
-                            main.viewPage('auth');
+                            coreTokens.clearAccessToken();
+                            coreMain.viewPage('auth');
                             $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
                         },
                         error: function (response) {
                             if (response.status === 0) {
-                                main.alert('Ошибка', 'Проверьте подключение к интернету');
+                                CoreUI.alert.danger('Ошибка', 'Проверьте подключение к интернету');
 
                             } else {
-                                main.alert('Ошибка', 'Обновите приложение или обратитесь к администратору');
+                                CoreUI.alert.danger('Ошибка', 'Обновите приложение или обратитесь к администратору');
                             }
                         }
                     });
@@ -280,7 +280,7 @@ var menu = {
             });
 
 
-            menu.swipe($(".mdc-drawer-swipe-area")[0], function (direction) {
+            pageMenu.swipe($(".mdc-drawer-swipe-area")[0], function (direction) {
                 console.log(direction);
                 if (direction === "right") {
                     drawer.open = true;
@@ -292,11 +292,11 @@ var menu = {
         }
 
 
-        let accessToken = auth.getAccessToken();
+        let accessToken = coreTokens.getAccessToken();
 
 
         $.ajax({
-            url: main.options.basePath + '/cabinet',
+            url: coreMain.options.basePath + '/cabinet',
             method: "GET",
             headers: {
                 'Access-Token': accessToken
@@ -313,39 +313,39 @@ var menu = {
                     typeof response.modules !== 'object'
                 ) {
                     console.warn(response);
-                    main.alert('Ошибка', 'Попробуйте обновить приложение или обратитесь к администратору');
+                    CoreUI.alert.danger('Ошибка', 'Попробуйте обновить приложение или обратитесь к администратору');
 
                 } else {
-                    menu.user    = response.user;
-                    menu.system  = response.system;
-                    menu.modules = response.modules;
+                    pageMenu.user    = response.user;
+                    pageMenu.system  = response.system;
+                    pageMenu.modules = response.modules;
 
-                    menu.renderMenu();
+                    pageMenu.renderMenu();
 
-                    if ( ! menu.isInitMenu) {
+                    if ( ! pageMenu.isInitMenu) {
                         initMenu();
-                        menu.isInitMenu = true;
+                        pageMenu.isInitMenu = true;
                     } else {
                         $('.page-menu .mdc-drawer').removeClass('mdc-drawer--open');
                     }
 
-                    menu.loadingScreen('hide');
+                    pageMenu.loadingScreen('hide');
 
                     let uri = location.hash.substr(1) ? '/mod' + location.hash.substr(1) : '';
 
-                    menu.load(uri);
+                    pageMenu.load(uri);
                 }
             },
             error: function (response) {
                 if (response.status === 403) {
-                    auth.clearAccessToken();
-                    main.viewPage('auth');
+                    coreTokens.clearAccessToken();
+                    coreMain.viewPage('auth');
 
                 } else if (response.status === 0) {
-                    main.alert('Ошибка', 'Проверьте подключение к интернету');
+                    CoreUI.alert.danger('Ошибка', 'Проверьте подключение к интернету');
 
                 } else {
-                    main.alert('Ошибка', 'Обновите приложение или обратитесь к администратору');
+                    CoreUI.alert.danger('Ошибка', 'Обновите приложение или обратитесь к администратору');
                 }
             }
         });
@@ -373,16 +373,16 @@ var menu = {
      */
     load: function (url) {
 
-        menu.preloader('show');
+        pageMenu.preloader('show');
 
-        let params = main.getParams(url);
+        let params = coreTools.getParams(url);
 
         if (params.module) {
-            menu.setActiveModule(params.module);
+            pageMenu.setActiveModule(params.module);
         } else {
-            let modules = Object.values(menu.modules);
+            let modules = Object.values(pageMenu.modules);
             if (modules.length > 0) {
-                menu.setActiveModule(modules[0].name);
+                pageMenu.setActiveModule(modules[0].name);
 
                 url = '/mod/' + modules[0].name + '/index'
             }
@@ -390,16 +390,16 @@ var menu = {
 
 
 
-        let accessToken = auth.getAccessToken();
+        let accessToken = coreTokens.getAccessToken();
 
         $.ajax({
-            url: main.options.basePath + url,
+            url: coreMain.options.basePath + url,
             method: "GET",
             headers: {
                 'Access-Token': accessToken
             },
             success: function (response) {
-                menu.preloader('hide');
+                pageMenu.preloader('hide');
 
                 $('.page-menu .main-content .container').html(response)
                     .css({
@@ -427,17 +427,17 @@ var menu = {
                     );
             },
             error: function (response) {
-                menu.preloader('hide');
+                pageMenu.preloader('hide');
 
                 if (response.status === 403) {
-                    auth.clearAccessToken();
-                    main.viewPage('auth');
+                    coreTokens.clearAccessToken();
+                    coreMain.viewPage('auth');
 
                 } else if (response.status === 0) {
-                    main.alert('Ошибка', 'Проверьте подключение к интернету');
+                    CoreUI.alert.danger('Ошибка', 'Проверьте подключение к интернету');
 
                 } else {
-                    main.alert('Ошибка', 'Обновите приложение или обратитесь к администратору');
+                    CoreUI.alert.danger('Ошибка', 'Обновите приложение или обратитесь к администратору');
                 }
             }
         });
@@ -449,31 +449,31 @@ var menu = {
      */
     renderMenu: function () {
 
-        if (menu.user.avatar) {
-            $('.page-menu > aside > .mdc-drawer__header img').attr('src', menu.user.avatar).show();
+        if (pageMenu.user.avatar) {
+            $('.page-menu > aside > .mdc-drawer__header img').attr('src', pageMenu.user.avatar).show();
         }
-        if (menu.user.name) {
-            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(menu.user.name));
+        if (pageMenu.user.name) {
+            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(pageMenu.user.name));
         }
-        if (menu.user.login) {
-            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(menu.user.login));
+        if (pageMenu.user.login) {
+            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(pageMenu.user.login));
         }
 
-        $('.page-menu > header .mdc-top-app-bar__title').text(menu.system.name);
+        $('.page-menu > header .mdc-top-app-bar__title').text(pageMenu.system.name);
 
         // Удаление бывших модулей
         $('.page-menu > aside .mdc-list .core-module').remove();
         $('.page-menu > aside .mdc-list .mdc-list-divider').remove();
 
-        if (Object.values(menu.modules).length > 0) {
-            let params = main.getParams();
+        if (Object.values(pageMenu.modules).length > 0) {
+            let params = coreTools.getParams();
 
-            $.each(menu.modules, function (key, module) {
+            $.each(pageMenu.modules, function (key, module) {
 
                 if (typeof module.name !== 'string' || ! module.name ||
                     typeof module.title !== 'string' || ! module.title
                 ) {
-                    main.notify('Не удалось показать некоторые модули из за ошибок!', {"textColor" : '#ff5722'});
+                    CoreUI.notify.danger('Не удалось показать некоторые модули из за ошибок!');
                     return true;
                 }
 
@@ -492,7 +492,7 @@ var menu = {
 
                 $('.page-menu > aside .mdc-list').prepend(
                     '<a class="mdc-list-item core-module core-module-' + moduleName + ' ' + activeClass + '" ' + activeAttr + '' +
-                       'onclick="if (location.hash === \'#/' + moduleName + '/index\') menu.load(\'/' + moduleName + '/index\');"' +
+                       'onclick="if (location.hash === \'#/' + moduleName + '/index\') pageMenu.load(\'/' + moduleName + '/index\');"' +
                        'href="#/' + moduleName + '/index">' +
                          '<span class="mdc-list-item__ripple"></span>' +
                          '<i class="material-icons mdc-list-item__graphic" aria-hidden="true">' + iconName + '</i>' +
@@ -502,7 +502,7 @@ var menu = {
             });
         }
 
-        if (Object.values(menu.modules).length > 1) {
+        if (Object.values(pageMenu.modules).length > 1) {
             $('.page-menu > aside .mdc-list .menu-logout').before('<hr class="mdc-list-divider">');
         }
     },
@@ -626,9 +626,9 @@ var menu = {
 
 $(function () {
 
-    main.on('hashchange', function () {
+    coreMain.on('hashchange', function () {
         if ($('.page-menu.active')[0]) {
-            menu.load(location.hash.substr(1));
+            pageMenu.load(location.hash.substr(1));
         }
     });
 });
