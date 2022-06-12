@@ -1,5 +1,5 @@
 
-let coreMain = {
+var coreMain = {
 
     options: {
         regApikey: '',
