@@ -44,7 +44,7 @@ var pageAuth = {
          '<div class="container container-registration" style="display: none">' +
              '<div class="mdc-card">' +
                  '<div class="mdc-card__content">' +
-                     '<img src="logo.kpg" alt="logo" class="logo">' +
+                     '<img src="logo.jpg" alt="logo" class="logo">' +
                      '<p class="mdc-typography--headline5">Регистрация</p>' +
                      '<div class="text-danger mdc-typography--subtitle2"></div>' +
                      '<div class="text-success mdc-typography--subtitle2"></div>' +
