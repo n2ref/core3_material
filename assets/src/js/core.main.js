@@ -130,6 +130,8 @@ $(function () {
         coreTokens.refreshToken(function() {
             coreTokens.initRefresh();
             coreMain.viewPage('menu');
+        }, function () {
+            coreMain.viewPage('auth');
         });
     }
 

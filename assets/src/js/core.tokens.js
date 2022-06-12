@@ -26,16 +26,22 @@ var coreTokens = {
 
 
     /**
-     * @param callback
+     * @param success
+     * @param fail
      * @returns {Promise<void>}
      */
-    refreshToken: async function (callback) {
+    refreshToken: async function (success, fail) {
 
         let refreshToken = coreTokens.getRefreshToken();
         let tokenData    = coreTools.jwtDecode(refreshToken);
 
         if (new Date(tokenData.exp * 1000) <= new Date()) {
             coreTokens.clearRefreshToken();
+
+            if (typeof fail === 'function') {
+                fail();
+            }
+
             return;
         }
 
@@ -57,21 +63,26 @@ var coreTokens = {
                     ! response.refresh_token
                 ) {
                     let errorMessage = response.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
-                    CoreUI.notify.danger(errorMessage);
+                    CoreUI.notice.danger(errorMessage);
+
+                    if (typeof fail === 'function') {
+                        fail();
+                    }
 
                 } else {
 
                     coreTokens.setAccessToken(response.access_token);
                     coreTokens.setRefreshToken(response.refresh_token);
 
-                    if (typeof callback === 'function') {
-                        callback();
+                    if (typeof success === 'function') {
+                        success();
                     }
                 }
             })
 
             .fail(function (response) {
                 let errorMessage = '';
+                console.log(response.responseJSON.error_message)
 
                 if (response.responseJSON && response.responseJSON.error_message) {
                     errorMessage = response.responseJSON.error_message;
@@ -81,7 +92,11 @@ var coreTokens = {
 
                 errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
 
-                CoreUI.notify.danger(errorMessage);
+                CoreUI.notice.danger(errorMessage);
+
+                if (typeof fail === 'function') {
+                    fail();
+                }
             });
     },
 

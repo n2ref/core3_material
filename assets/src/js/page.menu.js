@@ -50,13 +50,8 @@ var pageMenu = {
             '</div>' +
         '</header>' +
         '<aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">' +
-            '<div class="mdc-drawer__header">' +
-                '<img src="" alt="avatar" style="display: none">' +
-                '<h3 class="mdc-drawer__title"></h3>' +
-                '<h6 class="mdc-drawer__subtitle"></h6>' +
-            '</div>' +
             '<div class="mdc-drawer__content">' +
-                '<nav class="mdc-list"></nav>' +
+                '<ul class="menu-list level-1"></ul>' +
             '</div>' +
         '</aside>' +
         '<div class="mdc-drawer-scrim"></div>' +
@@ -176,10 +171,7 @@ var pageMenu = {
 
         // menu
         $('.page-menu .button-profile-menu').on('click', function () {
-
-            if ( ! profileMenu.open) {
-                profileMenu.open = true;
-            }
+            profileMenu.open = true;
         });
 
 
@@ -439,10 +431,6 @@ var pageMenu = {
 
         $('.page-menu > header .mdc-top-app-bar__title').text(pageMenu.system.name);
 
-        // Удаление бывших модулей
-        $('.page-menu > aside .mdc-list .core-module').remove();
-        $('.page-menu > aside .mdc-list .mdc-list-divider').remove();
-
         if (Object.values(pageMenu.modules).length > 0) {
             let params = coreTools.getParams();
 
@@ -455,33 +443,89 @@ var pageMenu = {
                     return true;
                 }
 
-                let moduleName  = $.trim(module.name);
-                let moduleTitle = $.trim(module.title);
-                let iconName    = $.trim(module.icon);
-                let activeClass = '';
-                let activeAttr  = '';
+                let moduleName    = $.trim(module.name);
+                let moduleTitle   = $.trim(module.title);
+                let iconName      = $.trim(module.icon);
+                let moduleClasses = '';
+                let indexClasses  = '';
+                let activeAttr    = '';
+                let nestedList    = '';
+                let nestedListBtn = '';
+                let iconContent   = '';
 
                 if (params.module && params.module === moduleName) {
-                    activeClass = 'mdc-list-item--activated';
-                    activeAttr  = 'tabindex="0"';
+                    moduleClasses = 'menu-module--activated menu-item-nested-open';
+                    activeAttr    = 'tabindex="0"';
+
+                    if (params.section && params.section === 'index') {
+                        indexClasses = 'menu-module-section--activated';
+                    }
+
                 } else {
                     activeAttr  = 'tabindex="1"';
                 }
 
-                $('.page-menu > aside .mdc-list').prepend(
-                    '<a class="mdc-list-item core-module core-module-' + moduleName + ' ' + activeClass + '" ' + activeAttr + '' +
-                       'onclick="if (location.hash === \'#/' + moduleName + '/index\') pageMenu.load(\'/mod/' + moduleName + '/index\');"' +
-                       'href="#/' + moduleName + '/index">' +
-                         '<span class="mdc-list-item__ripple"></span>' +
-                         '<i class="material-icons mdc-list-item__graphic" aria-hidden="true">' + iconName + '</i>' +
-                         '<span class="mdc-list-item__text">' +  moduleTitle + '</span>' +
-                    '</a>'
+                if (iconName) {
+                    iconContent = '<i class="material-icons menu-list-item__graphic">' + iconName + '</i>';
+                }
+
+
+                if ( module.sections && module.sections.length > 0) {
+                    let sectionLink = '';
+                    moduleClasses  += ' menu-item-nested';
+                    nestedListBtn   = '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>';
+                    nestedList     += '<ul class="menu-list level-2">';
+
+                    $.each(module.sections, function (key, section) {
+
+                        let sectionClasses = '';
+
+                        if (params.module &&
+                            params.module === moduleName &&
+                            params.section &&
+                            params.section === section.name
+                        ) {
+                            sectionClasses += 'menu-module-section--activated';
+                        }
+
+                        sectionLink = moduleName + '/' + section.name;
+                        nestedList +=
+                            '<li class="menu-list-item core-module-section core-module-' + moduleName + '-' + section.name + ' ' + sectionClasses + '">' +
+                                '<a onclick="if (location.hash === \'#/' + sectionLink + '\') pageMenu.load(\'/mod/' + sectionLink + '\');" ' +
+                                    'href="#/' + sectionLink + '" class="mdc-ripple-surface">' +
+                                    '<span class="menu-list-item__text">' +  section.title + '</span>' +
+                                '</a>' +
+                            '</li>'
+                    });
+
+                    nestedList += '</ul>';
+                }
+
+                $('.page-menu > aside .menu-list.level-1').append(
+                    '<li class="menu-list-item core-module core-module-' + moduleName + ' ' + moduleClasses + '" ' + activeAttr + '>' +
+                        '<div class="item-control ' + indexClasses + '">' +
+                            '<a onclick="if (location.hash === \'#/' + moduleName + '/index\') pageMenu.load(\'/mod/' + moduleName + '/index\');" ' +
+                               'href="#/' + moduleName + '/index" class="mdc-ripple-surface">' +
+                                 iconContent +
+                                 '<span class="menu-list-item__text">' +  moduleTitle + '</span>' +
+                            '</a>' +
+                            nestedListBtn +
+                        '</div>' +
+                        nestedList +
+                    '</li>'
                 );
             });
-        }
 
-        if (Object.values(pageMenu.modules).length > 1) {
-            $('.page-menu > aside .mdc-list .menu-logout').before('<hr class="mdc-list-divider">');
+
+            let menuItems = document.querySelectorAll('.page-menu .menu-list-item a');
+            for (let menuItem of menuItems) {
+                new mdc.ripple.MDCRipple(menuItem);
+            }
+
+            let buttons = document.querySelectorAll('.page-menu .menu-list-item .menu-icon-button');
+            for (let button of buttons) {
+                new mdc.ripple.MDCRipple(button);
+            }
         }
     },
 

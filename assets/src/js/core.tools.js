@@ -11,13 +11,13 @@ var coreTools = {
     getParams: function (url) {
 
         if (typeof url === 'undefined') {
-            url = location.hash.substr(1);
+            url = '/mod' + location.hash.substr(1);
         }
 
-        let params = url.match(/^\/([a-z0-9_]*)(?:\/|)([a-z0-9_]*)(?:(\?[^?]*)|)/);
+        let params = url.match(/^\/mod\/([a-z0-9_]*)(?:\/|)([a-z0-9_]*)(?:(\?[^?]*)|)/);
         let result = {
             module: params !== null && typeof params[1] === 'string' ? params[1] : '',
-            action: params !== null && typeof params[2] === 'string' ? params[2] : 'index',
+            section: params !== null && typeof params[2] === 'string' ? params[2] : 'index',
             query:  params !== null && typeof params[3] === 'string' ? params[3] : '',
         };
 
