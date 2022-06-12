@@ -121,10 +121,16 @@ $(function () {
     });
 
 
-    if ( ! coreTokens.getAccessToken()) {
+    let accessToken = coreTokens.getAccessToken();
+
+    if ( ! accessToken) {
         coreMain.viewPage('auth');
+
     } else {
-        coreMain.viewPage('menu');
+        coreTokens.refreshToken(function() {
+            coreTokens.initRefresh();
+            coreMain.viewPage('menu');
+        });
     }
 
 

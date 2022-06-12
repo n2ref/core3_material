@@ -221,29 +221,7 @@ var pageMenu = {
             CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
-
-                    $.ajax({
-                        url: coreMain.options.basePath + '/auth/logout',
-                        method: "PUT",
-                        headers: {
-                            'Access-Token': coreTokens.getAccessToken()
-                        },
-                        dataType: "json",
-                        success: function (response) {
-
-                            coreTokens.clearAccessToken();
-                            coreMain.viewPage('auth');
-                            $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
-                        },
-                        error: function (response) {
-                            if (response.status === 0) {
-                                CoreUI.alert.danger('Ошибка', 'Проверьте подключение к интернету');
-
-                            } else {
-                                CoreUI.alert.danger('Ошибка', 'Обновите приложение или обратитесь к администратору');
-                            }
-                        }
-                    });
+                    pageAuth.logout();
                 },
                 onCancel: function () {
                     $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
@@ -492,7 +470,7 @@ var pageMenu = {
 
                 $('.page-menu > aside .mdc-list').prepend(
                     '<a class="mdc-list-item core-module core-module-' + moduleName + ' ' + activeClass + '" ' + activeAttr + '' +
-                       'onclick="if (location.hash === \'#/' + moduleName + '/index\') pageMenu.load(\'/' + moduleName + '/index\');"' +
+                       'onclick="if (location.hash === \'#/' + moduleName + '/index\') pageMenu.load(\'/mod/' + moduleName + '/index\');"' +
                        'href="#/' + moduleName + '/index">' +
                          '<span class="mdc-list-item__ripple"></span>' +
                          '<i class="material-icons mdc-list-item__graphic" aria-hidden="true">' + iconName + '</i>' +

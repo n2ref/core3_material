@@ -7,6 +7,9 @@ var coreTokens = {
      *
      */
     initRefresh() {
+
+        this.deinitRefresh();
+
         this._refreshInterval = setInterval(this.refreshToken, 300000); // 5 минут
     },
 
@@ -23,9 +26,19 @@ var coreTokens = {
 
 
     /**
+     * @param callback
      * @returns {Promise<void>}
      */
-    refreshToken: async function () {
+    refreshToken: async function (callback) {
+
+        let refreshToken = coreTokens.getRefreshToken();
+        let tokenData    = coreTools.jwtDecode(refreshToken);
+
+        if (new Date(tokenData.exp * 1000) <= new Date()) {
+            coreTokens.clearRefreshToken();
+            return;
+        }
+
 
         $.ajax({
             url: coreMain.options.basePath + "/auth/refresh",
@@ -33,7 +46,7 @@ var coreTokens = {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
-                refresh_token: coreTokens.getRefreshToken(),
+                refresh_token: refreshToken,
                 fp: await coreTools.getFingerprint()
             })
         })
@@ -50,6 +63,10 @@ var coreTokens = {
 
                     coreTokens.setAccessToken(response.access_token);
                     coreTokens.setRefreshToken(response.refresh_token);
+
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 }
             })
 
@@ -78,8 +95,8 @@ var coreTokens = {
 
         localStorage.setItem('core3_access_token', accessToken);
 
-        let data        = coreTools.jwtDecode(coreTokens.getAccessToken());
-        let dateExpired = new Date(data.exp * 1000);
+        let tokenData   = coreTools.jwtDecode(coreTokens.getAccessToken());
+        let dateExpired = new Date(tokenData.exp * 1000);
 
         if (dateExpired > new Date()) {
             let expires = "; expires=" + dateExpired.toUTCString();

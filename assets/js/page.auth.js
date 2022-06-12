@@ -309,6 +309,7 @@ var pageAuth = {
                     $('.page-auth [name=password]').val('');
 
                     coreMain.viewPage('menu');
+                    coreTokens.initRefresh();
                 }
             })
 
@@ -333,6 +334,37 @@ var pageAuth = {
             });
     },
 
+    /**
+     *
+     */
+    logout: function () {
+
+        $.ajax({
+            url: coreMain.options.basePath + '/auth/logout',
+            method: "PUT",
+            headers: {
+                'Access-Token': coreTokens.getAccessToken()
+            },
+            dataType: "json",
+            success: function (response) {
+
+                coreTokens.clearAccessToken();
+                coreTokens.deinitRefresh();
+
+                coreMain.viewPage('auth');
+                $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
+            },
+            error: function (response) {
+                if (response.status === 0) {
+                    CoreUI.alert.danger('Ошибка', 'Проверьте подключение к интернету');
+
+                } else {
+                    CoreUI.alert.danger('Ошибка', 'Обновите приложение или обратитесь к администратору');
+                }
+            }
+        });
+    },
+
 
     /**
      * @param form
@@ -343,7 +375,7 @@ var pageAuth = {
         $('.container-registration .text-danger').text('');
 
         $.ajax({
-            url: coreMain.options.basePath + "/auth/registration",
+            url: coreMain.options.basePath + "/auth/registration/email",
             dataType: "json",
             method: "POST",
             data: $(form).serialize()
@@ -351,12 +383,25 @@ var pageAuth = {
             .done(function (response) {
                 pageAuth.preloader('hide');
 
-                if (response.status === 'success') {
-                    $('.container-registration .text-success').text(response.message).css('margin-bottom', '50px');
-                    $(form).hide();
+                if (typeof response.access_token !== 'string' ||
+                    typeof response.refresh_token !== 'string' ||
+                    ! response.access_token ||
+                    ! response.refresh_token
+                ) {
+                    let errorMessage = response.error_message || "Ошибка. Попробуйте позже, либо обратитесь к администратору";
+                    $('.container-registration .text-danger').text(errorMessage);
 
                 } else {
-                    $('.container-registration .text-danger').text(response.error_message);
+                    $('.page-auth form .text-danger').text('');
+
+                    coreTokens.setAccessToken(response.access_token);
+                    coreTokens.setRefreshToken(response.refresh_token);
+
+                    $('.page-auth [name=login]').val('');
+                    $('.page-auth [name=password]').val('');
+
+                    coreMain.viewPage('menu');
+                    coreTokens.initRefresh();
                 }
             })
 
@@ -407,7 +452,7 @@ var pageAuth = {
         let params = coreTools.getParams();
 
         $.ajax({
-            url: coreMain.options.basePath + "/auth/registration_complete",
+            url: coreMain.options.basePath + "/auth/registration/email/check$",
             dataType: "json",
             method: "POST",
             data: {
