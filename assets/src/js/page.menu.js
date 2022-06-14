@@ -29,7 +29,7 @@ var pageMenu = {
                     '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button install-button" ' +
                             'style="display: none">mobile_friendly</button>' +
 
-                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-profile-menu">menu</button>' +
+                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-profile-menu">more_vert</button>' +
 
                     '<div id="profile-menu" class="mdc-menu-surface--anchor">' +
                         '<div class="mdc-menu mdc-menu-surface">' +
@@ -49,14 +49,18 @@ var pageMenu = {
                 '</section>' +
             '</div>' +
         '</header>' +
-        '<aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">' +
+        '<aside class="mdc-drawer mdc-drawer--dismissible">' +
             '<div class="mdc-drawer__content">' +
+                '<div class="mdc-drawer__header">' +
+                    '<span class="material-icons">home</span>' +
+                    '<h3 class="system-title"></h3>' +
+                '</div>' +
                 '<ul class="menu-list level-1"></ul>' +
             '</div>' +
         '</aside>' +
         '<div class="mdc-drawer-scrim"></div>' +
         '<div class="mdc-drawer-swipe-area"></div>' +
-        '<div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">' +
+        '<div class="mdc-drawer-app-content">' +
             '<main class="main-content">' +
                 '<div class="container"></div>' +
             '</main>' +
@@ -429,7 +433,7 @@ var pageMenu = {
             $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(pageMenu.user.login));
         }
 
-        $('.page-menu > header .mdc-top-app-bar__title').text(pageMenu.system.name);
+        $('.page-menu .system-title').text(pageMenu.system.name);
 
         if (Object.values(pageMenu.modules).length > 0) {
             let params = coreTools.getParams();
