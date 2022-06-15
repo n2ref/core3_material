@@ -20,8 +20,11 @@ var pageMenu = {
         '<header class="mdc-top-app-bar mdc-top-app-bar--fixed app-bar">' +
             '<div class="mdc-top-app-bar__row">' +
                 '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">' +
-                    '<button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button open-menu" aria-label="Open navigation menu">menu</button>' +
-                    '<span class="mdc-top-app-bar__title"></span>' +
+                    '<button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button open-menu">menu</button>' +
+                    '<div class="header-title-container">' +
+                        '<span class="mdc-top-app-bar__title"></span>' +
+                        '<span class="mdc-top-app-bar__subtitle"></span>' +
+                    '</div>' +
                 '</section>' +
                 '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">' +
                     '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-fullscreen">fullscreen</button>' +
@@ -245,17 +248,25 @@ var pageMenu = {
             const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-menu .mdc-drawer'));
             drawer.foundation.handleScrimClick = function (){
                 drawer.open = false;
+                console.log(1)
+                $('.page.page-menu').closeClass('close-menu');
             }
 
             const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.page-menu .app-bar'));
             topAppBar.setScrollTarget(document.querySelector('.page-menu .main-content'));
             topAppBar.listen('MDCTopAppBar:nav', () => {
+
+                if (drawer.open) {
+                    $('.page.page-menu').addClass('close-menu');
+                } else {
+                    $('.page.page-menu').removeClass('close-menu');
+                }
+
                 drawer.open = ! drawer.open;
             });
 
 
             pageMenu.swipe($(".mdc-drawer-swipe-area")[0], function (direction) {
-                console.log(direction);
                 if (direction === "right") {
                     drawer.open = true;
 
@@ -352,7 +363,8 @@ var pageMenu = {
         let params = coreTools.getParams(url);
 
         if (params.module) {
-            pageMenu.setActiveModule(params.module);
+            pageMenu.setActiveModule(params.module, params.section);
+
         } else {
             let modules = Object.values(pageMenu.modules);
             if (modules.length > 0) {
@@ -451,18 +463,16 @@ var pageMenu = {
                 let moduleTitle   = $.trim(module.title);
                 let iconName      = $.trim(module.icon);
                 let moduleClasses = '';
-                let indexClasses  = '';
                 let activeAttr    = '';
                 let nestedList    = '';
                 let nestedListBtn = '';
                 let iconContent   = '';
 
                 if (params.module && params.module === moduleName) {
-                    moduleClasses = 'menu-module--activated menu-item-nested-open';
-                    activeAttr    = 'tabindex="0"';
+                    activeAttr = 'tabindex="0"';
 
-                    if (params.section && params.section === 'index') {
-                        indexClasses = 'menu-module-section--activated';
+                    if (module.sections && module.sections.length > 0) {
+                        moduleClasses = 'menu-item-nested-open';
                     }
 
                 } else {
@@ -474,28 +484,17 @@ var pageMenu = {
                 }
 
 
-                if ( module.sections && module.sections.length > 0) {
+                if (module.sections && module.sections.length > 0) {
                     let sectionLink = '';
                     moduleClasses  += ' menu-item-nested';
                     nestedListBtn   = '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>';
                     nestedList     += '<ul class="menu-list level-2">';
 
                     $.each(module.sections, function (key, section) {
-
-                        let sectionClasses = '';
-
-                        if (params.module &&
-                            params.module === moduleName &&
-                            params.section &&
-                            params.section === section.name
-                        ) {
-                            sectionClasses += 'menu-module-section--activated';
-                        }
-
                         sectionLink = moduleName + '/' + section.name;
                         nestedList +=
-                            '<li class="menu-list-item core-module-section core-module-' + moduleName + '-' + section.name + ' ' + sectionClasses + '">' +
-                                '<a onclick="if (location.hash === \'#/' + sectionLink + '\') pageMenu.load(\'/mod/' + sectionLink + '\');" ' +
+                            '<li class="menu-list-item core-module-section core-module-' + moduleName + '-' + section.name + '">' +
+                                '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + sectionLink + '\');" ' +
                                     'href="#/' + sectionLink + '" class="mdc-ripple-surface">' +
                                     '<span class="menu-list-item__text">' +  section.title + '</span>' +
                                 '</a>' +
@@ -507,8 +506,8 @@ var pageMenu = {
 
                 $('.page-menu > aside .menu-list.level-1').append(
                     '<li class="menu-list-item core-module core-module-' + moduleName + ' ' + moduleClasses + '" ' + activeAttr + '>' +
-                        '<div class="item-control ' + indexClasses + '">' +
-                            '<a onclick="if (location.hash === \'#/' + moduleName + '/index\') pageMenu.load(\'/mod/' + moduleName + '/index\');" ' +
+                        '<div class="item-control">' +
+                            '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + moduleName + '/index\');" ' +
                                'href="#/' + moduleName + '/index" class="mdc-ripple-surface">' +
                                  iconContent +
                                  '<span class="menu-list-item__text">' +  moduleTitle + '</span>' +
@@ -521,6 +520,9 @@ var pageMenu = {
             });
 
 
+            pageMenu.setActiveModule(params.module, params.section);
+
+
             let menuItems = document.querySelectorAll('.page-menu .menu-list-item a');
             for (let menuItem of menuItems) {
                 new mdc.ripple.MDCRipple(menuItem);
@@ -529,19 +531,65 @@ var pageMenu = {
             let buttons = document.querySelectorAll('.page-menu .menu-list-item .menu-icon-button');
             for (let button of buttons) {
                 new mdc.ripple.MDCRipple(button);
+                $(button).on('click', function () {
+                    $(this).parent().parent().toggleClass('menu-item-nested-open');
+                });
             }
         }
     },
 
 
     /**
-     *
      * @param moduleName
+     * @param sectionName
      */
-    setActiveModule: function (moduleName) {
+    setActiveModule: function (moduleName, sectionName) {
 
-        $('.page-menu > aside .core-module').removeClass('mdc-list-item--activated');
-        $('.page-menu > aside .core-module-' + moduleName).addClass('mdc-list-item--activated');
+        $('.page-menu > aside .core-module').removeClass('menu-module--activated');
+        $('.page-menu > aside .core-module-' + moduleName)
+            .addClass('menu-module--activated')
+            .addClass('menu-item-nested-open');
+
+        $('.page-menu > aside .core-module-section').removeClass('menu-module-section--activated');
+        $('.page-menu > aside .core-module-' + moduleName + '-' + sectionName).addClass('menu-module-section--activated');
+
+
+        /**
+         * @param moduleName
+         * @param sectionName
+         * @returns {*[]}
+         */
+        function getModuleTitles (moduleName, sectionName) {
+
+            let title = [];
+
+            $.each(pageMenu.modules, function (key, module) {
+                if (module.name === moduleName) {
+
+                    title.push(module.title);
+
+                    if (module.sections &&
+                        module.sections.length > 0
+                    ) {
+                        $.each(module.sections, function (key, section) {
+                            if (section.name === sectionName) {
+                                title.push(section.title);
+                                return false;
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+
+            return title;
+        }
+
+        let titles = getModuleTitles(moduleName, sectionName);
+
+        $('header .mdc-top-app-bar__title').text(titles[0] || '');
+        $('header .mdc-top-app-bar__subtitle').text(titles[1] || '');
     },
 
 
