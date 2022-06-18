@@ -545,10 +545,18 @@ var pageMenu = {
      */
     setActiveModule: function (moduleName, sectionName) {
 
-        $('.page-menu > aside .core-module').removeClass('menu-module--activated');
+        $('.page-menu > aside .core-module')
+            .removeClass('menu-module-index--activated')
+            .removeClass('menu-module--activated');
+
         $('.page-menu > aside .core-module-' + moduleName)
             .addClass('menu-module--activated')
             .addClass('menu-item-nested-open');
+
+        if (sectionName === 'index') {
+            $('.page-menu > aside .core-module.core-module-' + moduleName)
+                .addClass('menu-module-index--activated');
+        }
 
         $('.page-menu > aside .core-module-section').removeClass('menu-module-section--activated');
         $('.page-menu > aside .core-module-' + moduleName + '-' + sectionName).addClass('menu-module-section--activated');

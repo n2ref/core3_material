@@ -4,10 +4,10 @@
 
     --menu-header: #fff;
     --menu-sidebar: #242f40;
-    --menu-module-active: rgb(0 0 0 / 40%);
+    --menu-module-active: rgb(0 0 0 / 30%);
     --menu-module-active-item: rgb(0 0 0 / 30%);
     --menu-module-border: #2288ff;
-    --menu-text: #ebf0ff;
+    --menu-text: rgb(255 255 255 / 70%);
     --menu-header-text: #444;
 }
 @font-face {font-family: "Material Icons";font-style: normal;font-weight: 400;font-display: block;src: url("../fonts/material-icons.woff2") format("woff2");}
@@ -190,7 +190,7 @@ html, body {
 }
 .page-menu .mdc-top-app-bar .mdc-top-app-bar__subtitle {
     font-size: 12px;
-    line-height: 16px;
+    line-height: 20px;
     color: var(--menu-header-text);
 }
 .page-menu .mdc-top-app-bar .button-share {
@@ -249,9 +249,6 @@ html, body {
     list-style: none;
     overflow: hidden;
 }
-.page-menu .mdc-drawer .menu-list .menu-list-item .item-control {
-
-}
 .page-menu .mdc-drawer .menu-list.level-1 {
     padding: 0 10px;
     margin: 10px 0;
@@ -263,9 +260,6 @@ html, body {
     justify-content: space-between;
     align-items: center;
     border-radius: 10px;
-}
-.page-menu .mdc-drawer .menu-list.level-1 > .menu-list-item .item-control:hover {
-    background-color: rgb(0 0 0 / 10%);
 }
 .page-menu .mdc-drawer .menu-list.level-1 > .menu-list-item .item-control a {
     width: 240px;
@@ -297,7 +291,7 @@ html, body {
     padding: 0;
     height: 0;
     opacity: 0;
-    transition: all 100ms linear 100ms;
+    transition: opacity 100ms linear 100ms;
 }
 .page-menu .mdc-drawer .menu-item-nested-open .menu-list.level-2 {
     height: auto;
@@ -320,6 +314,7 @@ html, body {
     display: flex;
     align-items: center;
 }
+.page-menu .mdc-drawer .menu-list .menu-list-item.menu-item-nested-open.menu-item-nested .item-control:hover,
 .page-menu .mdc-drawer .menu-list.level-2 > .menu-list-item a:hover {
     background-color: rgb(0 0 0 / 10%);
 }
@@ -343,11 +338,18 @@ html, body {
 .page-menu .mdc-drawer .menu-list-item__meta {
     color: var(--menu-text);
 }
-.page-menu .mdc-drawer .menu-list-item.menu-module--activated {
+.page-menu .mdc-drawer .menu-list.level-1 > .menu-list-item:hover,
+.page-menu .mdc-drawer .menu-list-item.menu-module--activated,
+.page-menu .mdc-drawer .menu-list-item.menu-module-index--activated .item-control {
     background-color: var(--menu-module-active);
 }
 .page-menu .mdc-drawer .menu-module-section--activated {
     background-color: var(--menu-module-active-item);
+}
+.page-menu .mdc-drawer .menu-module-index--activated .item-control .material-icons,
+.page-menu .mdc-drawer .menu-module-index--activated .item-control .menu-list-item__text,
+.page-menu .mdc-drawer .menu-module-section--activated .menu-list-item__text {
+    color: rgb(255 255 255 / 90%);
 }
 .page-menu #preloader {
     margin-top: -4px;
@@ -396,9 +398,9 @@ html, body {
     height: 100%;
     box-sizing: border-box;
     overflow: auto;
-    -webkit-transition: all 235ms linear 100ms;
-    -o-transition: all 235ms linear 100ms;
-    transition: all 235ms linear 100ms;
+    /*-webkit-transition: all 235ms linear 100ms;*/
+    /*-o-transition: all 235ms linear 100ms;*/
+    /*transition: all 235ms linear 100ms;*/
 }
 .page-menu .mdc-drawer-app-content .main-content {
     padding-top: 64px;
