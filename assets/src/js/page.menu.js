@@ -27,8 +27,6 @@ var pageMenu = {
                     '</div>' +
                 '</section>' +
                 '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">' +
-                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-fullscreen">fullscreen</button>' +
-                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-share">share</button>' +
                     '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button install-button" ' +
                             'style="display: none">mobile_friendly</button>' +
 
@@ -36,18 +34,18 @@ var pageMenu = {
 
                     '<div id="profile-menu" class="mdc-menu-surface--anchor">' +
                         '<div class="mdc-menu mdc-menu-surface">' +
-                    '<ul class="mdc-list" role="menu" aria-hidden="false" aria-orientation="vertical" tabindex="-1">' +
-                        '<li class="mdc-list-item" role="menuitem">' +
-                            '<span class="mdc-list-item__ripple"></span>' +
-                            '<span class="mdc-list-item__text">A Menu Item</span>' +
-                        '</li>' +
-                        '<li class="mdc-list-item menu-logout" role="menuitem">' +
-                            '<span class="mdc-list-item__ripple"></span>' +
-                            '<i class="material-icons mdc-list-item__graphic" aria-hidden="true">logout</i>' +
-                            '<span class="mdc-list-item__text">Выйти</span>' +
-                        '</li>' +
-                    '</ul>' +
-                    '</div>' +
+                            '<ul class="mdc-list" tabindex="-1">' +
+                                '<li class="mdc-list-item menu-user">' +
+                                    '<span class="mdc-list-item__header"></span>' +
+                                    '<span class="mdc-list-item__text"></span>' +
+                                '</li>' +
+                                '<li class="mdc-list-item menu-logout">' +
+                                    '<span class="mdc-list-item__ripple"></span>' +
+                                    '<i class="material-icons mdc-list-item__graphic">logout</i>' +
+                                    '<span class="mdc-list-item__text">Выйти</span>' +
+                                '</li>' +
+                            '</ul>' +
+                        '</div>' +
                     '</div>' +
                 '</section>' +
             '</div>' +
@@ -96,22 +94,6 @@ var pageMenu = {
         }
 
 
-        if (navigator.platform === 'web') {
-            // Share
-            $('.page-menu .button-share').show().on('click', function () {
-                navigator.share({
-                    title: 'Сканер документов',
-                    text : 'Приложение для сканирования и отправки документов в систему учета для их дальнейшей обработки.',
-                    url  : location.protocol + '//' + location.host,
-                });
-            });
-        }
-
-        // Fullscreen
-        $('.page-menu .button-fullscreen').on('click', pageMenu.toggleFullscreen);
-
-
-
         let element       = $('#profile-menu .mdc-menu-surface');
         const profileMenu = new mdc.menu.MDCMenu(element[0]);
 
@@ -157,8 +139,7 @@ var pageMenu = {
             const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-menu .mdc-drawer'));
             drawer.foundation.handleScrimClick = function (){
                 drawer.open = false;
-                console.log(1)
-                $('.page.page-menu').closeClass('close-menu');
+                $('.page.page-menu').removeClass('close-menu');
             }
 
             const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.page-menu .app-bar'));
@@ -445,10 +426,10 @@ var pageMenu = {
             $('.page-menu > aside > .mdc-drawer__header img').attr('src', pageMenu._user.avatar).show();
         }
         if (pageMenu._user.name) {
-            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(pageMenu._user.name));
+            $('.page-menu header #profile-menu .menu-user .mdc-list-item__header').text($.trim(pageMenu._user.name));
         }
         if (pageMenu._user.login) {
-            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(pageMenu._user.login));
+            $('.page-menu header #profile-menu .menu-user .mdc-list-item__text').text($.trim(pageMenu._user.login));
         }
 
         $('.page-menu .system-title').text(pageMenu._system.name);
