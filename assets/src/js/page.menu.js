@@ -10,17 +10,11 @@ var pageMenu = {
 
     _modules: null,
 
-    /**
-     *
-     */
-    _isInitMenu: false,
-
-
     _tpl:
         '<header class="mdc-top-app-bar mdc-top-app-bar--fixed app-bar">' +
             '<div class="mdc-top-app-bar__row">' +
                 '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">' +
-                    '<button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button open-menu">menu</button>' +
+                    '<button class="material-icons mdc-ripple-surface mdc-icon-button open-menu">menu</button>' +
                     '<div class="header-title-container">' +
                         '<span class="mdc-top-app-bar__title"></span>' +
                         '<span class="mdc-top-app-bar__subtitle"></span>' +
@@ -50,9 +44,9 @@ var pageMenu = {
                 '</section>' +
             '</div>' +
         '</header>' +
-        '<aside class="mdc-drawer mdc-drawer--dismissible">' +
-            '<div class="mdc-drawer__content">' +
-                '<div class="mdc-drawer__header">' +
+        '<aside class="menu-drawer">' +
+            '<div class="menu-drawer__content">' +
+                '<div class="menu-drawer__header">' +
                     '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/\');" href="#/">' +
                         '<span class="material-icons">home</span>' +
                         '<h3 class="system-title"></h3>' +
@@ -61,9 +55,9 @@ var pageMenu = {
                 '<ul class="menu-list level-1"></ul>' +
             '</div>' +
         '</aside>' +
-        '<div class="mdc-drawer-scrim"></div>' +
-        '<div class="mdc-drawer-swipe-area"></div>' +
-        '<div class="mdc-drawer-app-content">' +
+        '<div class="menu-drawer-scrim"></div>' +
+        '<div class="menu-drawer-swipe"></div>' +
+        '<div class="menu-drawer-app">' +
             '<main class="main-content">' +
                 '<div class="container"></div>' +
             '</main>' +
@@ -128,40 +122,47 @@ var pageMenu = {
         function initMenu() {
 
             if (window.screen.width <= 768) {
-                $('.page-menu .mdc-drawer').removeClass('mdc-drawer--dismissible');
-                $('.page-menu .mdc-drawer').addClass('mdc-drawer--modal');
+                // $('.page-menu .menu-drawer').removeClass('menu-drawer--dismissible');
+                // $('.page-menu .menu-drawer').addClass('menu-drawer--modal');
             }
 
             if (window.screen.width >= 769) {
-                $('.page-menu .mdc-drawer').addClass('mdc-drawer--open');
+                // $('.page-menu .menu-drawer').addClass('menu-drawer--open');
             }
 
-            const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-menu .mdc-drawer'));
-            drawer.foundation.handleScrimClick = function (){
-                drawer.open = false;
-                $('.page.page-menu').removeClass('close-menu');
-            }
+            // const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-menu .menu-drawer'));
+            // drawer.foundation.handleScrimClick = function (){
+            //     drawer.open = false;
+            //     $('.page.page-menu').removeClass('sidebar-close');
+            // }
 
-            const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.page-menu .app-bar'));
-            topAppBar.setScrollTarget(document.querySelector('.page-menu .main-content'));
-            topAppBar.listen('MDCTopAppBar:nav', () => {
 
-                if (drawer.open) {
-                    $('.page.page-menu').addClass('close-menu');
-                } else {
-                    $('.page.page-menu').removeClass('close-menu');
-                }
-
-                drawer.open = ! drawer.open;
+            $('.open-menu').on('click', function () {
+                $('.page.page-menu').toggleClass('sidebar-close');
             });
 
 
-            pageMenu._initSwipe($(".mdc-drawer-swipe-area")[0], function (direction) {
+            let buttons = document.querySelectorAll('.page-menu .menu-drawer .mdc-ripple-surface');
+            for (let button of buttons) {
+                new mdc.ripple.MDCRipple(button);
+            }
+
+            // const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector());
+            // topAppBar.setScrollTarget(document.querySelector('.page-menu .main-content'));
+            // topAppBar.listen('MDCTopAppBar:nav', () => {
+            //     console.log2)
+            //     $('.page.page-menu').toggleClass('sidebar-close');
+            // });
+
+
+            pageMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
                 if (direction === "right") {
-                    drawer.open = true;
+                    $('.page.page-menu').removeClass('sidebar-close');
+                    // drawer.open = true;
 
                 } else if (direction === "left") {
-                    drawer.open = false;
+                    $('.page.page-menu').addClass('sidebar-close');
+                    // drawer.open = false;
                 }
             });
         }
@@ -196,14 +197,7 @@ var pageMenu = {
                     pageMenu._modules = response.modules;
 
                     pageMenu._renderMenu();
-
-                    if ( ! pageMenu._isInitMenu) {
-                        initMenu();
-                        pageMenu._isInitMenu = true;
-                    } else {
-                        $('.page-menu .mdc-drawer').removeClass('mdc-drawer--open');
-                    }
-
+                    initMenu();
                     pageMenu.loadingScreen('hide');
 
                     let uri = location.hash.substr(1) !== '/' ? '/mod' + location.hash.substr(1) : '/';
@@ -423,7 +417,7 @@ var pageMenu = {
     _renderMenu: function () {
 
         if (pageMenu._user.avatar) {
-            $('.page-menu > aside > .mdc-drawer__header img').attr('src', pageMenu._user.avatar).show();
+            $('.page-menu > aside > .menu-drawer__header img').attr('src', pageMenu._user.avatar).show();
         }
         if (pageMenu._user.name) {
             $('.page-menu header #profile-menu .menu-user .mdc-list-item__header').text($.trim(pageMenu._user.name));
