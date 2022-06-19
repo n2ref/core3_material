@@ -17,7 +17,7 @@ var coreTools = {
         let params = url.match(/^\/mod\/([a-z0-9_]*)(?:\/|)([a-z0-9_]*)(?:(\?[^?]*)|)/);
         let result = {
             module: params !== null && typeof params[1] === 'string' ? params[1] : '',
-            section: params !== null && typeof params[2] === 'string' ? params[2] : 'index',
+            section: params !== null && typeof params[2] === 'string' ? params[2] : '',
             query:  params !== null && typeof params[3] === 'string' ? params[3] : '',
         };
 

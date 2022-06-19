@@ -55,8 +55,10 @@ var pageMenu = {
         '<aside class="mdc-drawer mdc-drawer--dismissible">' +
             '<div class="mdc-drawer__content">' +
                 '<div class="mdc-drawer__header">' +
-                    '<span class="material-icons">home</span>' +
-                    '<h3 class="system-title"></h3>' +
+                    '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/\');" href="#/">' +
+                        '<span class="material-icons">home</span>' +
+                        '<h3 class="system-title"></h3>' +
+                    '</a>' +
                 '</div>' +
                 '<ul class="menu-list level-1"></ul>' +
             '</div>' +
@@ -316,7 +318,7 @@ var pageMenu = {
 
                     pageMenu.loadingScreen('hide');
 
-                    let uri = location.hash.substr(1) ? '/mod' + location.hash.substr(1) : '';
+                    let uri = location.hash.substr(1) !== '/' ? '/mod' + location.hash.substr(1) : '/';
 
                     pageMenu.load(uri);
                 }
@@ -360,23 +362,16 @@ var pageMenu = {
 
         pageMenu.preloader('show');
 
-        let params = coreTools.getParams(url);
+        let accessToken = coreTokens.getAccessToken();
+        let params      = coreTools.getParams(url);
 
-        if (params.module) {
-            pageMenu.setActiveModule(params.module, params.section);
+        pageMenu.setActiveModule(params.module, params.section);
 
-        } else {
-            let modules = Object.values(pageMenu.modules);
-            if (modules.length > 0) {
-                pageMenu.setActiveModule(modules[0].name);
-
-                url = '/mod/' + modules[0].name + '/index'
-            }
+        if (url === '/') {
+            url = '/home';
         }
 
 
-
-        let accessToken = coreTokens.getAccessToken();
 
         $.ajax({
             url: coreMain.options.basePath + url,
@@ -560,6 +555,12 @@ var pageMenu = {
 
         $('.page-menu > aside .core-module-section').removeClass('menu-module-section--activated');
         $('.page-menu > aside .core-module-' + moduleName + '-' + sectionName).addClass('menu-module-section--activated');
+
+        if ( ! moduleName && ! sectionName) {
+            $('.page-menu .module-home').addClass('active');
+        } else {
+            $('.page-menu .module-home').removeClass('active');
+        }
 
 
         /**

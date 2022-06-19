@@ -20,10 +20,29 @@ var paths = {
     ]
 };
 
+
+const uglifyConfig = {
+    ie8: true,
+    // keep_fnames: true,
+    // warnings: true,
+    // mangle: {
+    //     keep_classnames: true,
+    //     safari10: true
+    // },
+    // output: {
+    //     safari10: true
+    // },
+    //compress: {
+    //    sequences: false,
+    //    typeofs: false,
+    //    keep_infinity: true
+    //}
+};
+
 gulp.task('build_js', function(){
     return gulp.src(paths.js)
         .pipe(sourcemaps.init())
-        .pipe(uglify())
+        .pipe(uglify(uglifyConfig))
         .pipe(concat('core-all.min.js', {newLine: ";\n"}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist'));
