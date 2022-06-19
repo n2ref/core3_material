@@ -4,16 +4,16 @@ var pageMenu = {
     /**
      *
      */
-    user: null,
+    _user: null,
 
-    system: null,
+    _system: null,
 
-    modules: null,
+    _modules: null,
 
     /**
      *
      */
-    isInitMenu: false,
+    _isInitMenu: false,
 
 
     _tpl:
@@ -83,69 +83,6 @@ var pageMenu = {
 
 
     /**
-     * @param target
-     * @param callback
-     */
-    swipe: function (target, callback) {
-
-        document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchmove', handleTouchMove, false);
-
-        let xDown = null;
-        let yDown = null;
-
-        /**
-         * @param evt
-         */
-        function handleTouchStart(evt) {
-            xDown = evt.touches[0].clientX;
-            yDown = evt.touches[0].clientY;
-        }
-
-        /**
-         * @param evt
-         */
-        function handleTouchMove(evt) {
-            if ( ! xDown || ! yDown ) {
-                return;
-            }
-
-
-            let xUp = evt.touches[0].clientX;
-            let yUp = evt.touches[0].clientY;
-
-            let xDiff = xDown - xUp;
-            let yDiff = yDown - yUp;
-
-            if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-                if ( xDiff > 0 ) {
-                    if (target === evt.target) {
-                        callback('left')
-                    }
-                } else {
-                    if (target === evt.target) {
-                        callback('right')
-                    }
-                }
-            } else {
-                if ( yDiff > 0 ) {
-                    if (target === evt.target) {
-                        callback('up')
-                    }
-                } else {
-                    if (target === evt.target) {
-                        callback('down')
-                    }
-                }
-            }
-
-            xDown = null;
-            yDown = null;
-        }
-    },
-
-
-    /**
      * Инициализация
      */
     init: function () {
@@ -184,37 +121,7 @@ var pageMenu = {
         });
 
 
-        // Установка
-        let install = function (event) {
-            event.preventDefault();
-
-            let button = $('.page-menu .install-button');
-
-            if (event.platforms.includes('web')) {
-                button.show();
-                button.on('click', function () {
-                    event.prompt();
-                });
-            }
-
-            event.userChoice.then(function(choiceResult) {
-                switch (choiceResult.outcome) {
-                    case "accepted" :
-                        button.hide();
-                        break;
-
-                    case "dismissed" :
-                        button.css('opacity', '0.7');
-                        break;
-                }
-            });
-        }
-
-        if (coreMain.install.event) {
-            install(coreMain.install.event);
-        } else {
-            coreMain.install.promise.then(install);
-        }
+        pageMenu._initInstall();
 
 
         // Выход
@@ -268,7 +175,7 @@ var pageMenu = {
             });
 
 
-            pageMenu.swipe($(".mdc-drawer-swipe-area")[0], function (direction) {
+            pageMenu._initSwipe($(".mdc-drawer-swipe-area")[0], function (direction) {
                 if (direction === "right") {
                     drawer.open = true;
 
@@ -300,18 +207,18 @@ var pageMenu = {
                     typeof response.modules !== 'object'
                 ) {
                     console.warn(response);
-                    CoreUI.alert.danger('Ошибка', 'Попробуйте обновить приложение или обратитесь к администратору');
+                    CoreUI.alert.danger('Ошибка', 'Попробуйте обновить страницу или обратитесь к администратору');
 
                 } else {
-                    pageMenu.user    = response.user;
-                    pageMenu.system  = response.system;
-                    pageMenu.modules = response.modules;
+                    pageMenu._user    = response.user;
+                    pageMenu._system  = response.system;
+                    pageMenu._modules = response.modules;
 
-                    pageMenu.renderMenu();
+                    pageMenu._renderMenu();
 
-                    if ( ! pageMenu.isInitMenu) {
+                    if ( ! pageMenu._isInitMenu) {
                         initMenu();
-                        pageMenu.isInitMenu = true;
+                        pageMenu._isInitMenu = true;
                     } else {
                         $('.page-menu .mdc-drawer').removeClass('mdc-drawer--open');
                     }
@@ -365,7 +272,7 @@ var pageMenu = {
         let accessToken = coreTokens.getAccessToken();
         let params      = coreTools.getParams(url);
 
-        pageMenu.setActiveModule(params.module, params.section);
+        pageMenu._setActiveModule(params.module, params.section);
 
         if (url === '/') {
             url = '/home';
@@ -422,183 +329,6 @@ var pageMenu = {
                 }
             }
         });
-    },
-
-
-    /**
-     *
-     */
-    renderMenu: function () {
-
-        if (pageMenu.user.avatar) {
-            $('.page-menu > aside > .mdc-drawer__header img').attr('src', pageMenu.user.avatar).show();
-        }
-        if (pageMenu.user.name) {
-            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(pageMenu.user.name));
-        }
-        if (pageMenu.user.login) {
-            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(pageMenu.user.login));
-        }
-
-        $('.page-menu .system-title').text(pageMenu.system.name);
-
-        if (Object.values(pageMenu.modules).length > 0) {
-            let params = coreTools.getParams();
-
-            $.each(pageMenu.modules, function (key, module) {
-
-                if (typeof module.name !== 'string' || ! module.name ||
-                    typeof module.title !== 'string' || ! module.title
-                ) {
-                    CoreUI.notify.danger('Не удалось показать некоторые модули из за ошибок!');
-                    return true;
-                }
-
-                let moduleName    = $.trim(module.name);
-                let moduleTitle   = $.trim(module.title);
-                let iconName      = $.trim(module.icon);
-                let moduleClasses = '';
-                let activeAttr    = '';
-                let nestedList    = '';
-                let nestedListBtn = '';
-                let iconContent   = '';
-
-                if (params.module && params.module === moduleName) {
-                    activeAttr = 'tabindex="0"';
-
-                    if (module.sections && module.sections.length > 0) {
-                        moduleClasses = 'menu-item-nested-open';
-                    }
-
-                } else {
-                    activeAttr  = 'tabindex="1"';
-                }
-
-                if (iconName) {
-                    iconContent = '<i class="material-icons menu-list-item__graphic">' + iconName + '</i>';
-                }
-
-
-                if (module.sections && module.sections.length > 0) {
-                    let sectionLink = '';
-                    moduleClasses  += ' menu-item-nested';
-                    nestedListBtn   = '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>';
-                    nestedList     += '<ul class="menu-list level-2">';
-
-                    $.each(module.sections, function (key, section) {
-                        sectionLink = moduleName + '/' + section.name;
-                        nestedList +=
-                            '<li class="menu-list-item core-module-section core-module-' + moduleName + '-' + section.name + '">' +
-                                '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + sectionLink + '\');" ' +
-                                    'href="#/' + sectionLink + '" class="mdc-ripple-surface">' +
-                                    '<span class="menu-list-item__text">' +  section.title + '</span>' +
-                                '</a>' +
-                            '</li>'
-                    });
-
-                    nestedList += '</ul>';
-                }
-
-                $('.page-menu > aside .menu-list.level-1').append(
-                    '<li class="menu-list-item core-module core-module-' + moduleName + ' ' + moduleClasses + '" ' + activeAttr + '>' +
-                        '<div class="item-control">' +
-                            '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + moduleName + '/index\');" ' +
-                               'href="#/' + moduleName + '/index" class="mdc-ripple-surface">' +
-                                 iconContent +
-                                 '<span class="menu-list-item__text">' +  moduleTitle + '</span>' +
-                            '</a>' +
-                            nestedListBtn +
-                        '</div>' +
-                        nestedList +
-                    '</li>'
-                );
-            });
-
-
-            pageMenu.setActiveModule(params.module, params.section);
-
-
-            let menuItems = document.querySelectorAll('.page-menu .menu-list-item a');
-            for (let menuItem of menuItems) {
-                new mdc.ripple.MDCRipple(menuItem);
-            }
-
-            let buttons = document.querySelectorAll('.page-menu .menu-list-item .menu-icon-button');
-            for (let button of buttons) {
-                new mdc.ripple.MDCRipple(button);
-                $(button).on('click', function () {
-                    $(this).parent().parent().toggleClass('menu-item-nested-open');
-                });
-            }
-        }
-    },
-
-
-    /**
-     * @param moduleName
-     * @param sectionName
-     */
-    setActiveModule: function (moduleName, sectionName) {
-
-        $('.page-menu > aside .core-module')
-            .removeClass('menu-module-index--activated')
-            .removeClass('menu-module--activated');
-
-        $('.page-menu > aside .core-module-' + moduleName)
-            .addClass('menu-module--activated')
-            .addClass('menu-item-nested-open');
-
-        if (sectionName === 'index') {
-            $('.page-menu > aside .core-module.core-module-' + moduleName)
-                .addClass('menu-module-index--activated');
-        }
-
-        $('.page-menu > aside .core-module-section').removeClass('menu-module-section--activated');
-        $('.page-menu > aside .core-module-' + moduleName + '-' + sectionName).addClass('menu-module-section--activated');
-
-        if ( ! moduleName && ! sectionName) {
-            $('.page-menu .module-home').addClass('active');
-        } else {
-            $('.page-menu .module-home').removeClass('active');
-        }
-
-
-        /**
-         * @param moduleName
-         * @param sectionName
-         * @returns {*[]}
-         */
-        function getModuleTitles (moduleName, sectionName) {
-
-            let title = [];
-
-            $.each(pageMenu.modules, function (key, module) {
-                if (module.name === moduleName) {
-
-                    title.push(module.title);
-
-                    if (module.sections &&
-                        module.sections.length > 0
-                    ) {
-                        $.each(module.sections, function (key, section) {
-                            if (section.name === sectionName) {
-                                title.push(section.title);
-                                return false;
-                            }
-                        });
-                    }
-
-                    return false;
-                }
-            });
-
-            return title;
-        }
-
-        let titles = getModuleTitles(moduleName, sectionName);
-
-        $('header .mdc-top-app-bar__title').text(titles[0] || '');
-        $('header .mdc-top-app-bar__subtitle').text(titles[1] || '');
     },
 
 
@@ -702,6 +432,284 @@ var pageMenu = {
                     $('#loading-screen').remove();
                 });
                 break;
+        }
+    },
+
+
+    /**
+     *
+     */
+    _renderMenu: function () {
+
+        if (pageMenu._user.avatar) {
+            $('.page-menu > aside > .mdc-drawer__header img').attr('src', pageMenu._user.avatar).show();
+        }
+        if (pageMenu._user.name) {
+            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__title').text($.trim(pageMenu._user.name));
+        }
+        if (pageMenu._user.login) {
+            $('.page-menu > aside > .mdc-drawer__header .mdc-drawer__subtitle').text($.trim(pageMenu._user.login));
+        }
+
+        $('.page-menu .system-title').text(pageMenu._system.name);
+
+        if (Object.values(pageMenu._modules).length > 0) {
+            let params = coreTools.getParams();
+
+            $.each(pageMenu._modules, function (key, module) {
+
+                if (typeof module.name !== 'string' || ! module.name ||
+                    typeof module.title !== 'string' || ! module.title
+                ) {
+                    CoreUI.notify.danger('Не удалось показать некоторые модули из за ошибок!');
+                    return true;
+                }
+
+                let moduleName    = $.trim(module.name);
+                let moduleTitle   = $.trim(module.title);
+                let iconName      = $.trim(module.icon);
+                let moduleClasses = '';
+                let activeAttr    = '';
+                let nestedList    = '';
+                let nestedListBtn = '';
+                let iconContent   = '';
+
+                if (params.module && params.module === moduleName) {
+                    activeAttr = 'tabindex="0"';
+
+                    if (module.sections && module.sections.length > 0) {
+                        moduleClasses = 'menu-item-nested-open';
+                    }
+
+                } else {
+                    activeAttr  = 'tabindex="1"';
+                }
+
+                if (iconName) {
+                    iconContent = '<i class="material-icons menu-list-item__graphic">' + iconName + '</i>';
+                }
+
+
+                if (module.sections && module.sections.length > 0) {
+                    let sectionLink = '';
+                    moduleClasses  += ' menu-item-nested';
+                    nestedListBtn   = '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>';
+                    nestedList     += '<ul class="menu-list level-2">';
+
+                    $.each(module.sections, function (key, section) {
+                        sectionLink = moduleName + '/' + section.name;
+                        nestedList +=
+                            '<li class="menu-list-item core-module-section core-module-' + moduleName + '-' + section.name + '">' +
+                                '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + sectionLink + '\');" ' +
+                                    'href="#/' + sectionLink + '" class="mdc-ripple-surface">' +
+                                    '<span class="menu-list-item__text">' +  section.title + '</span>' +
+                                '</a>' +
+                            '</li>'
+                    });
+
+                    nestedList += '</ul>';
+                }
+
+                $('.page-menu > aside .menu-list.level-1').append(
+                    '<li class="menu-list-item core-module core-module-' + moduleName + ' ' + moduleClasses + '" ' + activeAttr + '>' +
+                        '<div class="item-control">' +
+                            '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + moduleName + '/index\');" ' +
+                                'href="#/' + moduleName + '/index" class="mdc-ripple-surface">' +
+                                iconContent +
+                                '<span class="menu-list-item__text">' +  moduleTitle + '</span>' +
+                            '</a>' +
+                            nestedListBtn +
+                        '</div>' +
+                        nestedList +
+                    '</li>'
+                );
+            });
+
+
+            pageMenu._setActiveModule(params.module, params.section);
+
+
+            let menuItems = document.querySelectorAll('.page-menu .menu-list-item a');
+            for (let menuItem of menuItems) {
+                new mdc.ripple.MDCRipple(menuItem);
+            }
+
+            let buttons = document.querySelectorAll('.page-menu .menu-list-item .menu-icon-button');
+            for (let button of buttons) {
+                new mdc.ripple.MDCRipple(button);
+                $(button).on('click', function () {
+                    $(this).parent().parent().toggleClass('menu-item-nested-open');
+                });
+            }
+        }
+    },
+
+
+    /**
+     * @param moduleName
+     * @param sectionName
+     */
+    _setActiveModule: function (moduleName, sectionName) {
+
+        $('.page-menu > aside .core-module')
+            .removeClass('menu-module-index--activated')
+            .removeClass('menu-module--activated');
+
+        $('.page-menu > aside .core-module-' + moduleName)
+            .addClass('menu-module--activated')
+            .addClass('menu-item-nested-open');
+
+        if (sectionName === 'index') {
+            $('.page-menu > aside .core-module.core-module-' + moduleName)
+                .addClass('menu-module-index--activated');
+        }
+
+        $('.page-menu > aside .core-module-section').removeClass('menu-module-section--activated');
+        $('.page-menu > aside .core-module-' + moduleName + '-' + sectionName).addClass('menu-module-section--activated');
+
+        if ( ! moduleName && ! sectionName) {
+            $('.page-menu .module-home').addClass('active');
+        } else {
+            $('.page-menu .module-home').removeClass('active');
+        }
+
+
+        /**
+         * @param moduleName
+         * @param sectionName
+         * @returns {*[]}
+         */
+        function getModuleTitles (moduleName, sectionName) {
+
+            let title = [];
+
+            $.each(pageMenu._modules, function (key, module) {
+                if (module.name === moduleName) {
+
+                    title.push(module.title);
+
+                    if (module.sections &&
+                        module.sections.length > 0
+                    ) {
+                        $.each(module.sections, function (key, section) {
+                            if (section.name === sectionName) {
+                                title.push(section.title);
+                                return false;
+                            }
+                        });
+                    }
+
+                    return false;
+                }
+            });
+
+            return title;
+        }
+
+        let titles = getModuleTitles(moduleName, sectionName);
+
+        $('header .mdc-top-app-bar__title').text(titles[0] || '');
+        $('header .mdc-top-app-bar__subtitle').text(titles[1] || '');
+    },
+
+
+    /**
+     * @param target
+     * @param callback
+     */
+    _initSwipe: function (target, callback) {
+
+        document.addEventListener('touchstart', handleTouchStart, false);
+        document.addEventListener('touchmove', handleTouchMove, false);
+
+        let xDown = null;
+        let yDown = null;
+
+        /**
+         * @param evt
+         */
+        function handleTouchStart(evt) {
+            xDown = evt.touches[0].clientX;
+            yDown = evt.touches[0].clientY;
+        }
+
+        /**
+         * @param evt
+         */
+        function handleTouchMove(evt) {
+            if ( ! xDown || ! yDown ) {
+                return;
+            }
+
+
+            let xUp = evt.touches[0].clientX;
+            let yUp = evt.touches[0].clientY;
+
+            let xDiff = xDown - xUp;
+            let yDiff = yDown - yUp;
+
+            if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+                if ( xDiff > 0 ) {
+                    if (target === evt.target) {
+                        callback('left')
+                    }
+                } else {
+                    if (target === evt.target) {
+                        callback('right')
+                    }
+                }
+            } else {
+                if ( yDiff > 0 ) {
+                    if (target === evt.target) {
+                        callback('up')
+                    }
+                } else {
+                    if (target === evt.target) {
+                        callback('down')
+                    }
+                }
+            }
+
+            xDown = null;
+            yDown = null;
+        }
+    },
+
+
+    /**
+     * Установка
+     */
+    _initInstall: function () {
+
+        let install = function (event) {
+            event.preventDefault();
+
+            let button = $('.page-menu .install-button');
+
+            if (event.platforms.includes('web')) {
+                button.show();
+                button.on('click', function () {
+                    event.prompt();
+                });
+            }
+
+            event.userChoice.then(function(choiceResult) {
+                switch (choiceResult.outcome) {
+                    case "accepted" :
+                        button.hide();
+                        break;
+
+                    case "dismissed" :
+                        button.css('opacity', '0.7');
+                        break;
+                }
+            });
+        }
+
+        if (coreMain.install.event) {
+            install(coreMain.install.event);
+        } else {
+            coreMain.install.promise.then(install);
         }
     }
 }
