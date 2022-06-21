@@ -121,24 +121,8 @@ var pageMenu = {
          */
         function initMenu() {
 
-            if (window.screen.width <= 768) {
-                // $('.page-menu .menu-drawer').removeClass('menu-drawer--dismissible');
-                // $('.page-menu .menu-drawer').addClass('menu-drawer--modal');
-            }
-
-            if (window.screen.width >= 769) {
-                // $('.page-menu .menu-drawer').addClass('menu-drawer--open');
-            }
-
-            // const drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.page-menu .menu-drawer'));
-            // drawer.foundation.handleScrimClick = function (){
-            //     drawer.open = false;
-            //     $('.page.page-menu').removeClass('sidebar-close');
-            // }
-
-
-            $('.open-menu').on('click', function () {
-                $('.page.page-menu').toggleClass('sidebar-close');
+            $('.open-menu, .menu-drawer-scrim').on('click', function () {
+                $('.page.page-menu').toggleClass('drawer-toggle');
             });
 
 
@@ -147,22 +131,13 @@ var pageMenu = {
                 new mdc.ripple.MDCRipple(button);
             }
 
-            // const topAppBar = new mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector());
-            // topAppBar.setScrollTarget(document.querySelector('.page-menu .main-content'));
-            // topAppBar.listen('MDCTopAppBar:nav', () => {
-            //     console.log2)
-            //     $('.page.page-menu').toggleClass('sidebar-close');
-            // });
-
 
             pageMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
                 if (direction === "right") {
-                    $('.page.page-menu').removeClass('sidebar-close');
-                    // drawer.open = true;
+                    $('.page.page-menu').toggleClass('drawer-toggle');
 
                 } else if (direction === "left") {
-                    $('.page.page-menu').addClass('sidebar-close');
-                    // drawer.open = false;
+                    $('.page.page-menu').toggleClass('drawer-toggle');
                 }
             });
         }
@@ -338,7 +313,7 @@ var pageMenu = {
                 );
 
                 let preloaderElement = $('#preloader .preloader-progress');
-                let linearProgress   = new mdc.linearProgress.MDCLinearProgress(preloaderElement[0]);
+                let linearProgress   = new mdc['linear-progress'].MDCLinearProgress(preloaderElement[0]);
                 linearProgress.determinate = false;
                 break;
 
@@ -397,7 +372,7 @@ var pageMenu = {
                 );
 
                 let element            = $('#loading-screen .mdc-circular-progress');
-                const circularProgress = new mdc.circularProgress.MDCCircularProgress(element[0]);
+                const circularProgress = new mdc['circular-progress'].MDCCircularProgress(element[0]);
                 circularProgress.determinate = false;
                 circularProgress.progress = 0;
                 break;
@@ -462,6 +437,9 @@ var pageMenu = {
 
                 if (iconName) {
                     iconContent = '<i class="material-icons menu-list-item__graphic">' + iconName + '</i>';
+                } else {
+                    let letter = moduleTitle.trim().substr(0, 1);
+                    iconContent = '<span class="module-icon-letter">' + letter + '</span>';
                 }
 
 
@@ -508,7 +486,6 @@ var pageMenu = {
             for (let menuItem of menuItems) {
                 new mdc.ripple.MDCRipple(menuItem);
             }
-
             let buttons = document.querySelectorAll('.page-menu .menu-list-item .menu-icon-button');
             for (let button of buttons) {
                 new mdc.ripple.MDCRipple(button);
@@ -546,6 +523,11 @@ var pageMenu = {
             $('.page-menu .module-home').addClass('active');
         } else {
             $('.page-menu .module-home').removeClass('active');
+        }
+
+
+        if (window.screen.width < 600) {
+            $('.page-menu').removeClass('drawer-toggle');
         }
 
 

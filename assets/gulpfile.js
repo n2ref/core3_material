@@ -6,10 +6,15 @@ var uglify     = require('gulp-uglify');
 
 var paths = {
     css: [
+        'node_modules/@material/**/dist/*.min.css',
         'src/css/lib/**/*.css',
         'src/css/main.css',
+        'src/css/page.auth.css',
+        'src/css/page.disable.css',
+        'src/css/page.menu.css',
     ],
     js: [
+        'node_modules/@material/**/dist/*.min.js',
         'src/js/coreui/**/*.js',
         'src/js/lib/**/*.js',
         'src/js/core.tokens.js',
@@ -48,6 +53,15 @@ gulp.task('build_js', function(){
         .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('build_js_fast', function(){
+    return gulp.src(paths.js)
+        .pipe(sourcemaps.init())
+        .pipe(concat('core-all.min.js', {newLine: ";\n"}))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./dist'));
+});
+
+
 
 gulp.task('build_css', function(){
     return gulp.src(paths.css)
@@ -58,10 +72,24 @@ gulp.task('build_css', function(){
         .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('build_css_fast', function(){
+    return gulp.src(paths.css)
+        .pipe(sourcemaps.init())
+        .pipe(concat('core-all.min.css'))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./dist'));
+});
+
 
 gulp.task('build_watch', function() {
     gulp.watch(paths.js, gulp.parallel(['build_js']));
     gulp.watch(paths.css, gulp.parallel(['build_css']));
+});
+
+
+gulp.task('build_watch_fast', function() {
+    gulp.watch(paths.js, gulp.parallel(['build_js_fast']));
+    gulp.watch(paths.css, gulp.parallel(['build_css_fast']));
 });
 
 

@@ -139,7 +139,7 @@ var pageAuth = {
         // Инициализация текстовых полей
         let inputs = document.querySelectorAll('.page-auth .mdc-text-field');
         for (let input of inputs) {
-            new mdc.textField.MDCTextField(input);
+            new mdc.textfield.MDCTextField(input);
         }
 
         $('.container-login form').on('submit', function () {
@@ -248,7 +248,7 @@ var pageAuth = {
 
 
                     const element          = $('.mdc-circular-progress', $btn)[0];
-                    const circularProgress = new mdc.circularProgress.MDCCircularProgress(element);
+                    const circularProgress = new mdc['circular-progress'].MDCCircularProgress(element);
                     circularProgress.determinate = false;
                     circularProgress.progress = 0;
                 }

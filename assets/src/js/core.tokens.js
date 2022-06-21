@@ -82,7 +82,6 @@ var coreTokens = {
 
             .fail(function (response) {
                 let errorMessage = '';
-                console.log(response.responseJSON.error_message)
 
                 if (response.responseJSON && response.responseJSON.error_message) {
                     errorMessage = response.responseJSON.error_message;

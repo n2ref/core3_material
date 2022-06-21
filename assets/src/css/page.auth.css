@@ -1,0 +1,90 @@
+.page-auth {
+    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%, rgba(138,114,76,0) 40%),
+    linear-gradient(to bottom, rgba(57,173,219,.25) 0%, rgba(42,60,87,.4) 100%),
+    linear-gradient(135deg, #E91E63 0%,#3F51B5 100%);
+    overflow: auto;
+}
+.page-auth .container {
+    padding-top: 90px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.page-auth .container .logo {
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom: 30px;
+}
+.page-auth .container .mdc-card {
+    width: calc(100% - 20px);
+    max-width: 350px;
+    margin: 0 auto 25px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+.page-auth .container .mdc-card .mdc-card__content {
+    text-align: center;
+    padding: 40px 10px 40px 10px;
+    word-break: break-word;
+}
+.page-auth .container .mdc-card .mdc-card__content .mdc-text-field {
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+.page-auth .container .mdc-card .mdc-card__content .mdc-text-field:last-child {
+    margin-bottom: 0;
+}
+.page-auth .container .mdc-card .mdc-button {
+    margin-top: 35px;
+    min-width: 238px;
+    max-width: 100%;
+}
+.page-auth .container .forgot-password {
+    text-align: right;
+    margin-top: 10px;
+    width: 227px;
+    max-width: 100%;
+    display: inline-block;
+}
+.page-auth .container .forgot-password a {
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    color: #e91e63
+}
+.page-auth .container .out-box {
+    font-size: 12px;
+}
+.page-auth .container .out-box a {
+    text-decoration: none;
+    color: #2196F3;
+    cursor: pointer;
+    margin: 0 10px;
+}
+.page-auth .container .out-box a:hover {
+    text-decoration: underline;
+}
+.page-auth .form-controls {
+    margin-top: 30px;
+}
+
+.page-auth .text-danger {
+    color: #b10423;
+}
+.page-auth .text-success {
+    color: #43a047;
+}
+.page-auth .mdc-text-field--outlined {
+    height: 40px;
+    width: 238px;
+}
+.page-auth .mdc-text-field--outlined .mdc-floating-label,
+.page-auth .mdc-text-field--outlined .mdc-text-field__input {
+    font-size: 13px;
+}
+.page-auth .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    -webkit-transform: translateY(-26.75px) scale(0.75);
+    transform: translateY(-26.75px) scale(0.75);
+}
+.page-auth .mdc-button {
+    height: 40px;
+}
