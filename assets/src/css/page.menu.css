@@ -397,6 +397,12 @@
         margin-left: 0;
         z-index: 5;
     }
+    .page-menu .mdc-top-app-bar .mdc-top-app-bar__title {
+        line-height: 27px;
+    }
+    .page-menu .mdc-top-app-bar .mdc-top-app-bar__subtitle {
+        line-height: 19px;
+    }
     .page-menu .menu-drawer-app .main-content {
         padding-top: 56px;
     }
