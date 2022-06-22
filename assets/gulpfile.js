@@ -15,8 +15,12 @@ var paths = {
     ],
     js: [
         'node_modules/@material/**/dist/*.min.js',
+        'node_modules/jquery/dist/jquery.min.js',
+        'node_modules/jwt-decode/build/jwt-decode.js',
+        'node_modules/md5/dist/md5.min.js',
+        'node_modules/@fingerprintjs/fingerprintjs/dist/fp.min.js',
+        'node_modules/ejs/ejs.min.js',
         'src/js/coreui/**/*.js',
-        'src/js/lib/**/*.js',
         'src/js/core.tokens.js',
         'src/js/core.main.js',
         'src/js/core.tools.js',

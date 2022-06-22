@@ -19,18 +19,32 @@
     position: absolute;
     top: 0;
     height: 100%;
-    width: 100%;
-    z-index: 7;
+    width: calc(100% - 280px);
+    padding-left: 280px;
+    z-index: 5;
     text-align: center;
+    transition: all 100ms cubic-bezier(.4,0,.2,1);
 }
 .page-menu #loading-screen .loading-lock {
     position: absolute;
-    width: 100%;
+    width: calc(100% - 280px);
     height: 100%;
-    background-color: #fff;
+    background-color: rgb(255 255 255 / 50%);
+    transition: all 100ms cubic-bezier(.4,0,.2,1);
 }
+.page-menu.drawer-toggle #loading-screen {
+    width: 100%;
+    padding-left: 0;
+}
+.page-menu.drawer-toggle #loading-screen .loading-lock {
+    width: 100%;
+}
+
 .page-menu #loading-screen .loading-block {
     margin-top: 200px;
+}
+.page-menu #loading-screen .loading-text {
+    margin-top: 20px;
 }
 .page-menu #profile-menu {
     top: 30px;
@@ -392,10 +406,16 @@
         width: 0;
         margin-left: -1px;
     }
-    .page-menu .mdc-top-app-bar {
+    .page-menu .mdc-top-app-bar,
+    .page-menu.drawer-toggle .mdc-top-app-bar {
         width: 100%;
         margin-left: 0;
         z-index: 5;
+    }
+    .page-menu #loading-screen,
+    .page-menu #loading-screen .loading-lock {
+        width: 100%;
+        padding-left: 0;
     }
     .page-menu .mdc-top-app-bar .mdc-top-app-bar__title {
         line-height: 27px;

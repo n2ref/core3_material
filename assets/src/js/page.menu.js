@@ -10,58 +10,144 @@ var pageMenu = {
 
     _modules: null,
 
-    _tpl:
-        '<header class="mdc-top-app-bar mdc-top-app-bar--fixed app-bar">' +
-            '<div class="mdc-top-app-bar__row">' +
-                '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">' +
-                    '<button class="material-icons mdc-ripple-surface mdc-icon-button open-menu">menu</button>' +
-                    '<div class="header-title-container">' +
-                        '<span class="mdc-top-app-bar__title"></span>' +
-                        '<span class="mdc-top-app-bar__subtitle"></span>' +
+    _tpl: {
+        main:
+            '<header class="mdc-top-app-bar mdc-top-app-bar--fixed app-bar">' +
+                '<div class="mdc-top-app-bar__row">' +
+                    '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">' +
+                        '<button class="material-icons mdc-ripple-surface mdc-icon-button open-menu">menu</button>' +
+                        '<div class="header-title-container">' +
+                            '<span class="mdc-top-app-bar__title"></span>' +
+                            '<span class="mdc-top-app-bar__subtitle"></span>' +
+                        '</div>' +
+                    '</section>' +
+                    '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">' +
+                        '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button install-button" ' +
+                                'style="display: none">mobile_friendly</button>' +
+                        '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-profile-menu">more_vert</button>' +
+                        '<div id="profile-menu" class="mdc-menu-surface--anchor">' +
+                            '<div class="mdc-menu mdc-menu-surface">' +
+                                '<ul class="mdc-list" tabindex="-1">' +
+                                    '<li class="mdc-list-item menu-user">' +
+                                        '<span class="mdc-list-item__header"></span>' +
+                                        '<span class="mdc-list-item__text"></span>' +
+                                    '</li>' +
+                                    '<li class="mdc-list-item menu-logout">' +
+                                        '<span class="mdc-list-item__ripple"></span>' +
+                                        '<i class="material-icons mdc-list-item__graphic">logout</i>' +
+                                        '<span class="mdc-list-item__text">Выйти</span>' +
+                                    '</li>' +
+                                '</ul>' +
+                            '</div>' +
+                        '</div>' +
+                    '</section>' +
+                '</div>' +
+            '</header>' +
+            '<aside class="menu-drawer">' +
+                '<div class="menu-drawer__content">' +
+                    '<div class="menu-drawer__header">' +
+                        '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/\');" href="#/">' +
+                            '<span class="material-icons">home</span>' +
+                            '<h3 class="system-title"></h3>' +
+                        '</a>' +
                     '</div>' +
-                '</section>' +
-                '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">' +
-                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button install-button" ' +
-                            'style="display: none">mobile_friendly</button>' +
+                    '<ul class="menu-list level-1"></ul>' +
+                '</div>' +
+            '</aside>' +
+            '<div class="menu-drawer-scrim"></div>' +
+            '<div class="menu-drawer-swipe"></div>' +
+            '<div class="menu-drawer-app">' +
+                '<main class="main-content">' +
+                    '<div class="container"></div>' +
+                '</main>' +
+            '</div>',
 
-                    '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-profile-menu">more_vert</button>' +
 
-                    '<div id="profile-menu" class="mdc-menu-surface--anchor">' +
-                        '<div class="mdc-menu mdc-menu-surface">' +
-                            '<ul class="mdc-list" tabindex="-1">' +
-                                '<li class="mdc-list-item menu-user">' +
-                                    '<span class="mdc-list-item__header"></span>' +
-                                    '<span class="mdc-list-item__text"></span>' +
-                                '</li>' +
-                                '<li class="mdc-list-item menu-logout">' +
-                                    '<span class="mdc-list-item__ripple"></span>' +
-                                    '<i class="material-icons mdc-list-item__graphic">logout</i>' +
-                                    '<span class="mdc-list-item__text">Выйти</span>' +
-                                '</li>' +
-                            '</ul>' +
+        preloader:
+            '<div id="preloader">' +
+                '<div role="progressbar" class="mdc-linear-progress preloader-progress" ' +
+                    'aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">' +
+                    '<div class="mdc-linear-progress__buffer">' +
+                        '<div class="mdc-linear-progress__buffer-bar"></div>' +
+                        '<div class="mdc-linear-progress__buffer-dots"></div>' +
+                    '</div>' +
+                    '<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">' +
+                        '<span class="mdc-linear-progress__bar-inner"></span>' +
+                    '</div>' +
+                    '<div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">' +
+                        '<span class="mdc-linear-progress__bar-inner"></span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="preloader-block"></div>' +
+            '</div>',
+
+        loadingScreen:
+            '<div id="loading-screen">' +
+                '<div class="loading-lock"></div>' +
+                '<div class="loading-block">' +
+                    '<div class="mdc-circular-progress" style="width:96px;height:48px;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1">' +
+                        '<div class="mdc-circular-progress__determinate-container">' +
+                            '<svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+                                '<circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4"/>' +
+                                '<circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097" stroke-width="4"/>' +
+                            '</svg>' +
+                        '</div>' +
+                        '<div class="mdc-circular-progress__indeterminate-container">' +
+                            '<div class="mdc-circular-progress__spinner-layer">' +
+                                '<div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">' +
+                                    '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+                                        '<circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/>' +
+                                    '</svg>' +
+                                '</div>' +
+                                '<div class="mdc-circular-progress__gap-patch">' +
+                                    '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+                                        '<circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2"/>' +
+                                    '</svg>' +
+                                '</div>' +
+                                '<div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">' +
+                                    '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
+                                        '<circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/>' +
+                                    '</svg>' +
+                                '</div>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
-                '</section>' +
-            '</div>' +
-        '</header>' +
-        '<aside class="menu-drawer">' +
-            '<div class="menu-drawer__content">' +
-                '<div class="menu-drawer__header">' +
-                    '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/\');" href="#/">' +
-                        '<span class="material-icons">home</span>' +
-                        '<h3 class="system-title"></h3>' +
-                    '</a>' +
+                    '<div class="loading-text"><%= text %></div>' +
                 '</div>' +
-                '<ul class="menu-list level-1"></ul>' +
-            '</div>' +
-        '</aside>' +
-        '<div class="menu-drawer-scrim"></div>' +
-        '<div class="menu-drawer-swipe"></div>' +
-        '<div class="menu-drawer-app">' +
-            '<main class="main-content">' +
-                '<div class="container"></div>' +
-            '</main>' +
-        '</div>',
+            '</div>',
+
+
+        module:
+            '<li class="menu-list-item core-module core-module-<%= module.name %> <% if (module.sections && module.sections.length > 0) { %>menu-item-nested<% } %>">' +
+                '<div class="item-control">' +
+                    '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.url %>\');" ' +
+                        'href="#/<%= module.url %>" class="mdc-ripple-surface">' +
+                        '<% if (module.icon) { %>' +
+                            '<i class="material-icons menu-list-item__graphic"><%= module.icon %></i>' +
+                        '<% } else { %>' +
+                            '<span class="module-icon-letter"><%= module.title.trim().substr(0, 1) %></span>' +
+                        '<% } %>' +
+                        '<span class="menu-list-item__text"><%= module.title %></span>' +
+                    '</a>' +
+                    '<% if (module.sections && module.sections.length > 0) { %>' +
+                        '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>' +
+                    '<% } %>' +
+                '</div>' +
+                '<% if (module.sections && module.sections.length > 0) { %>' +
+                    '<ul class="menu-list level-2">' +
+                        '<% module.sections.forEach(function(section) { %>' +
+                            '<li class="menu-list-item core-module-section core-module-<%= module.name %>-<%= section.name %>">' +
+                                '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.name %>/<%= section.name %>\');" ' +
+                                    'href="#/<%= module.name %>/<%= section.name %>" class="mdc-ripple-surface">' +
+                                    '<span class="menu-list-item__text"><%= section.title %></span>' +
+                                '</a>' +
+                            '</li>' +
+                        '<% }); %>' +
+                    '</ul>' +
+                '<% } %>' +
+            '</li>',
+    },
+
 
 
     /**
@@ -70,7 +156,7 @@ var pageMenu = {
      */
     getPageContent: function () {
 
-        return ejs.render(this._tpl, {});
+        return this._tpl.main;
     },
 
 
@@ -115,34 +201,6 @@ var pageMenu = {
 
         $('.page-menu .main-content .container').html('')
 
-
-        /**
-         * Инициализация меню
-         */
-        function initMenu() {
-
-            $('.open-menu, .menu-drawer-scrim').on('click', function () {
-                $('.page.page-menu').toggleClass('drawer-toggle');
-            });
-
-
-            let buttons = document.querySelectorAll('.page-menu .menu-drawer .mdc-ripple-surface');
-            for (let button of buttons) {
-                new mdc.ripple.MDCRipple(button);
-            }
-
-
-            pageMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
-                if (direction === "right") {
-                    $('.page.page-menu').toggleClass('drawer-toggle');
-
-                } else if (direction === "left") {
-                    $('.page.page-menu').toggleClass('drawer-toggle');
-                }
-            });
-        }
-
-
         let accessToken = coreTokens.getAccessToken();
 
 
@@ -172,7 +230,6 @@ var pageMenu = {
                     pageMenu._modules = response.modules;
 
                     pageMenu._renderMenu();
-                    initMenu();
                     pageMenu.loadingScreen('hide');
 
                     let uri = location.hash.substr(1) !== '/' ? '/mod' + location.hash.substr(1) : '/';
@@ -293,24 +350,7 @@ var pageMenu = {
                     return false;
                 }
 
-                $('.page-menu > header').append(
-                    '<div id="preloader">' +
-                    '<div role="progressbar" class="mdc-linear-progress preloader-progress"' +
-                    'aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">' +
-                    '<div class="mdc-linear-progress__buffer">' +
-                    '<div class="mdc-linear-progress__buffer-bar"></div>' +
-                    '<div class="mdc-linear-progress__buffer-dots"></div>' +
-                    '</div>' +
-                    '<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">' +
-                    '<span class="mdc-linear-progress__bar-inner"></span>' +
-                    '</div>' +
-                    '<div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">' +
-                    '<span class="mdc-linear-progress__bar-inner"></span>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="preloader-block"></div>' +
-                    '</div>'
-                );
+                $('.page-menu > header').append(pageMenu._tpl.preloader);
 
                 let preloaderElement = $('#preloader .preloader-progress');
                 let linearProgress   = new mdc['linear-progress'].MDCLinearProgress(preloaderElement[0]);
@@ -326,9 +366,10 @@ var pageMenu = {
 
     /**
      * @param action
+     * @param options
      * @returns {boolean}
      */
-    loadingScreen: function(action) {
+    loadingScreen: function(action, options) {
 
         switch (action) {
             case 'show':
@@ -336,40 +377,11 @@ var pageMenu = {
                     return false;
                 }
 
-                $('.page-menu').prepend(
-                    '<div id="loading-screen">' +
-                        '<div class="loading-lock"></div>' +
-                        '<div class="loading-block">' +
-                            '<div class="mdc-circular-progress" style="width:96px;height:48px;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1">' +
-                                '<div class="mdc-circular-progress__determinate-container">' +
-                                    '<svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
-                                        '<circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4"/>' +
-                                        '<circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097" stroke-width="4"/>' +
-                                    '</svg>' +
-                                '</div>' +
-                                '<div class="mdc-circular-progress__indeterminate-container">' +
-                                    '<div class="mdc-circular-progress__spinner-layer">' +
-                                        '<div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">' +
-                                            '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
-                                                '<circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/>' +
-                                            '</svg>' +
-                                        '</div>' +
-                                        '<div class="mdc-circular-progress__gap-patch">' +
-                                            '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
-                                                '<circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2"/>' +
-                                            '</svg>' +
-                                        '</div>' +
-                                        '<div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">' +
-                                            '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' +
-                                                '<circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/>' +
-                                            '</svg>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>'
-                );
+                options = typeof options === 'object' || {};
+
+                $('.page-menu').prepend(ejs.render(pageMenu._tpl.loadingScreen, {
+                    text: options.text || 'Загрузка...'
+                }));
 
                 let element            = $('#loading-screen .mdc-circular-progress');
                 const circularProgress = new mdc['circular-progress'].MDCCircularProgress(element[0]);
@@ -407,7 +419,6 @@ var pageMenu = {
             let params = coreTools.getParams();
 
             $.each(pageMenu._modules, function (key, module) {
-
                 if (typeof module.name !== 'string' || ! module.name ||
                     typeof module.title !== 'string' || ! module.title
                 ) {
@@ -415,67 +426,19 @@ var pageMenu = {
                     return true;
                 }
 
-                let moduleName    = $.trim(module.name);
-                let moduleTitle   = $.trim(module.title);
-                let iconName      = $.trim(module.icon);
-                let moduleClasses = '';
-                let activeAttr    = '';
-                let nestedList    = '';
-                let nestedListBtn = '';
-                let iconContent   = '';
-
-                if (params.module && params.module === moduleName) {
-                    activeAttr = 'tabindex="0"';
-
-                    if (module.sections && module.sections.length > 0) {
-                        moduleClasses = 'menu-item-nested-open';
-                    }
-
-                } else {
-                    activeAttr  = 'tabindex="1"';
-                }
-
-                if (iconName) {
-                    iconContent = '<i class="material-icons menu-list-item__graphic">' + iconName + '</i>';
-                } else {
-                    let letter = moduleTitle.trim().substr(0, 1);
-                    iconContent = '<span class="module-icon-letter">' + letter + '</span>';
-                }
+                module.url = module.name + '/index';
 
 
-                if (module.sections && module.sections.length > 0) {
-                    let sectionLink = '';
-                    moduleClasses  += ' menu-item-nested';
-                    nestedListBtn   = '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>';
-                    nestedList     += '<ul class="menu-list level-2">';
-
+                if ( ! module.isset_index_page && module.sections.length > 0) {
                     $.each(module.sections, function (key, section) {
-                        sectionLink = moduleName + '/' + section.name;
-                        nestedList +=
-                            '<li class="menu-list-item core-module-section core-module-' + moduleName + '-' + section.name + '">' +
-                                '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + sectionLink + '\');" ' +
-                                    'href="#/' + sectionLink + '" class="mdc-ripple-surface">' +
-                                    '<span class="menu-list-item__text">' +  section.title + '</span>' +
-                                '</a>' +
-                            '</li>'
+                        module.url = module.name + '/' + section.name;
+                        return false;
                     });
-
-                    nestedList += '</ul>';
                 }
 
-                $('.page-menu > aside .menu-list.level-1').append(
-                    '<li class="menu-list-item core-module core-module-' + moduleName + ' ' + moduleClasses + '" ' + activeAttr + '>' +
-                        '<div class="item-control">' +
-                            '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/' + moduleName + '/index\');" ' +
-                                'href="#/' + moduleName + '/index" class="mdc-ripple-surface">' +
-                                iconContent +
-                                '<span class="menu-list-item__text">' +  moduleTitle + '</span>' +
-                            '</a>' +
-                            nestedListBtn +
-                        '</div>' +
-                        nestedList +
-                    '</li>'
-                );
+                $('.page-menu > aside .menu-list.level-1').append(ejs.render(pageMenu._tpl.module, {
+                    module: module
+                }));
             });
 
 
@@ -494,6 +457,27 @@ var pageMenu = {
                 });
             }
         }
+
+
+        $('.open-menu, .menu-drawer-scrim').on('click', function () {
+            $('.page.page-menu').toggleClass('drawer-toggle');
+        });
+
+
+        let buttons = document.querySelectorAll('.page-menu .menu-drawer .mdc-ripple-surface');
+        for (let button of buttons) {
+            new mdc.ripple.MDCRipple(button);
+        }
+
+
+        pageMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
+            if (direction === "right") {
+                $('.page.page-menu').toggleClass('drawer-toggle');
+
+            } else if (direction === "left") {
+                $('.page.page-menu').toggleClass('drawer-toggle');
+            }
+        });
     },
 
 
