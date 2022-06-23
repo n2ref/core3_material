@@ -22,24 +22,29 @@ var pageMenu = {
                         '</div>' +
                     '</section>' +
                     '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">' +
-                        '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button install-button" ' +
-                                'style="display: none">mobile_friendly</button>' +
-                        '<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button button-profile-menu">more_vert</button>' +
-                        '<div id="profile-menu" class="mdc-menu-surface--anchor">' +
-                            '<div class="mdc-menu mdc-menu-surface">' +
-                                '<ul class="mdc-list" tabindex="-1">' +
-                                    '<li class="mdc-list-item menu-user">' +
-                                        '<span class="mdc-list-item__header"></span>' +
-                                        '<span class="mdc-list-item__text"></span>' +
-                                    '</li>' +
-                                    '<li class="mdc-list-item menu-logout">' +
-                                        '<span class="mdc-list-item__ripple"></span>' +
-                                        '<i class="material-icons mdc-list-item__graphic">logout</i>' +
-                                        '<span class="mdc-list-item__text">Выйти</span>' +
-                                    '</li>' +
+                         '<ul class="navbar-nav">' +
+                              '<!-- Avatar -->' +
+                              '<li class="nav-item dropdown">' +
+                                '<a class="nav-link dropdown-toggle d-flex align-items-center" ' +
+                                  'href="#" id="navbarDropdownMenuLink" ' +
+                                  'data-mdb-toggle="dropdown"' +
+                                '>' +
+                                  '<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"' +
+                                    'class="rounded-circle" height="22" alt="Portrait of a Woman" loading="lazy"/>' +
+                                '</a>' +
+                                '<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">' +
+                                  '<li>' +
+                                    '<a class="dropdown-item" href="#">My profile</a>' +
+                                  '</li>' +
+                                  '<li>' +
+                                    '<a class="dropdown-item" href="#">Settings</a>' +
+                                  '</li>' +
+                                  '<li>' +
+                                    '<a class="dropdown-item menu-logout" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</a>' +
+                                  '</li>' +
                                 '</ul>' +
-                            '</div>' +
-                        '</div>' +
+                              '</li>' +
+                            '</ul>' +
                     '</section>' +
                 '</div>' +
             '</header>' +
@@ -58,7 +63,7 @@ var pageMenu = {
             '<div class="menu-drawer-swipe"></div>' +
             '<div class="menu-drawer-app">' +
                 '<main class="main-content">' +
-                    '<div class="container"></div>' +
+                    '<div class="main-wrapper"></div>' +
                 '</main>' +
             '</div>',
 
@@ -174,15 +179,6 @@ var pageMenu = {
         }
 
 
-        let element       = $('#profile-menu .mdc-menu-surface');
-        const profileMenu = new mdc.menu.MDCMenu(element[0]);
-
-        // menu
-        $('.page-menu .button-profile-menu').on('click', function () {
-            profileMenu.open = true;
-        });
-
-
         pageMenu._initInstall();
 
 
@@ -199,7 +195,7 @@ var pageMenu = {
             });
         });
 
-        $('.page-menu .main-content .container').html('')
+        $('.page-menu .main-content .main-wrapper').html('')
 
         let accessToken = coreTokens.getAccessToken();
 
@@ -296,7 +292,7 @@ var pageMenu = {
             success: function (response) {
                 pageMenu.preloader('hide');
 
-                $('.page-menu .main-content .container').html(response)
+                $('.page-menu .main-content .main-wrapper').html(response)
                     .css({
                         'opacity': '0',
                         'margin-top': '15px'

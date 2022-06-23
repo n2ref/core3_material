@@ -19,7 +19,7 @@
     position: absolute;
     top: 0;
     height: 100%;
-    width: calc(100% - 280px);
+    width: 100%;
     padding-left: 280px;
     z-index: 5;
     text-align: center;
@@ -174,7 +174,7 @@
     border-radius: 10px;
 }
 .page-menu .menu-drawer .menu-list.level-1 > .menu-list-item .item-control a {
-    width: 240px;
+    width: 100%;
     height: 40px;
     border-radius: 10px;
     text-decoration: none;
@@ -183,7 +183,7 @@
     align-items: center;
 }
 .page-menu .menu-drawer .menu-list.level-1 > .menu-list-item.menu-item-nested .item-control a {
-    width: 200px;
+    width: 100%;
     border-radius: 10px 0 0 10px;
 }
 .page-menu .menu-drawer .menu-list.level-1 > .menu-list-item.menu-item-nested .menu-icon-button {
@@ -327,7 +327,13 @@
     overflow: auto;
 }
 .page-menu .menu-drawer-app .main-content {
-    padding-top: 64px;
+    margin-left: 280px;
+    transition: width 100ms cubic-bezier(.4,0,.2,1);
+    padding: 104px 30px 30px 30px;
+    max-width: 100%;
+}
+.page-menu.drawer-toggle .menu-drawer-app .main-content{
+    margin-left: 64px;
 }
 .page-menu .menu-drawer__header {
     border-bottom: 1px solid rgb(0 0 0 / 25%);
@@ -370,16 +376,6 @@
 }
 .page-menu .menu-drawer__header .module-home.active .material-icons {
     color: var(--menu-drawer-text-active);
-}
-.page-menu .container {
-    margin-left: 280px;
-    padding: 40px 30px 30px 30px;
-    max-width: 100%;
-    box-sizing: border-box;
-    transition: width 100ms cubic-bezier(.4,0,.2,1);
-}
-.page-menu.drawer-toggle .container {
-    margin-left: 64px;
 }
 
 @media (min-width: 600px) {
@@ -424,7 +420,8 @@
         line-height: 19px;
     }
     .page-menu .menu-drawer-app .main-content {
-        padding-top: 56px;
+        padding-top: 86px;
+        margin-left: 0;
     }
     .page-menu .menu-drawer__header {
         min-height: 57px;
@@ -433,10 +430,6 @@
     .page-menu.drawer-toggle .menu-drawer-swipe {
         left: 0;
         top: 56px;
-    }
-    .page-menu .container,
-    .page-menu.drawer-toggle .container {
-        margin-left: 0;
     }
     .page-menu.drawer-toggle .menu-drawer {
         width: 280px;

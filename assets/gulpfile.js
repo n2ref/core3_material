@@ -7,7 +7,8 @@ var uglify     = require('gulp-uglify');
 var paths = {
     css: [
         'node_modules/@material/**/dist/*.min.css',
-        'src/css/lib/**/*.css',
+        'node_modules/mdb-ui-kit/css/mdb.min.css',
+        'src/css/font-awesome.min.css',
         'src/css/main.css',
         'src/css/page.auth.css',
         'src/css/page.disable.css',
@@ -15,6 +16,7 @@ var paths = {
     ],
     js: [
         'node_modules/@material/**/dist/*.min.js',
+        'node_modules/mdb-ui-kit/js/mdb.min.js',
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/jwt-decode/build/jwt-decode.js',
         'node_modules/md5/dist/md5.min.js',
