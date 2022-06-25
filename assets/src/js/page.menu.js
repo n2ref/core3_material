@@ -15,7 +15,7 @@ var pageMenu = {
             '<header class="mdc-top-app-bar mdc-top-app-bar--fixed app-bar">' +
                 '<div class="mdc-top-app-bar__row">' +
                     '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">' +
-                        '<button class="material-icons mdc-ripple-surface mdc-icon-button open-menu">menu</button>' +
+                        '<button class="mdc-ripple-surface open-menu"><i class="fa-solid fa-bars"></i></button>' +
                         '<div class="header-title-container">' +
                             '<span class="mdc-top-app-bar__title"></span>' +
                             '<span class="mdc-top-app-bar__subtitle"></span>' +
@@ -52,7 +52,7 @@ var pageMenu = {
                 '<div class="menu-drawer__content">' +
                     '<div class="menu-drawer__header">' +
                         '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/\');" href="#/">' +
-                            '<span class="material-icons">home</span>' +
+                            '<span class="fa-solid fa-house"></span>' +
                             '<h3 class="system-title"></h3>' +
                         '</a>' +
                     '</div>' +
@@ -121,21 +121,20 @@ var pageMenu = {
                 '</div>' +
             '</div>',
 
-
         module:
             '<li class="menu-list-item core-module core-module-<%= module.name %> <% if (module.sections && module.sections.length > 0) { %>menu-item-nested<% } %>">' +
                 '<div class="item-control">' +
                     '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.url %>\');" ' +
                         'href="#/<%= module.url %>" class="mdc-ripple-surface">' +
                         '<% if (module.icon) { %>' +
-                            '<i class="material-icons menu-list-item__graphic"><%= module.icon %></i>' +
+                            '<i class="<%= module.icon %>"></i>' +
                         '<% } else { %>' +
                             '<span class="module-icon-letter"><%= module.title.trim().substr(0, 1) %></span>' +
                         '<% } %>' +
                         '<span class="menu-list-item__text"><%= module.title %></span>' +
                     '</a>' +
                     '<% if (module.sections && module.sections.length > 0) { %>' +
-                        '<button class="menu-icon-button material-icons mdc-ripple-surface">arrow_drop_down</button>' +
+                        '<button class="menu-icon-button mdc-ripple-surface"><i class="fa-solid fa-sort-down"></i></button>' +
                     '<% } %>' +
                 '</div>' +
                 '<% if (module.sections && module.sections.length > 0) { %>' +

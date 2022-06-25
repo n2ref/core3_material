@@ -9,6 +9,7 @@ var paths = {
         'node_modules/@material/**/dist/*.min.css',
         'node_modules/mdb-ui-kit/css/mdb.min.css',
         'src/css/font-awesome.min.css',
+        'src/css/material-design.css',
         'src/css/main.css',
         'src/css/page.auth.css',
         'src/css/page.disable.css',

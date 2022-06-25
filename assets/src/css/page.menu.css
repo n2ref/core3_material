@@ -49,7 +49,7 @@
 .page-menu #profile-menu {
     top: 30px;
 }
-.page-menu #profile-menu .material-icons {
+.page-menu #profile-menu i {
     margin-right: 10px;
 }
 .page-menu #profile-menu .menu-user {
@@ -101,16 +101,14 @@
 .page-menu .mdc-top-app-bar .button-share {
     display: none;
 }
-.page-menu .mdc-top-app-bar .mdc-top-app-bar__action-item,
 .page-menu .mdc-top-app-bar .open-menu {
     color: var(--menu-header-text);
     border-radius: 50%;
+    border: 0;
+    background-color: transparent;
+    width: 45px;
+    height: 45px;
 }
-.page-menu .mdc-top-app-bar .material-icons:before,
-.page-menu .mdc-top-app-bar .material-icons:after {
-    background-color: var(--menu-header-btn-hover); /* RGBA of #2D5DCC */
-}
-
 
 
 
@@ -178,7 +176,7 @@
     height: 40px;
     border-radius: 10px;
     text-decoration: none;
-    padding: 0 12px 0 12px;
+    padding: 0 12px 0 14px;
     display: flex;
     align-items: center;
 }
@@ -188,6 +186,9 @@
 }
 .page-menu .menu-drawer .menu-list.level-1 > .menu-list-item.menu-item-nested .menu-icon-button {
     cursor: pointer;
+}
+.page-menu .menu-drawer .menu-list.level-1 > .menu-list-item.menu-item-nested .menu-icon-button i {
+    height: 26px;
 }
 .page-menu .menu-drawer .menu-list.level-1 > .menu-list-item .item-control button {
     background-color: transparent;
@@ -242,11 +243,11 @@
     font-size: 14px;
     margin-left: 5px;
 }
-.page-menu .menu-drawer .menu-list-item__graphic {
+.page-menu .menu-drawer i {
     color: var(--menu-drawer-text);
-    margin-right: 15px;
+    margin-right: 5px;
     min-width: 20px;
-    font-size: 20px;
+    font-size: 16px;
 }
 .page-menu .menu-drawer .module-icon-letter {
     display: none;
@@ -267,6 +268,7 @@
     background-color: var(--menu-drawer-mod-active-item);
 }
 .page-menu .menu-drawer .menu-module-index--activated .item-control .material-icons,
+.page-menu .menu-drawer .menu-module-index--activated .item-control i,
 .page-menu .menu-drawer .menu-module-index--activated .item-control .menu-list-item__text,
 .page-menu .menu-drawer .menu-module-index--activated .item-control .module-icon-letter,
 .page-menu .menu-drawer .menu-module-section--activated .menu-list-item__text {
@@ -351,8 +353,9 @@
     justify-content: flex-start;
     text-decoration: none;
     width: 100%;
+    height: 36px;
     border-radius: 10px;
-    padding: 8px 10px;
+    padding: 8px 12px;
 }
 .page-menu .menu-drawer__header .module-home:hover {
     background-color: var(--menu-drawer-mod-active);
@@ -370,16 +373,16 @@
 .page-menu .menu-drawer__header .module-home.active h3 {
     color: var(--menu-drawer-text-active);
 }
-.page-menu .menu-drawer__header .module-home .material-icons {
+.page-menu .menu-drawer__header .module-home span {
     color: var(--menu-drawer-text);
     margin-right: 13px;
 }
-.page-menu .menu-drawer__header .module-home.active .material-icons {
+.page-menu .menu-drawer__header .module-home.active span {
     color: var(--menu-drawer-text-active);
 }
 
 @media (min-width: 600px) {
-    .page-menu.drawer-toggle .menu-drawer__header .material-icons {
+    .page-menu.drawer-toggle .menu-drawer__header span {
         margin-right: 0;
     }
     .page-menu.drawer-toggle .menu-drawer__header .system-title {

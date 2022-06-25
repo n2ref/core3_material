@@ -21,8 +21,6 @@
     "@material/top-app-bar": "14.*",
     "@material/dialog": "14.*",
     "@material/snackbar": "14.*",
-    "@material/menu": "14.*",
-    "@material-design-icons/font": "0.11.2",
     "@fingerprintjs/fingerprintjs": "3.3.*",
     "jquery": "3.6.0",
     "jwt-decode": "3.1.2",
