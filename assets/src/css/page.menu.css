@@ -9,6 +9,7 @@
     --menu-drawer: #242f40;
     --menu-drawer-mod-active: rgb(0 0 0 / 30%);
     --menu-drawer-mod-active-item: rgb(0 0 0 / 30%);
+    --menu-drawer-mod-active-text: rgb(255 255 255 / 90%);
     --menu-drawer-text: rgb(255 255 255 / 70%);
     --menu-drawer-text-active: #fff;
 }
@@ -46,25 +47,17 @@
 .page-menu #loading-screen .loading-text {
     margin-top: 20px;
 }
-.page-menu #profile-menu {
-    top: 30px;
+.page-menu .cabinet-user img {
+    width: 28px;
+    margin-right: 5px;
 }
-.page-menu #profile-menu i {
-    margin-right: 10px;
+.page-menu .cabinet-user > a {
+    color: var(--menu-header-text);
+    font-size: 14px;
 }
-.page-menu #profile-menu .menu-user {
-    white-space: nowrap;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 8px;
-}
-.page-menu #profile-menu .menu-user .mdc-list-item__header {
-    font-weight: 600;
-}
-.page-menu #profile-menu .menu-user .mdc-list-item__text {
-    color: #666;
+.page-menu .cabinet-user .cabinet-user-info {
+    padding: 0.5rem 1rem;
+    color: #4f4f4f;
 }
 .page-menu .mdc-top-app-bar,
 .page-menu .menu-drawer  {
@@ -108,6 +101,9 @@
     background-color: transparent;
     width: 45px;
     height: 45px;
+}
+.page-menu .dropdown-menu {
+    border: 1px solid rgb(0 0 0 / 10%);
 }
 
 
@@ -241,7 +237,7 @@
     white-space: nowrap;
     overflow: hidden;
     font-size: 14px;
-    margin-left: 5px;
+    margin-left: 3px;
 }
 .page-menu .menu-drawer i {
     color: var(--menu-drawer-text);
@@ -252,9 +248,12 @@
 .page-menu .menu-drawer .module-icon-letter {
     display: none;
     color: var(--menu-drawer-text);
-    min-width: 20px;
+    min-width: 16px;
     font-size: 14px;
     text-align: center;
+}
+.page-menu .menu-drawer i + .menu-list-item__text {
+    margin-left: 5px;
 }
 .page-menu .menu-drawer .menu-list-item__meta {
     color: var(--menu-drawer-text);
@@ -272,7 +271,7 @@
 .page-menu .menu-drawer .menu-module-index--activated .item-control .menu-list-item__text,
 .page-menu .menu-drawer .menu-module-index--activated .item-control .module-icon-letter,
 .page-menu .menu-drawer .menu-module-section--activated .menu-list-item__text {
-    color: rgb(255 255 255 / 90%);
+    color: var(--menu-drawer-mod-active-text);
 }
 .page-menu #preloader {
     margin-top: -4px;

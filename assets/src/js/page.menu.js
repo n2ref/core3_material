@@ -22,36 +22,13 @@ var pageMenu = {
                         '</div>' +
                     '</section>' +
                     '<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">' +
-                         '<ul class="navbar-nav">' +
-                              '<!-- Avatar -->' +
-                              '<li class="nav-item dropdown">' +
-                                '<a class="nav-link dropdown-toggle d-flex align-items-center" ' +
-                                  'href="#" id="navbarDropdownMenuLink" ' +
-                                  'data-mdb-toggle="dropdown"' +
-                                '>' +
-                                  '<img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"' +
-                                    'class="rounded-circle" height="22" alt="Portrait of a Woman" loading="lazy"/>' +
-                                '</a>' +
-                                '<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">' +
-                                  '<li>' +
-                                    '<a class="dropdown-item" href="#">My profile</a>' +
-                                  '</li>' +
-                                  '<li>' +
-                                    '<a class="dropdown-item" href="#">Settings</a>' +
-                                  '</li>' +
-                                  '<li>' +
-                                    '<a class="dropdown-item menu-logout" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</a>' +
-                                  '</li>' +
-                                '</ul>' +
-                              '</li>' +
-                            '</ul>' +
                     '</section>' +
                 '</div>' +
             '</header>' +
             '<aside class="menu-drawer">' +
                 '<div class="menu-drawer__content">' +
                     '<div class="menu-drawer__header">' +
-                        '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/\');" href="#/">' +
+                        '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/home\');" href="#/">' +
                             '<span class="fa-solid fa-house"></span>' +
                             '<h3 class="system-title"></h3>' +
                         '</a>' +
@@ -67,6 +44,31 @@ var pageMenu = {
                 '</main>' +
             '</div>',
 
+        topMenu:
+            '<ul class="navbar-nav">' +
+                '<li class="nav-item dropdown cabinet-user">' +
+                    '<a class="nav-link dropdown-toggle d-flex align-items-center" ' +
+                        'href="#" data-mdb-toggle="dropdown">' +
+                        '<% if (user.avatar) { %>' +
+                            '<img src="<%= user.avatar %>" alt="avatar" class="rounded-circle" loading="lazy"/>' +
+                        '<% } else { %>' +
+                            '<i class="fa-solid fa-circle-user"></i>' +
+                        '<% } %>' +
+                    '</a>' +
+                    '<ul class="dropdown-menu">' +
+                        '<li class="cabinet-user-info">' +
+                            '<b class="cabinet-user-name"><%= user.name %></b><br>' +
+                            '<span class="cabinet-user-login"><%= user.login %></span>' +
+                        '</li>' +
+                        '<li><hr class="dropdown-divider"/></li>' +
+                        '<li>' +
+                            '<a class="dropdown-item menu-logout" href="#">' +
+                                '<i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти' +
+                            '</a>' +
+                        '</li>' +
+                    '</ul>' +
+                '</li>' +
+            '</ul>',
 
         preloader:
             '<div id="preloader">' +
@@ -129,7 +131,7 @@ var pageMenu = {
                         '<% if (module.icon) { %>' +
                             '<i class="<%= module.icon %>"></i>' +
                         '<% } else { %>' +
-                            '<span class="module-icon-letter"><%= module.title.trim().substr(0, 1) %></span>' +
+                            '<span class="module-icon-letter"><%= module.title.trim().substring(0, 1) %></span>' +
                         '<% } %>' +
                         '<span class="menu-list-item__text"><%= module.title %></span>' +
                     '</a>' +
@@ -180,20 +182,6 @@ var pageMenu = {
 
         pageMenu._initInstall();
 
-
-        // Выход
-        $('.page-menu .menu-logout').on('click', function () {
-            CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
-                acceptButtonText: "Да",
-                onAccept: function () {
-                    pageAuth.logout();
-                },
-                onCancel: function () {
-                    $('.page-menu > aside .menu-logout').removeClass('mdc-list-item--activated');
-                }
-            });
-        });
-
         $('.page-menu .main-content .main-wrapper').html('')
 
         let accessToken = coreTokens.getAccessToken();
@@ -227,7 +215,9 @@ var pageMenu = {
                     pageMenu._renderMenu();
                     pageMenu.loadingScreen('hide');
 
-                    let uri = location.hash.substr(1) !== '/' ? '/mod' + location.hash.substr(1) : '/';
+                    let uri = location.hash.substring(1) !== '' && location.hash.substring(1) !== '/'
+                        ? '/mod' + location.hash.substring(1)
+                        : '/home';
 
                     pageMenu.load(uri);
                 }
@@ -272,15 +262,6 @@ var pageMenu = {
         pageMenu.preloader('show');
 
         let accessToken = coreTokens.getAccessToken();
-        let params      = coreTools.getParams(url);
-
-        pageMenu._setActiveModule(params.module, params.section);
-
-        if (url === '/') {
-            url = '/home';
-        }
-
-
 
         $.ajax({
             url: coreMain.options.basePath + url,
@@ -290,6 +271,10 @@ var pageMenu = {
             },
             success: function (response) {
                 pageMenu.preloader('hide');
+
+                let params = coreTools.getParams(url);
+                pageMenu._setActiveModule(params.module, params.section);
+
 
                 $('.page-menu .main-content .main-wrapper').html(response)
                     .css({
@@ -398,15 +383,6 @@ var pageMenu = {
      */
     _renderMenu: function () {
 
-        if (pageMenu._user.avatar) {
-            $('.page-menu > aside > .menu-drawer__header img').attr('src', pageMenu._user.avatar).show();
-        }
-        if (pageMenu._user.name) {
-            $('.page-menu header #profile-menu .menu-user .mdc-list-item__header').text($.trim(pageMenu._user.name));
-        }
-        if (pageMenu._user.login) {
-            $('.page-menu header #profile-menu .menu-user .mdc-list-item__text').text($.trim(pageMenu._user.login));
-        }
 
         $('.page-menu .system-title').text(pageMenu._system.name);
 
@@ -454,12 +430,25 @@ var pageMenu = {
         }
 
 
+        $('.page-menu .mdc-top-app-bar__section--align-end').append(ejs.render(pageMenu._tpl.topMenu, {
+            user: pageMenu._user
+        }));
+
+        // Выход
+        $('.page-menu .menu-logout').on('click', function () {
+            CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
+                acceptButtonText: "Да",
+                onAccept: function () {
+                    pageAuth.logout();
+                }
+            });
+        });
+
         $('.open-menu, .menu-drawer-scrim').on('click', function () {
             $('.page.page-menu').toggleClass('drawer-toggle');
         });
 
-
-        let buttons = document.querySelectorAll('.page-menu .menu-drawer .mdc-ripple-surface');
+        let buttons = document.querySelectorAll('.page-menu .mdc-ripple-surface');
         for (let button of buttons) {
             new mdc.ripple.MDCRipple(button);
         }
@@ -655,7 +644,7 @@ $(function () {
 
     coreMain.on('hashchange', function () {
         if ($('.page-menu.active')[0]) {
-            pageMenu.load(location.hash.substr(1));
+            pageMenu.load(location.hash.substring(1));
         }
     });
 });
