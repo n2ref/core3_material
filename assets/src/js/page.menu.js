@@ -139,8 +139,14 @@ var pageMenu = {
                         '<button class="menu-icon-button mdc-ripple-surface"><i class="fa-solid fa-sort-down"></i></button>' +
                     '<% } %>' +
                 '</div>' +
-                '<% if (module.sections && module.sections.length > 0) { %>' +
-                    '<ul class="menu-list level-2">' +
+                '<ul class="menu-list level-2">' +
+                    '<li class="menu-list-item core-module-section-index">' +
+                        '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.url %>\');" ' +
+                            'href="#/<%= module.url %>" class="mdc-ripple-surface">' +
+                            '<%= module.title %>' +
+                        '</a>' +
+                    '</li>' +
+                    '<% if (module.sections && module.sections.length > 0) { %>' +
                         '<% module.sections.forEach(function(section) { %>' +
                             '<li class="menu-list-item core-module-section core-module-<%= module.name %>-<%= section.name %>">' +
                                 '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.name %>/<%= section.name %>\');" ' +
@@ -149,8 +155,8 @@ var pageMenu = {
                                 '</a>' +
                             '</li>' +
                         '<% }); %>' +
-                    '</ul>' +
-                '<% } %>' +
+                    '<% } %>' +
+                '</ul>' +
             '</li>',
     },
 
@@ -493,6 +499,7 @@ var pageMenu = {
             $('.page-menu .module-home').removeClass('active');
         }
 
+        // core-module-section-index
 
         if (window.screen.width < 600) {
             $('.page-menu').removeClass('drawer-toggle');

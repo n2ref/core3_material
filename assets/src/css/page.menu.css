@@ -127,17 +127,17 @@
     height: 100%;
     border-right-width: 1px;
     border-right-style: solid;
-    overflow: hidden;
     transition: width 100ms cubic-bezier(.4,0,.2,1);
+    /*overflow: hidden;*/
 }
 .page-menu.drawer-toggle .menu-drawer {
     width: 64px;
     display: block;
 }
 .page-menu .menu-drawer .menu-drawer__content {
-    overflow-x: hidden;
     height: 100%;
-    overflow-y: auto;
+    /*overflow-x: hidden;*/
+    /*overflow-y: auto;*/
 }
 
 
@@ -153,7 +153,8 @@
     align-content: flex-start;
     align-items: flex-start;
     list-style: none;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    position: relative;
 }
 .page-menu .menu-drawer .menu-list.level-1 {
     padding: 0 10px;
@@ -215,6 +216,7 @@
     align-items: flex-start;
     padding: 0;
     overflow: initial;
+    white-space: nowrap;
 }
 .page-menu .menu-drawer .menu-list.level-2 > .menu-list-item a {
     padding-left: 48px;
@@ -223,9 +225,36 @@
     display: flex;
     align-items: center;
 }
+.page-menu .menu-drawer .menu-list.level-2 > .menu-list-item.core-module-section-index {
+    display: none;
+    font-weight: 600;
+}
+.page-menu .menu-drawer .menu-list.level-2 > .menu-list-item.core-module-section-index a {
+    color: var(--menu-drawer-text);
+}
 .page-menu .menu-drawer .menu-list .menu-list-item.menu-item-nested-open.menu-item-nested .item-control:hover,
 .page-menu .menu-drawer .menu-list.level-2 > .menu-list-item a:hover {
     background-color: rgb(0 0 0 / 10%);
+}
+.page-menu.drawer-toggle .menu-drawer .menu-list-item:hover .level-2 {
+    display: block;
+    height: auto;
+    position: absolute;
+    left: 43px;
+    top: 0;
+    z-index: 22222222;
+    opacity: 1;
+    min-width: 200px;
+    background-color: var(--menu-drawer);
+    box-shadow: 0 0 6px 1px #00000085;
+    border-radius: 8px;
+    padding: 8px 0;
+}
+.page-menu.drawer-toggle .menu-drawer .menu-list-item:hover .level-2 > .core-module-section-index {
+    display: list-item;
+}
+.page-menu.drawer-toggle .menu-drawer .menu-list-item:hover .level-2 > .menu-list-item a {
+    padding-left: 20px;
 }
 
 .page-menu .menu-drawer .menu-list-item:not(.menu-list-item--disabled).menu-module--activated .menu-list-item__ripple::before {
