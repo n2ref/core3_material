@@ -1,4 +1,3 @@
-
 var pageMenu = {
 
     /**
@@ -124,10 +123,11 @@ var pageMenu = {
             '</div>',
 
         module:
-            '<li class="menu-list-item core-module core-module-<%= module.name %> <% if (module.sections && module.sections.length > 0) { %>menu-item-nested<% } %>">' +
+            '<li class="menu-list-item core-module core-module-<%= module.name %> ' +
+                 '<% if (module.sections && module.sections.length > 0) { %>menu-item-nested<% } %>">' +
                 '<div class="item-control">' +
-                    '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.url %>\');" ' +
-                        'href="#/<%= module.url %>" class="mdc-ripple-surface">' +
+                    '<a href="#/<%= module.name %>/<%= module.index %>" class="mdc-ripple-surface" ' +
+                        'data-module="<%= module.name %>" data-section="<%= module.index %>">' +
                         '<% if (module.icon) { %>' +
                             '<i class="<%= module.icon %>"></i>' +
                         '<% } else { %>' +
@@ -141,16 +141,16 @@ var pageMenu = {
                 '</div>' +
                 '<ul class="menu-list level-2">' +
                     '<li class="menu-list-item core-module-section-index">' +
-                        '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.url %>\');" ' +
-                            'href="#/<%= module.url %>" class="mdc-ripple-surface">' +
+                        '<a href="#/<%= module.name %>/<%= module.index %>" class="mdc-ripple-surface" ' +
+                            'data-module="<%= module.name %>" data-section="<%= module.index %>">' +
                             '<%= module.title %>' +
                         '</a>' +
                     '</li>' +
                     '<% if (module.sections && module.sections.length > 0) { %>' +
                         '<% module.sections.forEach(function(section) { %>' +
                             '<li class="menu-list-item core-module-section core-module-<%= module.name %>-<%= section.name %>">' +
-                                '<a onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/mod/<%= module.name %>/<%= section.name %>\');" ' +
-                                    'href="#/<%= module.name %>/<%= section.name %>" class="mdc-ripple-surface">' +
+                                '<a href="#/<%= module.name %>/<%= section.name %>" class="mdc-ripple-surface" ' +
+                                    'data-module="<%= module.name %>" data-section="<%= section.name %>">' +
                                     '<span class="menu-list-item__text"><%= section.title %></span>' +
                                 '</a>' +
                             '</li>' +
@@ -176,6 +176,13 @@ var pageMenu = {
      * Инициализация
      */
     init: function () {
+
+        // Нужно для первого открытия страницы
+        if (window.screen.width > 600 && localStorage.getItem('core3_drawer_toggle') === '1') {
+            $('.page-menu').addClass('drawer-toggle');
+            $('.page-menu .menu-drawer').css('transition', 'none 0s ease 0s');
+            $('.page-menu .mdc-top-app-bar').css('transition', 'none 0s ease 0s');
+        }
 
         pageMenu.loadingScreen('show');
 
@@ -377,7 +384,7 @@ var pageMenu = {
 
             case 'hide':
                 $('#loading-screen').fadeOut('fast', function () {
-                    $('#loading-screen').remove();
+                    $(this).remove();
                 });
                 break;
         }
@@ -388,7 +395,6 @@ var pageMenu = {
      *
      */
     _renderMenu: function () {
-
 
         $('.page-menu .system-title').text(pageMenu._system.name);
 
@@ -403,12 +409,12 @@ var pageMenu = {
                     return true;
                 }
 
-                module.url = module.name + '/index';
+                module.index = 'index';
 
 
                 if ( ! module.isset_index_page && module.sections.length > 0) {
                     $.each(module.sections, function (key, section) {
-                        module.url = module.name + '/' + section.name;
+                        module.index = section.name;
                         return false;
                     });
                 }
@@ -425,6 +431,19 @@ var pageMenu = {
             let menuItems = document.querySelectorAll('.page-menu .menu-list-item a');
             for (let menuItem of menuItems) {
                 new mdc.ripple.MDCRipple(menuItem);
+
+                $(menuItem).on('click', function (event) {
+                    if (event.button === 0 && ! event.ctrlKey) {
+                        let module  = $(this).data('module');
+                        let section = $(this).data('section');
+
+                        if (window.screen.width < 600) {
+                            pageMenu._drawerToggle();
+                        }
+
+                        pageMenu.load('/mod/' + module + '/' + section);
+                    }
+                });
             }
             let buttons = document.querySelectorAll('.page-menu .menu-list-item .menu-icon-button');
             for (let button of buttons) {
@@ -451,7 +470,7 @@ var pageMenu = {
         });
 
         $('.open-menu, .menu-drawer-scrim').on('click', function () {
-            $('.page.page-menu').toggleClass('drawer-toggle');
+            pageMenu._drawerToggle();
         });
 
         let buttons = document.querySelectorAll('.page-menu .mdc-ripple-surface');
@@ -462,10 +481,10 @@ var pageMenu = {
 
         pageMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
             if (direction === "right") {
-                $('.page.page-menu').toggleClass('drawer-toggle');
+                pageMenu._drawerToggle();
 
             } else if (direction === "left") {
-                $('.page.page-menu').toggleClass('drawer-toggle');
+                pageMenu._drawerToggle();
             }
         });
     },
@@ -481,6 +500,12 @@ var pageMenu = {
             .removeClass('menu-module-index--activated')
             .removeClass('menu-module--activated');
 
+        $('.page-menu > aside .core-module-section')
+            .removeClass('menu-module-section--activated');
+
+        $('.page-menu > aside .core-module-section-index')
+            .removeClass('menu-module-section--activated');
+
         $('.page-menu > aside .core-module-' + moduleName)
             .addClass('menu-module--activated')
             .addClass('menu-item-nested-open');
@@ -488,21 +513,18 @@ var pageMenu = {
         if (sectionName === 'index') {
             $('.page-menu > aside .core-module.core-module-' + moduleName)
                 .addClass('menu-module-index--activated');
+
+            $('.page-menu > aside .core-module-' + moduleName + ' .core-module-section-index')
+                .addClass('menu-module-section--activated');
         }
 
-        $('.page-menu > aside .core-module-section').removeClass('menu-module-section--activated');
         $('.page-menu > aside .core-module-' + moduleName + '-' + sectionName).addClass('menu-module-section--activated');
+
 
         if ( ! moduleName && ! sectionName) {
             $('.page-menu .module-home').addClass('active');
         } else {
             $('.page-menu .module-home').removeClass('active');
-        }
-
-        // core-module-section-index
-
-        if (window.screen.width < 600) {
-            $('.page-menu').removeClass('drawer-toggle');
         }
 
 
@@ -605,6 +627,28 @@ var pageMenu = {
             xDown = null;
             yDown = null;
         }
+    },
+
+
+    /**
+     * @private
+     */
+    _drawerToggle:  function () {
+
+        // Нужно для первого открытия страницы
+        $('.page-menu .menu-drawer').css('transition', '');
+        $('.page-menu .mdc-top-app-bar').css('transition', '');
+
+
+        let menu = $('.page.page-menu');
+
+        if (menu.hasClass('drawer-toggle')) {
+            localStorage.setItem('core3_drawer_toggle', 0);
+        } else {
+            localStorage.setItem('core3_drawer_toggle', 1);
+        }
+
+        menu.toggleClass('drawer-toggle');
     },
 
 
