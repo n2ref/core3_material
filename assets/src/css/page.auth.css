@@ -63,28 +63,27 @@
 .page-auth .container .out-box a:hover {
     text-decoration: underline;
 }
-.page-auth .form-controls {
-    margin-top: 30px;
-}
-
 .page-auth .text-danger {
     color: #b10423;
 }
 .page-auth .text-success {
     color: #43a047;
 }
-.page-auth .mdc-text-field--outlined {
+.page-auth .form-controls {
+    margin-top: 30px;
+}
+.page-auth .form-controls .mdc-text-field--outlined {
     height: 40px;
     width: 238px;
 }
-.page-auth .mdc-text-field--outlined .mdc-floating-label,
-.page-auth .mdc-text-field--outlined .mdc-text-field__input {
+.page-auth .form-controls .mdc-text-field--outlined .mdc-floating-label,
+.page-auth .form-controls .mdc-text-field--outlined .mdc-text-field__input {
     font-size: 13px;
 }
-.page-auth .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+.page-auth .form-controls .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
     -webkit-transform: translateY(-26.75px) scale(0.75);
     transform: translateY(-26.75px) scale(0.75);
 }
-.page-auth .mdc-button {
+.page-auth .form-controls .mdc-button {
     height: 40px;
 }

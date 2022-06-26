@@ -2,7 +2,6 @@
 var coreMain = {
 
     options: {
-        regApikey: '',
         basePath: '/core',
     },
 
@@ -17,7 +16,7 @@ var coreMain = {
     /**
      *
      */
-    hashChangeCallbacks: [],
+    _hashChangeCallbacks: [],
 
 
     /**
@@ -25,7 +24,7 @@ var coreMain = {
      */
     viewPage: function (pageName) {
 
-        let pageObjectName = 'page' +  pageName.charAt(0).toUpperCase() + pageName.slice(1);
+        let pageObjectName = 'core' +  pageName.charAt(0).toUpperCase() + pageName.slice(1);
 
         if (window[pageObjectName]) {
             let pageContent = window[pageObjectName].getPageContent();
@@ -60,7 +59,7 @@ var coreMain = {
     on: function (eventName, callback) {
 
         if (eventName === 'hashchange') {
-            coreMain.hashChangeCallbacks.push(callback);
+            coreMain._hashChangeCallbacks.push(callback);
         }
     },
 
@@ -70,9 +69,9 @@ var coreMain = {
      */
     hashChange: function () {
 
-        if (coreMain.hashChangeCallbacks.length > 0) {
-            for (let i = 0; i < coreMain.hashChangeCallbacks.length; i++) {
-                coreMain.hashChangeCallbacks[i]();
+        if (coreMain._hashChangeCallbacks.length > 0) {
+            for (let i = 0; i < coreMain._hashChangeCallbacks.length; i++) {
+                coreMain._hashChangeCallbacks[i]();
             }
         }
     },
@@ -91,25 +90,6 @@ var coreMain = {
 
 
 $(function () {
-    // Показ ошибок
-    window.onerror = function(msg) {
-        if (msg === 'Uncaught EvalError: Possible side-effect in debug-evaluate') {
-            return;
-        }
-
-        CoreUI.notice.danger(msg);
-    };
-
-    // Регистрация service worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(swRegistration => {
-                // при каждой перезагрузке страницы будет запускать обновление кэша
-                swRegistration.update();
-
-            }).catch(err => console.log('SW registration FAIL:', err));
-    }
-
     // Событие установки
     coreMain.install.promise = new Promise(function (resolve, reject) {
 

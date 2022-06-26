@@ -27,34 +27,16 @@ var paths = {
         'src/js/core.tokens.js',
         'src/js/core.main.js',
         'src/js/core.tools.js',
-        'src/js/page.auth.js',
-        'src/js/page.menu.js',
+        'src/js/core.auth.js',
+        'src/js/core.menu.js',
     ]
 };
 
 
-const uglifyConfig = {
-    ie8: true,
-    // keep_fnames: true,
-    // warnings: true,
-    // mangle: {
-    //     keep_classnames: true,
-    //     safari10: true
-    // },
-    // output: {
-    //     safari10: true
-    // },
-    //compress: {
-    //    sequences: false,
-    //    typeofs: false,
-    //    keep_infinity: true
-    //}
-};
-
 gulp.task('build_js', function(){
     return gulp.src(paths.js)
         .pipe(sourcemaps.init())
-        .pipe(uglify(uglifyConfig))
+        .pipe(uglify())
         .pipe(concat('core-all.min.js', {newLine: ";\n"}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist'));
@@ -88,6 +70,7 @@ gulp.task('build_css_fast', function(){
 });
 
 
+
 gulp.task('build_watch', function() {
     gulp.watch(paths.js, gulp.parallel(['build_js']));
     gulp.watch(paths.css, gulp.parallel(['build_css']));
@@ -100,4 +83,4 @@ gulp.task('build_watch_fast', function() {
 });
 
 
-gulp.task("default", gulp.series([ 'build_js', 'build_css', 'build_watch' ]));
+gulp.task("default", gulp.series([ 'build_js', 'build_css']));

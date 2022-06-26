@@ -1,4 +1,4 @@
-var pageMenu = {
+var coreMenu = {
 
     /**
      *
@@ -27,7 +27,7 @@ var pageMenu = {
             '<aside class="menu-drawer">' +
                 '<div class="menu-drawer__content">' +
                     '<div class="menu-drawer__header">' +
-                        '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) pageMenu.load(\'/home\');" href="#/">' +
+                        '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) coreMenu.load(\'/home\');" href="#/">' +
                             '<span class="fa-solid fa-house"></span>' +
                             '<h3 class="system-title"></h3>' +
                         '</a>' +
@@ -69,9 +69,9 @@ var pageMenu = {
                 '</li>' +
             '</ul>',
 
-        preloader:
-            '<div id="preloader">' +
-                '<div role="progressbar" class="mdc-linear-progress preloader-progress" ' +
+        loader:
+            '<div id="loader">' +
+                '<div role="progressbar" class="mdc-linear-progress loader-progress" ' +
                     'aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">' +
                     '<div class="mdc-linear-progress__buffer">' +
                         '<div class="mdc-linear-progress__buffer-bar"></div>' +
@@ -84,11 +84,11 @@ var pageMenu = {
                         '<span class="mdc-linear-progress__bar-inner"></span>' +
                     '</div>' +
                 '</div>' +
-                '<div class="preloader-block"></div>' +
+                '<div class="loader-block"></div>' +
             '</div>',
 
-        loadingScreen:
-            '<div id="loading-screen">' +
+        preloader:
+            '<div id="preloader">' +
                 '<div class="loading-lock"></div>' +
                 '<div class="loading-block">' +
                     '<div class="mdc-circular-progress" style="width:96px;height:48px;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1">' +
@@ -184,7 +184,7 @@ var pageMenu = {
             $('.page-menu .mdc-top-app-bar').css('transition', 'none 0s ease 0s');
         }
 
-        pageMenu.loadingScreen('show');
+        coreMenu.preloader('show');
 
         // Инициализация кнопок
         let buttons = document.querySelectorAll('.page-menu .mdc-button');
@@ -193,7 +193,7 @@ var pageMenu = {
         }
 
 
-        pageMenu._initInstall();
+        coreMenu._initInstall();
 
         $('.page-menu .main-content .main-wrapper').html('')
 
@@ -221,18 +221,18 @@ var pageMenu = {
                     CoreUI.alert.danger('Ошибка', 'Попробуйте обновить страницу или обратитесь к администратору');
 
                 } else {
-                    pageMenu._user    = response.user;
-                    pageMenu._system  = response.system;
-                    pageMenu._modules = response.modules;
+                    coreMenu._user    = response.user;
+                    coreMenu._system  = response.system;
+                    coreMenu._modules = response.modules;
 
-                    pageMenu._renderMenu();
-                    pageMenu.loadingScreen('hide');
+                    coreMenu._renderMenu();
+                    coreMenu.preloader('hide');
 
                     let uri = location.hash.substring(1) !== '' && location.hash.substring(1) !== '/'
                         ? '/mod' + location.hash.substring(1)
                         : '/home';
 
-                    pageMenu.load(uri);
+                    coreMenu.load(uri);
                 }
             },
             error: function (response) {
@@ -272,7 +272,9 @@ var pageMenu = {
      */
     load: function (url) {
 
-        pageMenu.preloader('show');
+        url = url || '/home';
+
+        coreMenu.preloader('show');
 
         let accessToken = coreTokens.getAccessToken();
 
@@ -283,10 +285,10 @@ var pageMenu = {
                 'Access-Token': accessToken
             },
             success: function (response) {
-                pageMenu.preloader('hide');
+                coreMenu.preloader('hide');
 
                 let params = coreTools.getParams(url);
-                pageMenu._setActiveModule(params.module, params.section);
+                coreMenu._setActiveModule(params.module, params.section);
 
 
                 $('.page-menu .main-content .main-wrapper').html(response)
@@ -315,7 +317,7 @@ var pageMenu = {
                     );
             },
             error: function (response) {
-                pageMenu.preloader('hide');
+                coreMenu.preloader('hide');
 
                 if (response.status === 403) {
                     coreTokens.clearAccessToken();
@@ -334,24 +336,28 @@ var pageMenu = {
 
     /**
      * @param action
+     * @param options
+     * @returns {boolean}
      */
-    preloader: function(action) {
+    loader: function(action, options) {
 
         switch (action) {
             case 'show':
-                if ($('#preloader')[0]) {
+                if ($('#loader')[0]) {
                     return false;
                 }
 
-                $('.page-menu > header').append(pageMenu._tpl.preloader);
+                options = typeof options === 'object' ? options : {};
 
-                let preloaderElement = $('#preloader .preloader-progress');
-                let linearProgress   = new mdc['linear-progress'].MDCLinearProgress(preloaderElement[0]);
+                $('.page-menu > header').append(coreMenu._tpl.loader);
+
+                let loaderElement = $('#loader .loader-progress');
+                let linearProgress   = new mdc['linear-progress'].MDCLinearProgress(loaderElement[0]);
                 linearProgress.determinate = false;
                 break;
 
             case 'hide':
-                $('#preloader').remove();
+                $('#loader').remove();
                 break;
         }
     },
@@ -362,28 +368,28 @@ var pageMenu = {
      * @param options
      * @returns {boolean}
      */
-    loadingScreen: function(action, options) {
+    preloader: function(action, options) {
 
         switch (action) {
             case 'show':
-                if ($('#loading-screen')[0]) {
+                if ($('#preloader')[0]) {
                     return false;
                 }
 
-                options = typeof options === 'object' || {};
+                options = typeof options === 'object' ? options : {};
 
-                $('.page-menu').prepend(ejs.render(pageMenu._tpl.loadingScreen, {
+                $('.page-menu').prepend(ejs.render(coreMenu._tpl.preloader, {
                     text: options.text || 'Загрузка...'
                 }));
 
-                let element            = $('#loading-screen .mdc-circular-progress');
+                let element            = $('#preloader .mdc-circular-progress');
                 const circularProgress = new mdc['circular-progress'].MDCCircularProgress(element[0]);
                 circularProgress.determinate = false;
                 circularProgress.progress = 0;
                 break;
 
             case 'hide':
-                $('#loading-screen').fadeOut('fast', function () {
+                $('#preloader').fadeOut('fast', function () {
                     $(this).remove();
                 });
                 break;
@@ -396,12 +402,12 @@ var pageMenu = {
      */
     _renderMenu: function () {
 
-        $('.page-menu .system-title').text(pageMenu._system.name);
+        $('.page-menu .system-title').text(coreMenu._system.name);
 
-        if (Object.values(pageMenu._modules).length > 0) {
+        if (Object.values(coreMenu._modules).length > 0) {
             let params = coreTools.getParams();
 
-            $.each(pageMenu._modules, function (key, module) {
+            $.each(coreMenu._modules, function (key, module) {
                 if (typeof module.name !== 'string' || ! module.name ||
                     typeof module.title !== 'string' || ! module.title
                 ) {
@@ -419,13 +425,13 @@ var pageMenu = {
                     });
                 }
 
-                $('.page-menu > aside .menu-list.level-1').append(ejs.render(pageMenu._tpl.module, {
+                $('.page-menu > aside .menu-list.level-1').append(ejs.render(coreMenu._tpl.module, {
                     module: module
                 }));
             });
 
 
-            pageMenu._setActiveModule(params.module, params.section);
+            coreMenu._setActiveModule(params.module, params.section);
 
 
             let menuItems = document.querySelectorAll('.page-menu .menu-list-item a');
@@ -438,10 +444,10 @@ var pageMenu = {
                         let section = $(this).data('section');
 
                         if (window.screen.width < 600) {
-                            pageMenu._drawerToggle();
+                            coreMenu._drawerToggle();
                         }
 
-                        pageMenu.load('/mod/' + module + '/' + section);
+                        coreMenu.load('/mod/' + module + '/' + section);
                     }
                 });
             }
@@ -455,8 +461,8 @@ var pageMenu = {
         }
 
 
-        $('.page-menu .mdc-top-app-bar__section--align-end').append(ejs.render(pageMenu._tpl.topMenu, {
-            user: pageMenu._user
+        $('.page-menu .mdc-top-app-bar__section--align-end').append(ejs.render(coreMenu._tpl.topMenu, {
+            user: coreMenu._user
         }));
 
         // Выход
@@ -464,13 +470,13 @@ var pageMenu = {
             CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
-                    pageAuth.logout();
+                    coreAuth.logout();
                 }
             });
         });
 
         $('.open-menu, .menu-drawer-scrim').on('click', function () {
-            pageMenu._drawerToggle();
+            coreMenu._drawerToggle();
         });
 
         let buttons = document.querySelectorAll('.page-menu .mdc-ripple-surface');
@@ -479,12 +485,12 @@ var pageMenu = {
         }
 
 
-        pageMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
+        coreMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
             if (direction === "right") {
-                pageMenu._drawerToggle();
+                coreMenu._drawerToggle();
 
             } else if (direction === "left") {
-                pageMenu._drawerToggle();
+                coreMenu._drawerToggle();
             }
         });
     },
@@ -537,7 +543,7 @@ var pageMenu = {
 
             let title = [];
 
-            $.each(pageMenu._modules, function (key, module) {
+            $.each(coreMenu._modules, function (key, module) {
                 if (module.name === moduleName) {
 
                     title.push(module.title);
@@ -695,7 +701,7 @@ $(function () {
 
     coreMain.on('hashchange', function () {
         if ($('.page-menu.active')[0]) {
-            pageMenu.load(location.hash.substring(1));
+            coreMenu.load(location.hash.substring(1));
         }
     });
 });
