@@ -284,14 +284,29 @@ var coreMenu = {
             headers: {
                 'Access-Token': accessToken
             },
-            success: function (response) {
+            success: function (response, textStatus, jqXHR) {
                 coreMenu.preloader('hide');
 
                 let params = coreTools.getParams(url);
                 coreMenu._setActiveModule(params.module, params.section);
 
+                let contentType = jqXHR.getResponseHeader('Content-type');
+                let content     = '';
 
-                $('.page-menu .main-content .main-wrapper').html(response)
+                if (/^application\/json($|$)/.test(contentType)) {
+                    try {
+                        let jsonContent = JSON.parse(response);
+                        content = coreMenu._renderContent(jsonContent);
+
+                    } catch (e) {
+                        content = e.message;
+                    }
+
+                } else {
+                    content = response;
+                }
+
+                $('.page-menu .main-content .main-wrapper').html(content)
                     .css({
                         'opacity': '0',
                         'margin-top': '15px'
@@ -394,6 +409,16 @@ var coreMenu = {
                 });
                 break;
         }
+    },
+
+
+    /**
+     * @param jsonContent
+     * @private
+     */
+    _renderContent: function (jsonContent) {
+
+        return JSON.stringify(jsonContent);
     },
 
 
