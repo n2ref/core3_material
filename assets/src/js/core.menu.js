@@ -295,8 +295,7 @@ var coreMenu = {
 
                 if (/^application\/json($|$)/.test(contentType)) {
                     try {
-                        let jsonContent = JSON.parse(response);
-                        content = coreMenu._renderContent(jsonContent);
+                        content = coreMenu._renderContent(response);
 
                     } catch (e) {
                         content = e.message;
