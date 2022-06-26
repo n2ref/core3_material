@@ -7,18 +7,6 @@ stages:
   - test
 
 
-test_php_7.4:
-  stage: test
-  image: php:7.4
-  extends: .php_scripts
-
-
-test_php_8.0:
-  stage: test
-  image: php:8.0
-  extends: .php_scripts
-
-
 test_js:
   stage: test
   image: node
