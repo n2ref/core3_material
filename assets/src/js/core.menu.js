@@ -27,7 +27,7 @@ var coreMenu = {
             '<aside class="menu-drawer">' +
                 '<div class="menu-drawer__content">' +
                     '<div class="menu-drawer__header">' +
-                        '<a class="module-home" onclick="if (event.button === 0 && ! event.ctrlKey) coreMenu.load(\'/home\');" href="#/">' +
+                        '<a class="module-home" href="#/">' +
                             '<span class="fa-solid fa-house"></span>' +
                             '<h3 class="system-title"></h3>' +
                         '</a>' +
@@ -499,8 +499,19 @@ var coreMenu = {
             });
         });
 
-        $('.open-menu, .menu-drawer-scrim').on('click', function () {
+        $('.page-menu .open-menu, .page-menu .menu-drawer-scrim').on('click', function () {
             coreMenu._drawerToggle();
+        });
+
+        $('.page-menu .module-home').on('click', function (event) {
+            if (event.button === 0 && ! event.ctrlKey)  {
+                coreMenu.load('/home');
+
+                if (window.screen.width < 600) {
+                    coreMenu._drawerToggle();
+                    console.log(11)
+                }
+            }
         });
 
         let buttons = document.querySelectorAll('.page-menu .mdc-ripple-surface');
@@ -509,7 +520,7 @@ var coreMenu = {
         }
 
 
-        coreMenu._initSwipe($(".menu-drawer-swipe")[0], function (direction) {
+        coreMenu._initSwipe($(".page-menu .menu-drawer-swipe")[0], function (direction) {
             if (direction === "right") {
                 coreMenu._drawerToggle();
 

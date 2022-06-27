@@ -27,7 +27,7 @@ var coreAuth = {
                                          '</span>' +
                                          '<span class="mdc-notched-outline__trailing"></span>' +
                                      '</span>' +
-                                     '<input type="text" name="password" class="mdc-text-field__input" required aria-labelledby="password">' +
+                                     '<input type="password" name="password" class="mdc-text-field__input" required aria-labelledby="password">' +
                                  '</label>' +
                              '</div>' +
                              '<button class="mdc-button mdc-button--raised">' +
