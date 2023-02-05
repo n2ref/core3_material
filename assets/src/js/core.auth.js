@@ -5,7 +5,7 @@ var coreAuth = {
              '<div class="container container-login" style="display: none">' +
                  '<div class="mdc-card">' +
                      '<div class="mdc-card__content">' +
-                         '<img src="logo.png" alt="logo" class="logo">' +
+                         '<img src="assets/src/img/logo.png" alt="logo" class="logo">' +
                          '<form>' +
                              '<span class="text-danger"></span>' +
                              '<div class="form-controls">' +
@@ -45,7 +45,7 @@ var coreAuth = {
              '<div class="container container-registration" style="display: none">' +
                  '<div class="mdc-card">' +
                      '<div class="mdc-card__content">' +
-                         '<img src="logo.png" alt="logo" class="logo">' +
+                         '<img src="assets/src/img/logo.png" alt="logo" class="logo">' +
                          '<p class="mdc-typography--headline5">Регистрация</p>' +
                          '<div class="text-danger mdc-typography--subtitle2"></div>' +
                          '<div class="text-success mdc-typography--subtitle2"></div>' +
