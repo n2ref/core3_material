@@ -3,6 +3,8 @@ var CoreUI = typeof CoreUI !== 'undefined' ? CoreUI : {};
 
 CoreUI.alert = {
 
+    _dialog: null,
+
     info: function (title, message, options) {
         this.create(title, message, options);
     },
@@ -58,6 +60,10 @@ CoreUI.alert = {
      */
     create: function (title, message, options) {
 
+        if (CoreUI.alert._dialog) {
+            CoreUI.alert._dialog.close();
+        }
+
         options = options || {};
 
         let titleColor = typeof options['titleColor'] === 'string'
@@ -82,25 +88,25 @@ CoreUI.alert = {
 
         $('body').append(
             '<div class="mdc-dialog" id="dialog-alert">' +
-            '<div class="mdc-dialog__container">' +
-            '<div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" ' +
-            'aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">' +
-            tplTitle +
-            tplMessage +
-            '<div class="mdc-dialog__actions">' +
-            '<button type="button" class="mdc-button mdc-dialog__button" ' +
-            'data-mdc-dialog-action="cancel">' +
-            '<div class="mdc-button__ripple"></div>' +
-            '<span class="mdc-button__label">' + textButton + '</span>' +
-            '</button>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '<div class="mdc-dialog__scrim"></div>' +
+                '<div class="mdc-dialog__container">' +
+                    '<div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" ' +
+                         'aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">' +
+                        tplTitle +
+                        tplMessage +
+                        '<div class="mdc-dialog__actions">' +
+                            '<button type="button" class="mdc-button mdc-dialog__button" ' +
+                                    'data-mdc-dialog-action="cancel">' +
+                                '<div class="mdc-button__ripple"></div>' +
+                                '<span class="mdc-button__label">' + textButton + '</span>' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="mdc-dialog__scrim"></div>' +
             '</div>'
         );
 
-        let dialogElement = $('#dialog-alert');
+        let dialogElement = $('#dialog-alert:not(.mdc-dialog--closing)');
         let dialog        = new mdc.dialog.MDCDialog(dialogElement[0]);
 
 
@@ -115,6 +121,8 @@ CoreUI.alert = {
         });
 
         dialog.open();
+
+        CoreUI.alert._dialog = dialog;
 
         return dialog;
     },

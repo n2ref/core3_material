@@ -1,158 +1,12 @@
 var coreAuth = {
 
-     _tpl: {
-        main:
-             '<div class="container container-login" style="display: none">' +
-                 '<div class="mdc-card">' +
-                     '<div class="mdc-card__content">' +
-                         '<img src="assets/src/img/logo.png" alt="logo" class="logo">' +
-                         '<form>' +
-                             '<span class="text-danger"></span>' +
-                             '<div class="form-controls">' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="login">Логин или Email</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="text" name="login" class="mdc-text-field__input" required aria-labelledby="login">' +
-                                 '</label>' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="password">Пароль</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="password" name="password" class="mdc-text-field__input" required aria-labelledby="password">' +
-                                 '</label>' +
-                             '</div>' +
-                             '<button class="mdc-button mdc-button--raised">' +
-                                 '<div class="mdc-button__ripple"></div>' +
-                                 '<span class="mdc-button__label">Войти</span>' +
-                             '</button>' +
-                         '</form>' +
-                     '</div>' +
-                 '</div>' +
-                 '<div class="out-box">' +
-                     '<a class="install-button" style="display: none">Установить</a>' +
-                     '<a href="#/registration" class="reg-button">Регистрация</a>' +
-                 '</div>' +
-             '</div>' +
-             '<div class="container container-registration" style="display: none">' +
-                 '<div class="mdc-card">' +
-                     '<div class="mdc-card__content">' +
-                         '<img src="assets/src/img/logo.png" alt="logo" class="logo">' +
-                         '<p class="mdc-typography--headline5">Регистрация</p>' +
-                         '<div class="text-danger mdc-typography--subtitle2"></div>' +
-                         '<div class="text-success mdc-typography--subtitle2"></div>' +
-                         '<form>' +
-                             '<div class="form-controls">' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="registration-email">Email</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="email" name="email" class="mdc-text-field__input" required aria-labelledby="registration-email">' +
-                                 '</label>' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="registration-name">Имя</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="text" name="name" class="mdc-text-field__input" required aria-labelledby="registration-name">' +
-                                 '</label>' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="registration-login">Логин</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="text" name="login" class="mdc-text-field__input" required aria-labelledby="registration-login">' +
-                                 '</label>' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="registration-pass">Пароль</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="password" name="pass" class="mdc-text-field__input" required aria-labelledby="registration-pass">' +
-                                 '</label>' +
-                                 '<label class="mdc-text-field mdc-text-field--outlined">' +
-                                     '<span class="mdc-notched-outline">' +
-                                         '<span class="mdc-notched-outline__leading"></span>' +
-                                         '<span class="mdc-notched-outline__notch">' +
-                                             '<span class="mdc-floating-label" id="registration-pass2">Пароль еще раз</span>' +
-                                         '</span>' +
-                                         '<span class="mdc-notched-outline__trailing"></span>' +
-                                     '</span>' +
-                                     '<input type="password" name="pass2" class="mdc-text-field__input" required aria-labelledby="registration-pass2">' +
-                                 '</label>' +
-                             '</div>' +
-                             '<button class="mdc-button mdc-button--raised">' +
-                                 '<div class="mdc-button__ripple"></div>' +
-                                 '<span class="mdc-button__label">Зарегистрироваться</span>' +
-                             '</button>' +
-                         '</form>' +
-                     '</div>' +
-                 '</div>' +
-                 '<div class="out-box">' +
-                     '<a class="install-button" style="display: none">Установить</a>' +
-                     '<a href="#" class="login-button">Войти</a>' +
-                 '</div>' +
-             '</div>',
-
-         preloader:
-             '<div class="mdc-circular-progress" style="width:42px;height:24px;margin-left:-42px;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1">' +
-               '<div class="mdc-circular-progress__determinate-container">' +
-                 '<svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
-                   '<circle class="mdc-circular-progress__determinate-track" cx="12" cy="12" r="8.75" stroke-width="2.5"/>' +
-                   '<circle class="mdc-circular-progress__determinate-circle" cx="12" cy="12" r="8.75" stroke-dasharray="54.978" stroke-dashoffset="54.978" stroke-width="2.5"/>' +
-                 '</svg>' +
-               '</div>' +
-               '<div class="mdc-circular-progress__indeterminate-container">' +
-                 '<div class="mdc-circular-progress__spinner-layer">' +
-                   '<div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">' +
-                     '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
-                       '<circle cx="12" cy="12" r="8.75" stroke-dasharray="54.978" stroke-dashoffset="27.489" stroke-width="2.5"/>' +
-                     '</svg>' +
-                   '</div>' +
-                   '<div class="mdc-circular-progress__gap-patch">' +
-                     '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
-                       '<circle cx="12" cy="12" r="8.75" stroke-dasharray="54.978" stroke-dashoffset="27.489" stroke-width="2"/>' +
-                     '</svg>' +
-                   '</div>' +
-                   '<div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">' +
-                     '<svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
-                       '<circle cx="12" cy="12" r="8.75" stroke-dasharray="54.978" stroke-dashoffset="27.489" stroke-width="2.5"/>' +
-                     '</svg>' +
-                   '</div>' +
-                 '</div>' +
-               '</div>' +
-             '</div>'
-    },
-
-
     /**
      * Получение страницы входа и регистрации
      * @returns {*}
      */
     getPageContent: function () {
 
-        return this._tpl.main;
+        return coreTemplates['auth/main.html'];
     },
 
 
@@ -247,7 +101,7 @@ var coreAuth = {
                 $btn.attr("disabled", "disabled");
 
                 if ($btn.find('.mdc-circular-progress').length === 0) {
-                    $btn.prepend(coreAuth._tpl.preloader);
+                    $btn.prepend(coreTemplates['auth/preloader.html']);
 
 
                     const element          = $('.mdc-circular-progress', $btn)[0];

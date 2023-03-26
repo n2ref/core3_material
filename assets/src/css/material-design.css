@@ -1,5 +1,5 @@
 @font-face {font-family: "Material Icons";font-style: normal;font-weight: 400;font-display: block;src: url("../fonts/material-icons.woff2") format("woff2");}
-@font-face {font-family: "Material Icons Outlined";font-style: normal;font-weight: 400;font-display: block;}
+@font-face {font-family: "Material Icons Outlined";font-style: normal;font-weight: 400;font-display:  block;src: url("../fonts/material-icons-outlined.woff2") format("woff2");}
 @font-face {font-family: "Material Icons Round";font-style: normal;font-weight: 400;font-display: block;src: url("../fonts/material-icons-round.woff2") format("woff2");}
 @font-face {font-family: "Material Icons Sharp";font-style: normal;font-weight: 400;font-display: block;src: url("../fonts/material-icons-sharp.woff2") format("woff2");}
 @font-face {font-family: "Material Icons Two Tone";font-style: normal;font-weight: 400;font-display: block;src: url("../fonts/material-icons-two-tone.woff2") format("woff2");}

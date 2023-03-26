@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build_all": "gulp build_js && gulp build_css",
-    "build_js": "gulp build_js",
+    "build_all": "gulp build_tpl && gulp build_js && gulp build_css",
+
+    "build_js": "gulp build_tpl && gulp build_js",
+    "build_js_fast": "gulp build_tpl && gulp build_js_fast",
+
     "build_css": "gulp build_css",
+    "build_css_fast": "gulp build_css_fast",
+
     "build_watch": "gulp build_watch",
     "build_watch_fast": "gulp build_watch_fast",
     "text_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./js"
@@ -22,7 +27,7 @@
     "@material/dialog": "14.*",
     "@material/snackbar": "14.*",
     "@fingerprintjs/fingerprintjs": "3.3.*",
-    "jquery": "3.6.0",
+    "jquery": "3.6.4",
     "jwt-decode": "3.1.2",
     "md5": "2.3.0",
     "ejs": "3.1.*"
@@ -32,7 +37,9 @@
     "gulp-concat": "2.*",
     "gulp-sourcemaps": "3.*",
     "gulp-uglify": "3.0.*",
-    "gulp-clean-css": "4.*"
+    "gulp-clean-css": "4.*",
+    "gulp-htmlmin": "5.0.1",
+    "gulp-html2js": "0.4.2"
   },
   "keywords": [],
   "author": "shabuninil",

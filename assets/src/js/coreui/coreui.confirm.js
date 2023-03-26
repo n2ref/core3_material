@@ -3,6 +3,7 @@ var CoreUI = typeof CoreUI !== 'undefined' ? CoreUI : {};
 
 CoreUI.confirm = {
 
+    _dialog: null,
 
     info: function (title, message, options) {
         this.create(title, message, options);
@@ -59,6 +60,10 @@ CoreUI.confirm = {
      */
     create: function(title, message, options) {
 
+        if (CoreUI.confirm._dialog) {
+            CoreUI.confirm._dialog.close();
+        }
+
         options = options || {};
 
         let titleColor = typeof options['titleColor'] === 'string'
@@ -87,30 +92,30 @@ CoreUI.confirm = {
 
         $('body').append(
             '<div class="mdc-dialog" id="dialog-confirm">' +
-            '<div class="mdc-dialog__container">' +
-            '<div class="mdc-dialog__surface" role="alertdialog" aria-modal="true"' +
-            'aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">' +
-            tplTitle +
-            tplMessage +
-            '<div class="mdc-dialog__actions">' +
-            '<button type="button" class="mdc-button mdc-dialog__button" ' +
-            'data-mdc-dialog-action="cancel">' +
-            '<div class="mdc-button__ripple"></div>' +
-            '<span class="mdc-button__label">' + cancelButtonText + '</span>' +
-            '</button>' +
-            '<button type="button" class="mdc-button mdc-dialog__button" ' +
-            'data-mdc-dialog-action="accept">' +
-            '<div class="mdc-button__ripple"></div>' +
-            '<span class="mdc-button__label">' + acceptButtonText + '</span>' +
-            '</button>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '<div class="mdc-dialog__scrim"></div>' +
+                '<div class="mdc-dialog__container">' +
+                    '<div class="mdc-dialog__surface" role="alertdialog" aria-modal="true"' +
+                         'aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">' +
+                        tplTitle +
+                        tplMessage +
+                        '<div class="mdc-dialog__actions">' +
+                            '<button type="button" class="mdc-button mdc-dialog__button" ' +
+                                    'data-mdc-dialog-action="cancel">' +
+                                '<div class="mdc-button__ripple"></div>' +
+                                '<span class="mdc-button__label">' + cancelButtonText + '</span>' +
+                            '</button>' +
+                            '<button type="button" class="mdc-button mdc-dialog__button" ' +
+                                    'data-mdc-dialog-action="accept">' +
+                                '<div class="mdc-button__ripple"></div>' +
+                                '<span class="mdc-button__label">' + acceptButtonText + '</span>' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="mdc-dialog__scrim"></div>' +
             '</div>'
         );
 
-        let dialogElement = $('#dialog-confirm');
+        let dialogElement = $('#dialog-confirm:not(.mdc-dialog--closing)');
         let dialog        = new mdc.dialog.MDCDialog(dialogElement[0]);
 
         dialog.listen('MDCDialog:closing', function(data) {
@@ -134,6 +139,8 @@ CoreUI.confirm = {
         });
 
         dialog.open();
+
+        CoreUI.confirm._dialog = dialog;
 
         return dialog;
     },

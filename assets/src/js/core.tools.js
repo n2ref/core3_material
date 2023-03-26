@@ -58,6 +58,129 @@ var coreTools = {
 
 
     /**
+     *
+     */
+    toggleFullscreen: function () {
+
+        if ( ! document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    },
+
+
+    /**
+     * Форматирование числа
+     * @param   {number|string} numb
+     * @returns {string}
+     * @private
+     */
+    formatNumber: function(numb) {
+        numb = numb.toString();
+        return numb.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+    },
+
+
+    /**
+     * Форматирование числа
+     * @param   {number|string} numb
+     * @returns {string}
+     * @private
+     */
+    formatMoney: function(numb) {
+
+        if (isNaN(numb)) {
+            return this.formatNumber(numb);
+
+        } else {
+            numb = Number(numb).toFixed(2).toString();
+            return numb.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+        }
+    },
+
+
+    /**
+     * Копирование
+     * @param text
+     * @returns {Promise<unknown>|Promise<void>}
+     */
+    clipboardText: function (text) {
+
+        /**
+         * Старый вариант копирования
+         * @param text
+         */
+        function fallbackCopyTextToClipboard(text) {
+
+            return new Promise(function (resolve, reject) {
+                let textArea = document.createElement("textarea");
+                textArea.value = text;
+
+                // Avoid scrolling to bottom
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.position = "fixed";
+
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    let successful = document.execCommand('copy');
+
+                    document.body.removeChild(textArea);
+
+                    if (successful) {
+                        resolve()
+                    } else {
+                        reject();
+                    }
+
+                } catch (err) {
+                    document.body.removeChild(textArea);
+                    reject();
+                }
+            });
+        }
+
+
+        /**
+         * @param text
+         * @returns {Promise<void>|Promise<unknown>}
+         */
+        function copyTextToClipboard(text) {
+
+            if ( ! navigator.clipboard) {
+                return fallbackCopyTextToClipboard(text);
+            }
+
+            return navigator.clipboard.writeText(text);
+        }
+
+        return copyTextToClipboard(text);
+    },
+
+
+    /**
+     * @returns {number}
+     * @private
+     */
+    hashCode: function() {
+
+        let string = 'A' + new Date().getTime();
+
+        for (var h = 0, i = 0; i < string.length; h &= h) {
+            h = 31 * h + string.charCodeAt(i++);
+        }
+
+        return Math.abs(h);
+    },
+
+
+    /**
      * @returns Promise
      */
     getFingerprint: function () {
