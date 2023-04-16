@@ -3,6 +3,7 @@ var coreMenu = {
     _user: null,
     _system: null,
     _modules: null,
+    _events: {},
 
 
     /**
@@ -136,16 +137,13 @@ var coreMenu = {
 
                 let contentType = jqXHR.getResponseHeader('Content-type');
                 let content     = '';
-                let callback    = null;
 
                 // Обработка json
                 if (/^application\/json($|$)/.test(contentType) &&
                     typeof response === 'object'
                 ) {
                     try {
-                        let result = coreMenu._renderContent(response);
-                        content  = result.content;
-                        callback = typeof result.callback === 'function' ? result.callback : null;
+                        content = coreMenu._renderContent(response);
 
                     } catch (e) {
                         content = e.message;
@@ -168,9 +166,8 @@ var coreMenu = {
                         }
                     );
 
-                if (typeof callback === 'function') {
-                    callback();
-                }
+
+                coreMenu._trigger('shown.load.core3', this, [ url ]);
             },
             error: function (response) {
                 coreMenu.preloader.hide();
@@ -266,47 +263,100 @@ var coreMenu = {
 
 
     /**
+     * @param eventName
+     * @param callback
+     * @param context
+     * @param singleExec
+     */
+    on: function(eventName, callback, context, singleExec) {
+        if (typeof this._events[eventName] !== 'object') {
+            this._events[eventName] = [];
+        }
+        this._events[eventName].push({
+            context : context || this,
+            callback : callback,
+            singleExec : singleExec
+        });
+    },
+
+
+    /**
      * @param data
      * @private
      */
     _renderContent: function (data) {
 
-        let result = {
-            content: "",
-            callback: null,
-        };
+        let result          = "";
         let alloyComponents = [
             'coreui.table',
             'coreui.form',
             'coreui.layout',
             'coreui.panel',
             'coreui.tabs',
-            'coreui.alert',
+            'coreui.info',
         ];
 
-        if ( ! Array.isArray(data) &&
-            data.hasOwnProperty('component') &&
-            alloyComponents.indexOf(data.component) >= 0
+        if (typeof data === 'string' ||
+            typeof data === 'bigint' ||
+            typeof data === 'number' ||
+            typeof data === 'symbol'
         ) {
-            switch (data.component) {
-                case 'coreui.table':
-                case 'coreui.form':
-                case 'coreui.layout':
-                case 'coreui.panel':
-                case 'coreui.tabs':
-                case 'coreui.alert':
-                    let name     = data.component.split('.')[1];
-                    let instance = CoreUI[name].init(data);
-                    result.content  = instance.render();
-                    result.callback = instance.initEvents;
-                    break;
+            result = data;
+
+        } else if (data instanceof Object) {
+            if ( ! Array.isArray(data)) {
+                data = [ data ];
+            }
+
+            for (let i = 0; i < data.length; i++) {
+                if (typeof data[i] === 'string') {
+                    result += data[i];
+
+                } else {
+                    if ( ! Array.isArray(data[i]) &&
+                        data[i].hasOwnProperty('component') &&
+                        alloyComponents.indexOf(data[i].component) >= 0
+                    ) {
+                        let name     = data[i].component.split('.')[1];
+                        let instance = CoreUI[name].create(data[i]);
+                        result += instance.render();
+
+                        this.on('shown.load.core3', instance.initEvents, instance, true);
+
+                    } else {
+                        result += JSON.stringify(data[i]);
+                    }
+                }
             }
 
         } else {
-            result.content = JSON.stringify(data);
+            result = JSON.stringify(data);
         }
 
         return result;
+    },
+
+
+    /**
+     *
+     * @param name
+     * @param context
+     * @param params
+     */
+    _trigger: function(name, context, params) {
+        if (this._events[name] instanceof Object && this._events[name].length > 0) {
+            for (let i = 0; i < this._events[name].length; i++) {
+                let callback = this._events[name][i].callback;
+
+                context = this._events[name][i].context || context;
+
+                callback.apply(context, params);
+
+                if (this._events[name][i].singleExec) {
+                    this._events[name].splice(i, 1);
+                }
+            }
+        }
     },
 
 

@@ -12,11 +12,9 @@
     "build_css_fast": "gulp build_css_fast",
 
     "build_watch": "gulp build_watch",
-    "build_watch_fast": "gulp build_watch_fast",
     "text_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./js"
   },
   "dependencies": {
-    "mdb-ui-kit": "4.2.0",
     "@material/ripple": "14.*",
     "@material/button": "14.*",
     "@material/card": "14.*",
@@ -24,13 +22,21 @@
     "@material/linear-progress": "14.*",
     "@material/circular-progress": "14.*",
     "@material/top-app-bar": "14.*",
-    "@material/dialog": "14.*",
-    "@material/snackbar": "14.*",
     "@fingerprintjs/fingerprintjs": "3.3.*",
+
+    "bootstrap": "5.3.0-alpha3",
     "jquery": "3.6.4",
     "jwt-decode": "3.1.2",
     "md5": "2.3.0",
-    "ejs": "3.1.*"
+    "ejs": "3.1.*",
+
+    "coreui-panel": "1.0.*",
+    "coreui-modal": "1.0.1",
+    "coreui-alert": "1.0.0",
+    "coreui-info": "1.0.1",
+    "coreui-confirm": "1.0.0",
+    "coreui-notice": "1.0.0",
+    "coreui-tabs": "1.0.0"
   },
   "devDependencies": {
     "gulp": "4.*",

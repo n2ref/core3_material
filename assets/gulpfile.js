@@ -13,9 +13,17 @@ var conf = {
         file: 'core-all.min.css',
         src: [
             'node_modules/@material/**/dist/*.min.css',
-            'node_modules/mdb-ui-kit/css/mdb.min.css',
             'src/css/font-awesome.min.css',
             'src/css/material-design.css',
+
+            'node_modules/bootstrap/dist/css/bootstrap.min.css',
+
+            'node_modules/coreui-panel/dist/coreui-panel.min.css',
+            'node_modules/coreui-tabs/dist/coreui-tabs.min.css',
+            'node_modules/coreui-alert/dist/coreui-alert.min.css',
+            'node_modules/coreui-confirm/dist/coreui-confirm.min.css',
+            'node_modules/coreui-notice/dist/coreui-notice.min.css',
+
             'src/css/main.css',
             'src/css/page.auth.css',
             'src/css/page.disable.css',
@@ -26,13 +34,24 @@ var conf = {
         file: 'core-all.min.js',
         src: [
             'node_modules/@material/**/dist/*.min.js',
-            'node_modules/mdb-ui-kit/js/mdb.min.js',
             'node_modules/jquery/dist/jquery.min.js',
             'node_modules/jwt-decode/build/jwt-decode.js',
             'node_modules/md5/dist/md5.min.js',
             'node_modules/@fingerprintjs/fingerprintjs/dist/fp.min.js',
             'node_modules/ejs/ejs.min.js',
-            'src/js/coreui/**/*.js',
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+
+            'node_modules/coreui-panel/dist/coreui-panel.min.js',
+            'node_modules/coreui-tabs/dist/coreui-tabs.min.js',
+            'node_modules/coreui-alert/dist/coreui-alert.min.js',
+            'node_modules/coreui-confirm/dist/coreui-confirm.min.js',
+            'node_modules/coreui-modal/dist/coreui-modal.min.js',
+            'node_modules/coreui-info/dist/coreui-info.min.js',
+            'node_modules/coreui-notice/dist/coreui-notice.min.js',
+
+            'src/js/coreui/coreui.form.js',
+            'src/js/coreui/coreui.table.js',
+
             'src/js/core.templates.js',
             'src/js/core.tokens.js',
             'src/js/core.main.js',
@@ -109,14 +128,10 @@ gulp.task('build_css_fast', function(){
 
 
 gulp.task('build_watch', function() {
-    gulp.watch(conf.js.src, gulp.parallel(['build_js']));
-    gulp.watch(conf.css.src, gulp.parallel(['build_css']));
-});
-
-gulp.task('build_watch_fast', function() {
     gulp.watch(conf.tpl.src, gulp.series(['build_tpl', 'build_js_fast']));
     gulp.watch(conf.js.src, gulp.parallel(['build_js_fast']));
     gulp.watch(conf.css.src, gulp.parallel(['build_css_fast']));
 });
+
 
 gulp.task("default", gulp.series([ 'build_tpl', 'build_js', 'build_css']));
