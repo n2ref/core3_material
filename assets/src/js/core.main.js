@@ -1,6 +1,8 @@
 
 var coreMain = {
 
+    activePage: null,
+
     options: {
         basePath: '/core',
     },

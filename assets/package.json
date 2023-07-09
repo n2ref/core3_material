@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "build_all": "gulp build_tpl && gulp build_js && gulp build_css",
+    "build_watch": "gulp build_watch",
 
     "build_js": "gulp build_tpl && gulp build_js",
     "build_js_fast": "gulp build_tpl && gulp build_js_fast",
@@ -11,8 +12,7 @@
     "build_css": "gulp build_css",
     "build_css_fast": "gulp build_css_fast",
 
-    "build_watch": "gulp build_watch",
-    "text_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./js"
+    "test_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./js"
   },
   "dependencies": {
     "@material/ripple": "14.*",
@@ -25,18 +25,23 @@
     "@fingerprintjs/fingerprintjs": "3.3.*",
 
     "bootstrap": "5.3.0-alpha3",
+    "bootstrap-icons": "1.*",
     "jquery": "3.6.4",
     "jwt-decode": "3.1.2",
     "md5": "2.3.0",
     "ejs": "3.1.*",
 
-    "coreui-panel": "1.0.*",
-    "coreui-modal": "1.0.1",
+    "coreui-panel": "1.0.7",
+    "coreui-modal": "1.0.2",
     "coreui-alert": "1.0.0",
     "coreui-info": "1.0.1",
     "coreui-confirm": "1.0.0",
     "coreui-notice": "1.0.0",
-    "coreui-tabs": "1.0.0"
+    "coreui-tabs": "1.0.0",
+    "coreui-layout": "1.0.8",
+    "coreui-table": "1.0.5",
+    "coreui-form": "1.0.0",
+    "coreui-chart": "1.0.1"
   },
   "devDependencies": {
     "gulp": "4.*",
@@ -45,7 +50,8 @@
     "gulp-uglify": "3.0.*",
     "gulp-clean-css": "4.*",
     "gulp-htmlmin": "5.0.1",
-    "gulp-html2js": "0.4.2"
+    "gulp-html2js": "0.4.2",
+    "gulp-replace": "1.*"
   },
   "keywords": [],
   "author": "shabuninil",

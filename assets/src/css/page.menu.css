@@ -362,9 +362,11 @@
 }
 .page-menu .menu-drawer-app .main-content {
     margin-left: 280px;
-    transition: width 100ms cubic-bezier(.4,0,.2,1);
-    padding: 104px 30px 30px 30px;
+    transition: width .1s cubic-bezier(.4,0,.2,1);
+    padding: 30px 30px 30px 30px;
     max-width: 100%;
+    height: calc(100% - 64px);
+    margin-top: 64px;
 }
 .page-menu.drawer-toggle .menu-drawer-app .main-content{
     margin-left: 64px;
@@ -414,6 +416,22 @@
 }
 .page-menu .menu-drawer__header .module-home.active span {
     color: var(--menu-drawer-text-active);
+}
+.page-menu .btn {
+    --bs-btn-padding-y: 0.25rem;
+    --bs-btn-padding-x: 0.5rem;
+    --bs-btn-font-size: 1rem;
+}
+.page-menu .btn-sm {
+    --bs-btn-padding-y: .25rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .75rem;
+}
+.page-menu .btn-xs {
+    line-height: 1.4;
+    --bs-btn-padding-y: 0rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .75rem;
 }
 
 /* DESKTOP */
@@ -479,7 +497,10 @@
         padding-right: 10px;
     }
     .page-menu .menu-drawer-app .main-content {
-        padding-top: 86px;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: calc(100% - 56px);
+        margin-top: 56px;
         margin-left: 0;
     }
     .page-menu .menu-drawer__header {

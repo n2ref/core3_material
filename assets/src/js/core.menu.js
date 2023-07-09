@@ -117,6 +117,14 @@ var coreMenu = {
 
 
     /**
+     * Перезагрузка содержимого страницы
+     */
+    reload: function () {
+        coreMenu.load('/mod' + location.hash.substring(1))
+    },
+
+
+    /**
      * Загрузка содержимого модуля
      * @param url
      */
@@ -294,6 +302,7 @@ var coreMenu = {
             'coreui.panel',
             'coreui.tabs',
             'coreui.info',
+            'coreui.chart',
         ];
 
         if (typeof data === 'string' ||
@@ -344,7 +353,9 @@ var coreMenu = {
      * @param params
      */
     _trigger: function(name, context, params) {
-        if (this._events[name] instanceof Object && this._events[name].length > 0) {
+
+        if (this._events.hasOwnProperty(name) && this._events[name].length > 0) {
+
             for (let i = 0; i < this._events[name].length; i++) {
                 let callback = this._events[name][i].callback;
 
@@ -354,6 +365,7 @@ var coreMenu = {
 
                 if (this._events[name][i].singleExec) {
                     this._events[name].splice(i, 1);
+                    i--;
                 }
             }
         }
@@ -406,11 +418,14 @@ var coreMenu = {
                         let module  = $(this).data('module');
                         let section = $(this).data('section');
 
-                        if (window.screen.width < 600) {
-                            coreMenu._drawerToggle();
-                        }
+                        if (location.hash.substring(1) === '/' + module + '/' + section) {
 
-                        coreMenu.load('/mod/' + module + '/' + section);
+                            if (window.screen.width < 600) {
+                                coreMenu._drawerToggle();
+                            }
+
+                            coreMenu.load('/mod/' + module + '/' + section);
+                        }
                     }
                 });
             }
@@ -674,8 +689,8 @@ var coreMenu = {
 $(function () {
 
     coreMain.on('hashchange', function () {
-        if ($('.page-menu.active')[0]) {
-            coreMenu.load(location.hash.substring(1));
+        if ($('.page.page-menu')[0]) {
+            coreMenu.load('/mod' + location.hash.substring(1));
         }
     });
 });

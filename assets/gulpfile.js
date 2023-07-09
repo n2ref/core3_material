@@ -5,6 +5,7 @@ var cleanCSS   = require('gulp-clean-css');
 var uglify     = require('gulp-uglify');
 var minifyHtml = require("gulp-htmlmin");
 var html2js    = require('gulp-html2js');
+var replace    = require('gulp-replace');
 
 
 
@@ -17,12 +18,15 @@ var conf = {
             'src/css/material-design.css',
 
             'node_modules/bootstrap/dist/css/bootstrap.min.css',
+            'node_modules/bootstrap-icons/font/bootstrap-icons.min.css',
 
             'node_modules/coreui-panel/dist/coreui-panel.min.css',
             'node_modules/coreui-tabs/dist/coreui-tabs.min.css',
             'node_modules/coreui-alert/dist/coreui-alert.min.css',
             'node_modules/coreui-confirm/dist/coreui-confirm.min.css',
             'node_modules/coreui-notice/dist/coreui-notice.min.css',
+            'node_modules/coreui-table/dist/coreui-table.min.css',
+            'node_modules/coreui-chart/dist/coreui-chart.min.css',
 
             'src/css/main.css',
             'src/css/page.auth.css',
@@ -48,9 +52,11 @@ var conf = {
             'node_modules/coreui-modal/dist/coreui-modal.min.js',
             'node_modules/coreui-info/dist/coreui-info.min.js',
             'node_modules/coreui-notice/dist/coreui-notice.min.js',
-
-            'src/js/coreui/coreui.form.js',
-            'src/js/coreui/coreui.table.js',
+            'node_modules/coreui-layout/dist/coreui-layout.min.js',
+            'node_modules/coreui-table/dist/coreui-table.min.js',
+            'node_modules/coreui-form/dist/coreui-form.min.js',
+            'node_modules/coreui-form/dist/coreui-form.min.js',
+            'node_modules/coreui-chart/dist/coreui-chart.min.js',
 
             'src/js/core.templates.js',
             'src/js/core.tokens.js',
@@ -114,6 +120,7 @@ gulp.task('build_css', function(){
         .pipe(cleanCSS())
         .pipe(concat(conf.css.file))
         .pipe(sourcemaps.write('.'))
+        .pipe(replace(';src:url(fonts/', ';src:url(../fonts/'))
         .pipe(gulp.dest('./dist'));
 });
 
@@ -122,6 +129,7 @@ gulp.task('build_css_fast', function(){
         .pipe(sourcemaps.init())
         .pipe(concat(conf.css.file))
         .pipe(sourcemaps.write('.'))
+        .pipe(replace(';src:url(fonts/', ';src:url(../fonts/'))
         .pipe(gulp.dest('./dist'));
 });
 
