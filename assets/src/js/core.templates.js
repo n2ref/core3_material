@@ -4,139 +4,73 @@ window["coreTemplates"] = {};
 window["coreTemplates"]["auth/main.html"] = "<div class=\"container container-login\" style=\"display: none\">\n" +
     "    <div class=\"mdc-card\">\n" +
     "        <div class=\"mdc-card__content\">\n" +
-    "            <img src=\"assets/src/img/logo.png\" alt=\"logo\" class=\"logo\">\n" +
-    "            <form>\n" +
+    "            <img src=\"\" alt=\"logo\" class=\"logo\" style=\"display: none\">\n" +
+    "\n" +
+    "            <form class=\"mb-5\" novalidate>\n" +
     "                <span class=\"text-danger\"></span>\n" +
-    "                <div class=\"form-controls\">\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                            <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"login\">Логин или Email</span>\n" +
-    "                            </span>\n" +
-    "                            <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                          </span>\n" +
-    "                        <input type=\"text\" name=\"login\" class=\"mdc-text-field__input\" required aria-labelledby=\"login\">\n" +
-    "                    </label>\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                            <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"password\">Пароль</span>\n" +
-    "                                </span>\n" +
-    "                                <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                        </span>\n" +
-    "                        <input type=\"password\" name=\"password\" class=\"mdc-text-field__input\" required aria-labelledby=\"password\">\n" +
-    "                    </label>\n" +
+    "                <div class=\"form-controls mb-5\">\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"auth-login\">Логин или Email</label>\n" +
+    "                        <div class=\"control-icon position-relative\">\n" +
+    "                            <input type=\"text\" name=\"login\" class=\"form-control\" id=\"auth-login\" required>\n" +
+    "                            <i class=\"bi bi-person-fill\"></i>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"auth-password\">Пароль</label>\n" +
+    "                        <div class=\"control-icon position-relative\">\n" +
+    "                            <input type=\"password\" name=\"password\" class=\"form-control\" id=\"auth-password\" required>\n" +
+    "                            <i class=\"bi bi-shield-lock\"></i>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
     "                </div>\n" +
-    "                <button class=\"mdc-button mdc-button--raised\">\n" +
-    "                    <div class=\"mdc-button__ripple\"></div>\n" +
-    "                    <span class=\"mdc-button__label\">Войти</span>\n" +
-    "                </button>\n" +
+    "                <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Войти</button>\n" +
     "            </form>\n" +
+    "\n" +
+    "            <div class=\"links-container\">\n" +
+    "                <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
+    "                <a href=\"#/registration\" class=\"reg-button\">Регистрация</a>\n" +
+    "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"out-box\">\n" +
-    "        <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
-    "        <a href=\"#/registration\" class=\"reg-button\">Регистрация</a>\n" +
     "    </div>\n" +
     "</div>\n" +
     "<div class=\"container container-registration\" style=\"display: none\">\n" +
     "    <div class=\"mdc-card\">\n" +
     "        <div class=\"mdc-card__content\">\n" +
-    "            <img src=\"assets/src/img/logo.png\" alt=\"logo\" class=\"logo\">\n" +
+    "            <img src=\"\" alt=\"logo\" class=\"logo\" style=\"display: none\">\n" +
+    "\n" +
     "            <p class=\"mdc-typography--headline5\">Регистрация</p>\n" +
     "            <div class=\"text-danger mdc-typography--subtitle2\"></div>\n" +
     "            <div class=\"text-success mdc-typography--subtitle2\"></div>\n" +
-    "            <form>\n" +
-    "                <div class=\"form-controls\">\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                            <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"registration-email\">Email</span>\n" +
-    "                            </span>\n" +
-    "                            <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                        </span>\n" +
-    "                        <input type=\"email\" name=\"email\" class=\"mdc-text-field__input\" required aria-labelledby=\"registration-email\">\n" +
-    "                    </label>\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                            <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"registration-name\">Имя</span>\n" +
-    "                            </span>\n" +
-    "                            <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                        </span>\n" +
-    "                        <input type=\"text\" name=\"name\" class=\"mdc-text-field__input\" required aria-labelledby=\"registration-name\">\n" +
-    "                    </label>\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                            <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"registration-login\">Логин</span>\n" +
-    "                            </span>\n" +
-    "                            <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                        </span>\n" +
-    "                        <input type=\"text\" name=\"login\" class=\"mdc-text-field__input\" required aria-labelledby=\"registration-login\">\n" +
-    "                    </label>\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                        <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"registration-pass\">Пароль</span>\n" +
-    "                            </span>\n" +
-    "                            <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                        </span>\n" +
-    "                        <input type=\"password\" name=\"pass\" class=\"mdc-text-field__input\" required aria-labelledby=\"registration-pass\">\n" +
-    "                    </label>\n" +
-    "                    <label class=\"mdc-text-field mdc-text-field--outlined\">\n" +
-    "                        <span class=\"mdc-notched-outline\">\n" +
-    "                            <span class=\"mdc-notched-outline__leading\"></span>\n" +
-    "                            <span class=\"mdc-notched-outline__notch\">\n" +
-    "                                <span class=\"mdc-floating-label\" id=\"registration-pass2\">Пароль еще раз</span>\n" +
-    "                            </span>\n" +
-    "                            <span class=\"mdc-notched-outline__trailing\"></span>\n" +
-    "                        </span>\n" +
-    "                        <input type=\"password\" name=\"pass2\" class=\"mdc-text-field__input\" required aria-labelledby=\"registration-pass2\">\n" +
-    "                    </label>\n" +
+    "\n" +
+    "            <form class=\"mb-5\" novalidate>\n" +
+    "                <div class=\"form-controls mb-5\">\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-name\">Имя</label>\n" +
+    "                        <input type=\"text\" name=\"name\" class=\"form-control\" id=\"registration-name\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-email\">Email</label>\n" +
+    "                        <input type=\"email\" name=\"email\" class=\"form-control\" id=\"registration-email\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-pass\">Пароль</label>\n" +
+    "                        <input type=\"password\" name=\"password\" class=\"form-control\" id=\"registration-pass\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-pass2\">Пароль еще раз</label>\n" +
+    "                        <input type=\"password\" class=\"form-control\" id=\"registration-pass2\" required>\n" +
+    "                    </div>\n" +
     "                </div>\n" +
-    "                <button class=\"mdc-button mdc-button--raised\">\n" +
-    "                    <div class=\"mdc-button__ripple\"></div>\n" +
-    "                    <span class=\"mdc-button__label\">Зарегистрироваться</span>\n" +
-    "                </button>\n" +
+    "                <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Зарегистрироваться</button>\n" +
     "            </form>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"out-box\">\n" +
-    "        <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
-    "        <a href=\"#\" class=\"login-button\">Войти</a>\n" +
-    "    </div>\n" +
-    "</div>"; 
-
-window["coreTemplates"]["auth/preloader.html"] = "<div class=\"mdc-circular-progress\" style=\"width:42px;height:24px;margin-left:-42px;\" role=\"progressbar\" aria-label=\"Example Progress Bar\" aria-valuemin=\"0\" aria-valuemax=\"1\">\n" +
-    "    <div class=\"mdc-circular-progress__determinate-container\">\n" +
-    "        <svg class=\"mdc-circular-progress__determinate-circle-graphic\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-    "            <circle class=\"mdc-circular-progress__determinate-track\" cx=\"12\" cy=\"12\" r=\"8.75\" stroke-width=\"2.5\"/>\n" +
-    "            <circle class=\"mdc-circular-progress__determinate-circle\" cx=\"12\" cy=\"12\" r=\"8.75\" stroke-dasharray=\"54.978\" stroke-dashoffset=\"54.978\" stroke-width=\"2.5\"/>\n" +
-    "        </svg>\n" +
-    "    </div>\n" +
-    "    <div class=\"mdc-circular-progress__indeterminate-container\">\n" +
-    "        <div class=\"mdc-circular-progress__spinner-layer\">\n" +
-    "            <div class=\"mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left\">\n" +
-    "                <svg class=\"mdc-circular-progress__indeterminate-circle-graphic\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-    "                    <circle cx=\"12\" cy=\"12\" r=\"8.75\" stroke-dasharray=\"54.978\" stroke-dashoffset=\"27.489\" stroke-width=\"2.5\"/>\n" +
-    "                </svg>\n" +
-    "            </div>\n" +
-    "            <div class=\"mdc-circular-progress__gap-patch\">\n" +
-    "                <svg class=\"mdc-circular-progress__indeterminate-circle-graphic\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-    "                    <circle cx=\"12\" cy=\"12\" r=\"8.75\" stroke-dasharray=\"54.978\" stroke-dashoffset=\"27.489\" stroke-width=\"2\"/>\n" +
-    "                </svg>\n" +
-    "            </div>\n" +
-    "            <div class=\"mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right\">\n" +
-    "                <svg class=\"mdc-circular-progress__indeterminate-circle-graphic\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-    "                    <circle cx=\"12\" cy=\"12\" r=\"8.75\" stroke-dasharray=\"54.978\" stroke-dashoffset=\"27.489\" stroke-width=\"2.5\"/>\n" +
-    "                </svg>\n" +
+    "\n" +
+    "            <div class=\"links-container\">\n" +
+    "                <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
+    "                <a href=\"#\" class=\"login-button\">Войти</a>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -224,13 +158,13 @@ window["coreTemplates"]["menu/module.html"] = "<li class=\"menu-list-item core-m
 
 window["coreTemplates"]["menu/navbar.html"] = "<ul class=\"navbar-nav\">\n" +
     "    <li class=\"nav-item dropdown cabinet-user\">\n" +
-    "        <a class=\"nav-link dropdown-toggle d-flex align-items-center\" href=\"#\" data-mdb-toggle=\"dropdown\">\n" +
+    "        <button class=\"btn btn-link text-dark dropdown-toggle d-flex align-items-center\" type=\"button\" data-bs-toggle=\"dropdown\">\n" +
     "            <% if (user.avatar) { %>\n" +
     "            <img src=\"<%= user.avatar %>\" alt=\"avatar\" class=\"rounded-circle\" loading=\"lazy\">\n" +
     "            <% } else { %>\n" +
     "            <i class=\"fa-solid fa-circle-user\"></i>\n" +
     "            <% } %>\n" +
-    "        </a>\n" +
+    "        </button>\n" +
     "        <ul class=\"dropdown-menu\">\n" +
     "            <li class=\"cabinet-user-info\">\n" +
     "                <b class=\"cabinet-user-name\"><%= user.name %></b><br>\n" +

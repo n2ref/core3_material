@@ -1,21 +1,4 @@
-:root {
-    --mdc-theme-primary: #2a4397;
-    --mdc-theme-secondary: #36436e;
 
-    --menu-header: #fff;
-    --menu-header-text: #444;
-    --menu-header-avatar: #c9c9c9;
-    --menu-header-btn-hover: rgba(0, 0, 0, 0.15);
-
-    --menu-drawer: #242840;
-    --menu-drawer-mod-active: rgb(0 0 0 / 30%);
-    --menu-drawer-mod-active-item: rgb(0 0 0 / 30%);
-    --menu-drawer-mod-active-text: rgb(255 255 255 / 90%);
-    --menu-drawer-text: rgb(255 255 255 / 70%);
-    --menu-drawer-text-active: #fff;
-
-    --menu-bg: #fafafa;
-}
 .page-menu {
     background-color: var(--menu-bg);
 }
@@ -58,23 +41,15 @@
 }
 
 
-
-.page-menu .cabinet-user > a > img {
+.page-menu .cabinet-user  img {
     width: 32px;
     margin-right: 5px;
 }
-.page-menu .cabinet-user > a > i {
-    font-size: 32px;
-    color: var(--menu-header-avatar);
-    margin-right: 5px;
-}
-.page-menu .cabinet-user > a {
+.page-menu .cabinet-user .cabinet-user-info {
+    padding: 0 1rem;
     color: var(--menu-header-text);
     font-size: 14px;
-}
-.page-menu .cabinet-user .cabinet-user-info {
-    padding: 0.5rem 1rem;
-    color: #4f4f4f;
+    white-space: nowrap;
 }
 
 
@@ -120,6 +95,7 @@
     background-color: transparent;
     width: 45px;
     height: 45px;
+    font-size: 16px;
 }
 
 
@@ -413,6 +389,7 @@
 .page-menu .menu-drawer__header .module-home span {
     color: var(--menu-drawer-text);
     margin-right: 13px;
+    font-size: 16px;
 }
 .page-menu .menu-drawer__header .module-home.active span {
     color: var(--menu-drawer-text-active);
@@ -425,7 +402,7 @@
 .page-menu .btn-sm {
     --bs-btn-padding-y: .25rem;
     --bs-btn-padding-x: .5rem;
-    --bs-btn-font-size: .75rem;
+    --bs-btn-font-size: .85rem;
 }
 .page-menu .btn-xs {
     line-height: 1.4;

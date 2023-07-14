@@ -121,6 +121,7 @@ gulp.task('build_css', function(){
         .pipe(concat(conf.css.file))
         .pipe(sourcemaps.write('.'))
         .pipe(replace(';src:url(fonts/', ';src:url(../fonts/'))
+        .pipe(replace(';src:url("fonts/', ';src:url("../fonts/'))
         .pipe(gulp.dest('./dist'));
 });
 
@@ -130,6 +131,7 @@ gulp.task('build_css_fast', function(){
         .pipe(concat(conf.css.file))
         .pipe(sourcemaps.write('.'))
         .pipe(replace(';src:url(fonts/', ';src:url(../fonts/'))
+        .pipe(replace(';src:url("fonts/', ';src:url("../fonts/'))
         .pipe(gulp.dest('./dist'));
 });
 

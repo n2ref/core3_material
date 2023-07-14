@@ -41,7 +41,7 @@
     "coreui-layout": "1.0.8",
     "coreui-table": "1.0.5",
     "coreui-form": "1.0.0",
-    "coreui-chart": "1.0.1"
+    "coreui-chart": "1.0.2"
   },
   "devDependencies": {
     "gulp": "4.*",

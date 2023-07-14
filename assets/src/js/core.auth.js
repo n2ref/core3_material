@@ -15,6 +15,8 @@ var coreAuth = {
      */
     init: function () {
 
+        let that = this;
+
         // Инициализация кнопок
         let buttons = document.querySelectorAll('.page-auth .mdc-button');
         for (let button of buttons) {
@@ -35,6 +37,35 @@ var coreAuth = {
         $('.container-registration form').on('submit', function () {
             coreAuth.registration(this);
             return false
+        });
+
+
+        let conf = localStorage.getItem('core3_conf');
+        if (typeof conf === 'string') {
+            try {
+                conf = JSON.parse(conf);
+                if (typeof conf.logo === 'string') {
+                    this._setLogo(conf.logo);
+                }
+                if (typeof conf.theme === 'object') {
+                    this._setTheme(conf.theme);
+                }
+            } catch (e) {}
+        }
+
+
+        coreAuth.loadConfig().then(function (conf) {
+            localStorage.setItem('core3_conf', JSON.stringify(conf));
+
+            if (typeof conf.logo === 'string') {
+                that._setLogo(conf.logo);
+            } else {
+                that._setLogo('assets/src/img/logo.png');
+            }
+
+            if (typeof conf.theme === 'object') {
+                that._setTheme(conf.theme);
+            }
         });
 
         coreAuth.viewActualContainer();
@@ -94,28 +125,42 @@ var coreAuth = {
      */
     preloader(action) {
 
-        let $btn = $('.page-auth .mdc-button:visible');
+        let $btn = $('.page-auth button[type=submit]:visible');
 
         switch (action) {
             case 'show':
                 $btn.attr("disabled", "disabled");
 
-                if ($btn.find('.mdc-circular-progress').length === 0) {
-                    $btn.prepend(coreTemplates['auth/preloader.html']);
-
-
-                    const element          = $('.mdc-circular-progress', $btn)[0];
-                    const circularProgress = new mdc['circular-progress'].MDCCircularProgress(element);
-                    circularProgress.determinate = false;
-                    circularProgress.progress = 0;
+                if ($btn.find('.spinner-border').length === 0) {
+                    $btn.prepend('<div class="spinner-border spinner-border-sm"></div> ');
                 }
                 break;
 
             case 'hide':
-                $('.page-auth .mdc-button .mdc-circular-progress').remove();
+                $btn.find('.spinner-border').remove();
                 $btn.removeAttr("disabled");
                 break;
         }
+    },
+
+
+    /**
+     * Получение конфигурации
+     * @return {Promise}
+     */
+    loadConfig: function () {
+
+        return new Promise(function (resolve, reject) {
+
+            $.ajax({
+                url: coreMain.options.basePath + "/conf",
+                method: "GET",
+                dataType: "json",
+                success: function (response) {
+                    resolve(response);
+                }
+            })
+        });
     },
 
 
@@ -124,6 +169,13 @@ var coreAuth = {
      * @returns {Promise<boolean>}
      */
     login: async function (form) {
+
+        if ( ! form.checkValidity()) {
+            $(form).addClass('was-validated');
+            return false;
+        } else {
+            $(form).removeClass('was-validated');
+        }
 
         coreAuth.preloader('show');
         $('.page-auth form .text-danger').text('');
@@ -145,9 +197,8 @@ var coreAuth = {
                 login: $('[name=login]', form).val(),
                 password: MD5($('[name=password]', form).val()),
                 fp: fp
-            })
-        })
-            .done(function (response) {
+            }),
+            success: function (response) {
                 if (typeof response.access_token !== 'string' ||
                     typeof response.refresh_token !== 'string' ||
                     ! response.access_token ||
@@ -168,15 +219,18 @@ var coreAuth = {
                     coreMain.viewPage('menu');
                     coreTokens.initRefresh();
                 }
-            })
-
-            .fail(function (response) {
+            },
+            error: function (response) {
                 coreAuth.preloader('hide');
 
                 let errorMessage = '';
 
-                if (response.responseJSON && response.responseJSON.error_message) {
+                if (response.status === 0) {
+                    errorMessage = 'Проверьте подключение к интернету';
+
+                } else if (response.responseJSON && response.responseJSON.error_message) {
                     errorMessage = response.responseJSON.error_message;
+
                 } else {
                     errorMessage = $("<div>" + response.responseText + "</div>").text();
                 }
@@ -184,12 +238,13 @@ var coreAuth = {
                 errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
 
                 $('.container-login .text-danger').text(errorMessage);
-            })
-
-            .always (function (jqXHR, textStatus) {
+            },
+            complete: function (jqXHR, textStatus) {
                 coreAuth.preloader('hide');
-            });
+            }
+        });
     },
+
 
     /**
      *
@@ -228,6 +283,13 @@ var coreAuth = {
      */
     registration: function (form) {
 
+        if ( ! form.checkValidity()) {
+            $(form).addClass('was-validated');
+            return false;
+        } else {
+            $(form).removeClass('was-validated');
+        }
+
         coreAuth.preloader('show');
         $('.container-registration .text-danger').text('');
 
@@ -235,9 +297,8 @@ var coreAuth = {
             url: coreMain.options.basePath + "/auth/registration/email",
             dataType: "json",
             method: "POST",
-            data: $(form).serialize()
-        })
-            .done(function (response) {
+            data: $(form).serialize(),
+            success: function (response) {
                 coreAuth.preloader('hide');
 
                 if (typeof response.access_token !== 'string' ||
@@ -260,15 +321,18 @@ var coreAuth = {
                     coreMain.viewPage('menu');
                     coreTokens.initRefresh();
                 }
-            })
-
-            .fail(function (response) {
+            },
+            error: function (response) {
                 coreAuth.preloader('hide');
 
                 let errorMessage = '';
 
-                if (response.responseJSON && response.responseJSON.error_message) {
+                if (response.status === 0) {
+                    errorMessage = 'Проверьте подключение к интернету';
+
+                } else if (response.responseJSON && response.responseJSON.error_message) {
                     errorMessage = response.responseJSON.error_message;
+
                 } else {
                     errorMessage = $(response.responseText).text();
                 }
@@ -276,11 +340,11 @@ var coreAuth = {
                 errorMessage = errorMessage || 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
 
                 $('.container-registration .text-danger').text(errorMessage);
-            })
-
-            .always (function (jqXHR, textStatus) {
+            },
+            complete: function (jqXHR, textStatus) {
                 coreAuth.preloader('hide');
-            });
+            }
+        });
     },
 
 
@@ -309,37 +373,38 @@ var coreAuth = {
         let params = coreTools.getParams();
 
         $.ajax({
-            url: coreMain.options.basePath + "/auth/registration/email/check$",
+            url: coreMain.options.basePath + "/auth/registration/email/check",
             dataType: "json",
             method: "POST",
             data: {
                 key:      params.query.key,
                 password: MD5(form.password.value)
+            },
+            success: function (data) {
+                coreAuth.preloader('hide');
+
+                if (data.status === 'success') {
+                    $('.container-registration_complete .text-success').html(data.message).css('margin-bottom', '50px');
+                    $(form).hide();
+
+                } else {
+                    $('.container-registration_complete .text-danger').text(data.error_message);
+                }
+            },
+            error: function (response) {
+                coreAuth.preloader('hide');
+
+                let errorMessage = '';
+
+                if (response.status === 0) {
+                    errorMessage = 'Ошибка. Проверьте подключение к интернету'
+
+                } else {
+                    errorMessage = 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
+                }
+
+                $('.container-registration_complete .text-danger').text(errorMessage);
             }
-        }).done(function (data) {
-            coreAuth.preloader('hide');
-
-            if (data.status === 'success') {
-                $('.container-registration_complete .text-success').html(data.message).css('margin-bottom', '50px');
-                $(form).hide();
-
-            } else {
-                $('.container-registration_complete .text-danger').text(data.error_message);
-            }
-
-        }).fail(function (response) {
-            coreAuth.preloader('hide');
-
-            let errorMessage = '';
-
-            if (response.status === 0) {
-                errorMessage = 'Ошибка. Проверьте подключение к интернету'
-
-            } else {
-                errorMessage = 'Ошибка. Попробуйте позже, либо обратитесь к администратору';
-            }
-
-            $('.container-registration_complete .text-danger').text(errorMessage);
         });
     },
 
@@ -352,6 +417,68 @@ var coreAuth = {
 
         $('.page-auth > .container').hide();
         $('.page-auth > .container-' + name).fadeIn('fast');
+    },
+
+
+    /**
+     * Установка логотипа
+     * @param {string} logo
+     * @private
+     */
+    _setLogo: function (logo) {
+
+        $('.page-auth img.logo').attr('src', logo).show();
+    },
+
+
+    /**
+     * Установка темы
+     * @param {object} theme
+     * @private
+     */
+    _setTheme: function (theme) {
+
+        let styles = [];
+
+        if (typeof theme.login === 'object' &&
+            typeof theme.login.bg_video === 'string' &&
+            theme.login.bg_video
+        ) {
+            if ( ! $('.page.page-auth > video')[0]) {
+                $('.page.page-auth').prepend('<video autoplay muted loop><source src="' + theme.login.bg_video + '" type="video/mp4"></video>');
+            }
+        }
+
+        if (typeof theme.login === 'object' &&
+            typeof theme.login.bg_img === 'string' &&
+            theme.login.bg_img
+        ) {
+            styles.push('--login-bg:url("' + theme.login.bg_img + '");');
+
+        } else if (typeof theme.login === 'object' &&
+            typeof theme.login.bg_color === 'string' &&
+            theme.login.bg_color
+        ) {
+            styles.push('--login-bg: ' + theme.login.bg_color + ';');
+        } else if (typeof theme.login === 'object' &&
+            typeof theme.login.bg_color === 'string' &&
+            theme.login.bg_color
+        ) {
+            styles.push('--login-bg: ' + theme.login.bg_color + ';');
+        }
+
+        if (styles.length > 0) {
+            let content   = ':root{' + styles.join('') + '}';
+            let coreTheme = $('head #theme-login');
+
+            if ( ! coreTheme[0] || content !== coreTheme.html()) {
+                if (coreTheme[0]) {
+                    coreTheme.remove();
+                }
+
+                $('head').append('<style id="theme-login">' + content + '</style>');
+            }
+        }
     }
 }
 

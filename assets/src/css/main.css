@@ -1,9 +1,27 @@
 html, body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
     margin: 0;
     padding: 0;
     height: 100%;
     min-height: 100%;
+}
+:root {
+    --mdc-theme-primary: #2a4397;
+    --mdc-theme-secondary: #36436e;
+
+    --menu-header: #fff;
+    --menu-header-text: #444;
+    --menu-header-btn-hover: rgba(0, 0, 0, 0.15);
+
+    --menu-drawer: #242840;
+    --menu-drawer-mod-active: rgb(0 0 0 / 30%);
+    --menu-drawer-mod-active-item: rgb(0 0 0 / 30%);
+    --menu-drawer-mod-active-text: rgb(255 255 255 / 90%);
+    --menu-drawer-text: rgb(255 255 255 / 70%);
+    --menu-drawer-text-active: #fff;
+
+    --menu-bg: #fafafa;
 }
 .main,
 .main .page {

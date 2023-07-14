@@ -28,6 +28,17 @@ var coreMenu = {
             $('.page-menu .mdc-top-app-bar').css('transition', 'none 0s ease 0s');
         }
 
+
+        let conf = localStorage.getItem('core3_conf');
+        if (typeof conf === 'string') {
+            try {
+                conf = JSON.parse(conf);
+                if (typeof conf.theme === 'object') {
+                    this._setTheme(conf.theme);
+                }
+            } catch (e) {}
+        }
+
         coreMenu.preloader.show();
 
         // Инициализация кнопок
@@ -379,6 +390,14 @@ var coreMenu = {
 
         $('.page-menu .system-title').text(coreMenu._system.name);
 
+        if (typeof coreMenu._system.conf === 'object') {
+            localStorage.setItem('core3_conf', JSON.stringify(coreMenu._system.conf));
+
+            if (typeof coreMenu._system.conf.theme === 'object') {
+                this._setTheme(coreMenu._system.conf.theme);
+            }
+        }
+
         if (Object.values(coreMenu._modules).length > 0) {
             let params = coreTools.getParams();
 
@@ -444,7 +463,9 @@ var coreMenu = {
         }));
 
         // Выход
-        $('.page-menu .menu-logout').on('click', function () {
+        $('.page-menu .menu-logout').on('click', function (e) {
+            e.preventDefault();
+
             CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
                 acceptButtonText: "Да",
                 onAccept: function () {
@@ -681,6 +702,44 @@ var coreMenu = {
             install(coreMain.install.event);
         } else {
             coreMain.install.promise.then(install);
+        }
+    },
+
+
+    /**
+     * Установка темы
+     * @param {object} theme
+     * @private
+     */
+    _setTheme: function (theme) {
+
+        let styles = [];
+
+        if (typeof theme.main === 'object' &&
+            typeof theme.main.bg_color === 'string' &&
+            theme.main.bg_color
+        ) {
+            styles.push('--menu-drawer: ' + theme.main.bg_color + ';');
+        }
+
+        if (typeof theme.main === 'object' &&
+            typeof theme.main.text_color === 'string' &&
+            theme.main.text_color
+        ) {
+            styles.push('--menu-drawer-text:' + theme.main.text_color + ';');
+        }
+
+        if (styles.length > 0) {
+            let content   = ':root{' + styles.join('') + '}';
+            let coreTheme = $('head #theme-main');
+
+            if ( ! coreTheme[0] || content !== coreTheme.html()) {
+                if (coreTheme[0]) {
+                    coreTheme.remove();
+                }
+
+                $('head').append('<style id="theme-main">' + content + '</style>');
+            }
         }
     }
 }
