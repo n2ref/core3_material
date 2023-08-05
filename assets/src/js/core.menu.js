@@ -466,11 +466,11 @@ var coreMenu = {
         $('.page-menu .menu-logout').on('click', function (e) {
             e.preventDefault();
 
-            CoreUI.confirm.warning('Уверены, что хотите выйти?', '', {
-                acceptButtonText: "Да",
-                onAccept: function () {
-                    coreAuth.logout();
-                }
+            CoreUI.alert.warning('Уверены, что хотите выйти?', '', {
+                btnAcceptText: "Да",
+                btnAcceptColor: "#F57C00",
+                btnAcceptEvent: coreAuth.logout,
+                btnRejectText: "Отмена"
             });
         });
 

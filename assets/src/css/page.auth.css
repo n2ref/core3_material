@@ -39,8 +39,6 @@
     word-break: break-word;
 }
 .page-auth .container .mdc-card form {
-    width: 250px;
-    max-width: 100%;
     padding: 0 10px;
     margin: 0 auto;
 }
@@ -115,7 +113,9 @@
     color: #43a047;
 }
 .page-auth .form-controls {
-    margin-top: 30px;
+    width: 250px;
+    max-width: 100%;
+    margin: 30px auto;
 }
 .page-auth .form-controls .mdc-text-field--outlined {
     height: 40px;

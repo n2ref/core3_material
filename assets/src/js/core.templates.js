@@ -16,15 +16,16 @@ window["coreTemplates"]["auth/main.html"] = "<div class=\"container container-lo
     "                            <i class=\"bi bi-person-fill\"></i>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
-    "                    <div class=\"mb-3 text-start\">\n" +
+    "                    <div class=\"mb-5 text-start\">\n" +
     "                        <label class=\"form-label\" for=\"auth-password\">Пароль</label>\n" +
     "                        <div class=\"control-icon position-relative\">\n" +
     "                            <input type=\"password\" name=\"password\" class=\"form-control\" id=\"auth-password\" required>\n" +
     "                            <i class=\"bi bi-shield-lock\"></i>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
+    "\n" +
+    "                    <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Войти</button>\n" +
     "                </div>\n" +
-    "                <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Войти</button>\n" +
     "            </form>\n" +
     "\n" +
     "            <div class=\"links-container\">\n" +
@@ -60,12 +61,13 @@ window["coreTemplates"]["auth/main.html"] = "<div class=\"container container-lo
     "                        <input type=\"password\" name=\"password\" class=\"form-control\" id=\"registration-pass\" required>\n" +
     "                    </div>\n" +
     "\n" +
-    "                    <div class=\"mb-3 text-start\">\n" +
+    "                    <div class=\"mb-5 text-start\">\n" +
     "                        <label class=\"form-label\" for=\"registration-pass2\">Пароль еще раз</label>\n" +
     "                        <input type=\"password\" class=\"form-control\" id=\"registration-pass2\" required>\n" +
     "                    </div>\n" +
+    "\n" +
+    "                    <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Зарегистрироваться</button>\n" +
     "                </div>\n" +
-    "                <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Зарегистрироваться</button>\n" +
     "            </form>\n" +
     "\n" +
     "            <div class=\"links-container\">\n" +
