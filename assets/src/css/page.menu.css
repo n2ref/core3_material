@@ -141,7 +141,7 @@
     align-content: flex-start;
     align-items: flex-start;
     list-style: none;
-    position: relative;
+    position: initial;
     transition: background-color .1s ease-in;
 }
 .page-menu .menu-drawer .menu-list.level-1 {
@@ -161,7 +161,7 @@
     height: 40px;
     border-radius: 10px;
     text-decoration: none;
-    padding: 0 12px 0 14px;
+    padding: 0 12px 0 13px;
     display: flex;
     align-items: center;
 }
@@ -404,7 +404,7 @@
 .page-menu .btn-sm {
     --bs-btn-padding-y: .25rem;
     --bs-btn-padding-x: .5rem;
-    --bs-btn-font-size: .85rem;
+    --bs-btn-font-size: .84rem;
 }
 .page-menu .btn-xs {
     line-height: 1.4;
@@ -422,35 +422,20 @@
     height: 6px;
     background-color: rgba(0,0,0,0);
 }
-/* button */
 .menu-list::-webkit-scrollbar-button {
     height: 0;
 }
-/* Handle */
 .menu-list::-webkit-scrollbar-thumb {
     visibility: hidden;
     background: #a6a6a6a3;
     border-radius: 10px;
 }
-/* Handle on hover */
 .menu-list::-webkit-scrollbar-thumb:hover {
     background: #a6a6a6;
 }
-
-/* Track */
 .menu-list::-webkit-scrollbar-track {
     background: #00000000;
 }
-::-webkit-scrollbar-track-piece {
-    /*background: #000;*/
-}
-.menu-list::-webkit-scrollbar-corner {
-    /*background: #999;*/
-}
-.menu-list::-webkit-resizer {
-    /*background: #111;*/
-}
-
 .menu-list:hover::-webkit-scrollbar,
 .menu-list:hover::-webkit-scrollbar-thumb {
     visibility: visible;
@@ -482,7 +467,7 @@
         display: block;
         height: auto;
         position: absolute;
-        left: 43px;
+        left: 52px;
         top: 0;
         z-index: 22222222;
         opacity: 1;

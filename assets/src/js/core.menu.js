@@ -422,6 +422,14 @@ var coreMenu = {
                 $('.page-menu > aside .menu-list.level-1').append(ejs.render(coreTemplates['menu/module.html'], {
                     module: module
                 }));
+
+                $('.page-menu > aside .core-module.core-module-' + module.name).hover(function (){
+                    let level2 = $('.level-2', this);
+
+                    if (level2[0]) {
+                        level2.css('top', $(this).offset().top);
+                    }
+                });
             });
 
 

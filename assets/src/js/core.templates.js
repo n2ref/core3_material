@@ -1,83 +1,6 @@
 //HEAD 
 window["coreTemplates"] = {};
 
-window["coreTemplates"]["auth/main.html"] = "<div class=\"container container-login\" style=\"display: none\">\n" +
-    "    <div class=\"mdc-card\">\n" +
-    "        <div class=\"mdc-card__content\">\n" +
-    "            <img src=\"\" alt=\"logo\" class=\"logo\" style=\"display: none\">\n" +
-    "\n" +
-    "            <form class=\"mb-5\" novalidate>\n" +
-    "                <span class=\"text-danger\"></span>\n" +
-    "                <div class=\"form-controls mb-5\">\n" +
-    "                    <div class=\"mb-3 text-start\">\n" +
-    "                        <label class=\"form-label\" for=\"auth-login\">Логин или Email</label>\n" +
-    "                        <div class=\"control-icon position-relative\">\n" +
-    "                            <input type=\"text\" name=\"login\" class=\"form-control\" id=\"auth-login\" required>\n" +
-    "                            <i class=\"bi bi-person-fill\"></i>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"mb-5 text-start\">\n" +
-    "                        <label class=\"form-label\" for=\"auth-password\">Пароль</label>\n" +
-    "                        <div class=\"control-icon position-relative\">\n" +
-    "                            <input type=\"password\" name=\"password\" class=\"form-control\" id=\"auth-password\" required>\n" +
-    "                            <i class=\"bi bi-shield-lock\"></i>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Войти</button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "\n" +
-    "            <div class=\"links-container\">\n" +
-    "                <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
-    "                <a href=\"#/registration\" class=\"reg-button\">Регистрация</a>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "<div class=\"container container-registration\" style=\"display: none\">\n" +
-    "    <div class=\"mdc-card\">\n" +
-    "        <div class=\"mdc-card__content\">\n" +
-    "            <img src=\"\" alt=\"logo\" class=\"logo\" style=\"display: none\">\n" +
-    "\n" +
-    "            <p class=\"mdc-typography--headline5\">Регистрация</p>\n" +
-    "            <div class=\"text-danger mdc-typography--subtitle2\"></div>\n" +
-    "            <div class=\"text-success mdc-typography--subtitle2\"></div>\n" +
-    "\n" +
-    "            <form class=\"mb-5\" novalidate>\n" +
-    "                <div class=\"form-controls mb-5\">\n" +
-    "                    <div class=\"mb-3 text-start\">\n" +
-    "                        <label class=\"form-label\" for=\"registration-name\">Имя</label>\n" +
-    "                        <input type=\"text\" name=\"name\" class=\"form-control\" id=\"registration-name\" required>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"mb-3 text-start\">\n" +
-    "                        <label class=\"form-label\" for=\"registration-email\">Email</label>\n" +
-    "                        <input type=\"email\" name=\"email\" class=\"form-control\" id=\"registration-email\" required>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"mb-3 text-start\">\n" +
-    "                        <label class=\"form-label\" for=\"registration-pass\">Пароль</label>\n" +
-    "                        <input type=\"password\" name=\"password\" class=\"form-control\" id=\"registration-pass\" required>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <div class=\"mb-5 text-start\">\n" +
-    "                        <label class=\"form-label\" for=\"registration-pass2\">Пароль еще раз</label>\n" +
-    "                        <input type=\"password\" class=\"form-control\" id=\"registration-pass2\" required>\n" +
-    "                    </div>\n" +
-    "\n" +
-    "                    <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Зарегистрироваться</button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "\n" +
-    "            <div class=\"links-container\">\n" +
-    "                <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
-    "                <a href=\"#\" class=\"login-button\">Войти</a>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>"; 
-
 window["coreTemplates"]["menu/loader.html"] = "<div id=\"loader\">\n" +
     "    <div role=\"progressbar\" class=\"mdc-linear-progress loader-progress\" aria-label=\"Example Progress Bar\" aria-valuemin=\"0\" aria-valuemax=\"1\" aria-valuenow=\"0\">\n" +
     "        <div class=\"mdc-linear-progress__buffer\">\n" +
@@ -215,6 +138,83 @@ window["coreTemplates"]["menu/preloader.html"] = "<div id=\"preloader\">\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"loading-text\"><%= text %></div>\n" +
+    "    </div>\n" +
+    "</div>"; 
+
+window["coreTemplates"]["auth/main.html"] = "<div class=\"container container-login\" style=\"display: none\">\n" +
+    "    <div class=\"mdc-card\">\n" +
+    "        <div class=\"mdc-card__content\">\n" +
+    "            <img src=\"\" alt=\"logo\" class=\"logo\" style=\"display: none\">\n" +
+    "\n" +
+    "            <form class=\"mb-5\" novalidate>\n" +
+    "                <span class=\"text-danger\"></span>\n" +
+    "                <div class=\"form-controls mb-5\">\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"auth-login\">Логин или Email</label>\n" +
+    "                        <div class=\"control-icon position-relative\">\n" +
+    "                            <input type=\"text\" name=\"login\" class=\"form-control\" id=\"auth-login\" required>\n" +
+    "                            <i class=\"bi bi-person-fill\"></i>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"mb-5 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"auth-password\">Пароль</label>\n" +
+    "                        <div class=\"control-icon position-relative\">\n" +
+    "                            <input type=\"password\" name=\"password\" class=\"form-control\" id=\"auth-password\" required>\n" +
+    "                            <i class=\"bi bi-shield-lock\"></i>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Войти</button>\n" +
+    "                </div>\n" +
+    "            </form>\n" +
+    "\n" +
+    "            <div class=\"links-container\">\n" +
+    "                <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
+    "                <a href=\"#/registration\" class=\"reg-button\">Регистрация</a>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "<div class=\"container container-registration\" style=\"display: none\">\n" +
+    "    <div class=\"mdc-card\">\n" +
+    "        <div class=\"mdc-card__content\">\n" +
+    "            <img src=\"\" alt=\"logo\" class=\"logo\" style=\"display: none\">\n" +
+    "\n" +
+    "            <p class=\"mdc-typography--headline5\">Регистрация</p>\n" +
+    "            <div class=\"text-danger mdc-typography--subtitle2\"></div>\n" +
+    "            <div class=\"text-success mdc-typography--subtitle2\"></div>\n" +
+    "\n" +
+    "            <form class=\"mb-5\" novalidate>\n" +
+    "                <div class=\"form-controls mb-5\">\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-name\">Имя</label>\n" +
+    "                        <input type=\"text\" name=\"name\" class=\"form-control\" id=\"registration-name\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-email\">Email</label>\n" +
+    "                        <input type=\"email\" name=\"email\" class=\"form-control\" id=\"registration-email\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <div class=\"mb-3 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-pass\">Пароль</label>\n" +
+    "                        <input type=\"password\" name=\"password\" class=\"form-control\" id=\"registration-pass\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <div class=\"mb-5 text-start\">\n" +
+    "                        <label class=\"form-label\" for=\"registration-pass2\">Пароль еще раз</label>\n" +
+    "                        <input type=\"password\" class=\"form-control\" id=\"registration-pass2\" required>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <button class=\"btn btn-primary w-100 py-2\" type=\"submit\">Зарегистрироваться</button>\n" +
+    "                </div>\n" +
+    "            </form>\n" +
+    "\n" +
+    "            <div class=\"links-container\">\n" +
+    "                <a class=\"install-button\" style=\"display: none\">Установить</a>\n" +
+    "                <a href=\"#\" class=\"login-button\">Войти</a>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "</div>"; 
 // END 
