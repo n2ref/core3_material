@@ -346,7 +346,7 @@
     height: calc(100% - 64px);
     margin-top: 64px;
 }
-.page-menu.drawer-toggle .menu-drawer-app .main-content{
+.page-menu.drawer-toggle .menu-drawer-app .main-content {
     margin-left: 64px;
 }
 .page-menu .menu-drawer__header {
@@ -503,6 +503,7 @@
     .page-menu .mdc-top-app-bar .mdc-top-app-bar__section {
         padding-right: 10px;
     }
+    .page-menu.drawer-toggle .menu-drawer-app .main-content,
     .page-menu .menu-drawer-app .main-content {
         padding-left: 10px;
         padding-right: 10px;
@@ -519,6 +520,7 @@
     }
     .page-menu.drawer-toggle .menu-drawer {
         width: 280px;
+        max-width: 100%;
         margin-left: 0;
     }
     .page-menu.drawer-toggle .menu-drawer-scrim {
