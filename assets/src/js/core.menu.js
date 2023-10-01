@@ -401,6 +401,8 @@ var coreMenu = {
         if (Object.values(coreMenu._modules).length > 0) {
             let params = coreTools.getParams();
 
+            $('.page-menu > aside .menu-list.level-1').empty();
+
             $.each(coreMenu._modules, function (key, module) {
                 if (typeof module.name !== 'string' || ! module.name ||
                     typeof module.title !== 'string' || ! module.title
@@ -446,7 +448,6 @@ var coreMenu = {
                         let section = $(this).data('section');
 
                         if (location.hash.substring(1) === '/' + module + '/' + section) {
-
                             if (window.screen.width < 600) {
                                 coreMenu._drawerToggle();
                             }
@@ -466,6 +467,7 @@ var coreMenu = {
         }
 
 
+        $('.page-menu .mdc-top-app-bar__section--align-end').empty();
         $('.page-menu .mdc-top-app-bar__section--align-end').append(ejs.render(coreTemplates['menu/navbar.html'], {
             user: coreMenu._user
         }));
@@ -756,7 +758,12 @@ var coreMenu = {
 $(function () {
 
     coreMain.on('hashchange', function () {
+
         if ($('.page.page-menu')[0]) {
+            if (window.screen.width < 600) {
+                coreMenu._drawerToggle();
+            }
+
             coreMenu.load('/mod' + location.hash.substring(1));
         }
     });
