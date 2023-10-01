@@ -590,6 +590,13 @@ var coreMenu = {
 
         $('header .mdc-top-app-bar__title').text(titles[0] || '');
         $('header .mdc-top-app-bar__subtitle').text(titles[1] || '');
+
+        let title = coreMenu._system.name;
+        title += titles.hasOwnProperty(0)
+            ? ' - ' + titles[0] + (titles.hasOwnProperty(1) ? ' - ' + titles[1] : '')
+            : '';
+
+        $('head title').text(title);
     },
 
 

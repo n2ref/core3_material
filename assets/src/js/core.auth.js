@@ -44,6 +44,9 @@ var coreAuth = {
         if (typeof conf === 'string') {
             try {
                 conf = JSON.parse(conf);
+                if (typeof conf.name === 'string') {
+                    $('head title').text(conf.name);
+                }
                 if (typeof conf.logo === 'string') {
                     this._setLogo(conf.logo);
                 }
@@ -57,10 +60,14 @@ var coreAuth = {
         coreAuth.loadConfig().then(function (conf) {
             localStorage.setItem('core3_conf', JSON.stringify(conf));
 
+            if (typeof conf.name === 'string') {
+                $('head title').text(conf.name);
+            }
+
             if (typeof conf.logo === 'string') {
                 that._setLogo(conf.logo);
             } else {
-                that._setLogo('assets/src/img/logo.png');
+                that._setLogo('');
             }
 
             if (typeof conf.theme === 'object') {
@@ -427,7 +434,11 @@ var coreAuth = {
      */
     _setLogo: function (logo) {
 
-        $('.page-auth img.logo').attr('src', logo).show();
+        if (logo) {
+            $('.page-auth img.logo').attr('src', logo).show();
+        } else {
+            $('.page-auth img.logo').hide();
+        }
     },
 
 
