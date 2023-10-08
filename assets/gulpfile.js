@@ -1,47 +1,50 @@
-const gulp     = require('gulp');
-var concat     = require('gulp-concat');
-var sourcemaps = require('gulp-sourcemaps');
-var cleanCSS   = require('gulp-clean-css');
-var uglify     = require('gulp-uglify');
-var minifyHtml = require("gulp-htmlmin");
-var html2js    = require('gulp-html2js');
-var replace    = require('gulp-replace');
+const gulp       = require('gulp');
+const concat     = require('gulp-concat');
+const sourcemaps = require('gulp-sourcemaps');
+const uglify     = require('gulp-uglify');
+const htmlToJs   = require('gulp-html-to-js');
+const babel      = require("gulp-babel");
+const sass       = require('gulp-sass')(require('sass'));
+const rollup     = require('rollup-stream');
+const source     = require('vinyl-source-stream');
+const buffer     = require("vinyl-buffer");
+const wrapFile   = require('gulp-wrap-file');
 
 
 
-var conf = {
+const conf = {
+    dist: "./dist",
     css: {
-        file: 'core-all.min.css',
+        file: 'core-all.css',
+        fileMin: 'core-all.min.css',
         src: [
-            'node_modules/@material/**/dist/*.min.css',
-            'src/css/font-awesome.min.css',
-            'src/css/material-design.css',
-
-            'node_modules/bootstrap/dist/css/bootstrap.min.css',
-            'node_modules/bootstrap-icons/font/bootstrap-icons.min.css',
-
-            'node_modules/coreui-panel/dist/coreui-panel.min.css',
-            'node_modules/coreui-tabs/dist/coreui-tabs.min.css',
-            'node_modules/coreui-alert/dist/coreui-alert.min.css',
-            'node_modules/coreui-notice/dist/coreui-notice.min.css',
-            'node_modules/coreui-table/dist/coreui-table.min.css',
-            'node_modules/coreui-chart/dist/coreui-chart.min.css',
-
-            'src/css/main.css',
-            'src/css/page.auth.css',
-            'src/css/page.disable.css',
-            'src/css/page.menu.css',
+            'src/css/main.scss',
         ]
     },
     js: {
+        file: 'core-all.js',
+        src: [
+            'node_modules/jquery/dist/jquery.min.js',
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+
+            'node_modules/coreui-panel/dist/coreui-panel.js',
+            'node_modules/coreui-tabs/dist/coreui-tabs.min.js',
+            'node_modules/coreui-alert/dist/coreui-alert.min.js',
+            'node_modules/coreui-modal/dist/coreui-modal.js',
+            'node_modules/coreui-info/dist/coreui-info.min.js',
+            'node_modules/coreui-notice/dist/coreui-notice.min.js',
+            'node_modules/coreui-layout/dist/coreui-layout.js',
+            'node_modules/coreui-table/dist/coreui-table.js',
+            'node_modules/coreui-form/dist/coreui-form.js',
+            'node_modules/coreui-chart/dist/coreui-chart.min.js',
+
+            'dist/core.js',
+        ]
+    },
+    js_min: {
         file: 'core-all.min.js',
         src: [
-            'node_modules/@material/**/dist/*.min.js',
             'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/jwt-decode/build/jwt-decode.js',
-            'node_modules/md5/dist/md5.min.js',
-            'node_modules/@fingerprintjs/fingerprintjs/dist/fp.min.js',
-            'node_modules/ejs/ejs.min.js',
             'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
 
             'node_modules/coreui-panel/dist/coreui-panel.min.js',
@@ -53,20 +56,23 @@ var conf = {
             'node_modules/coreui-layout/dist/coreui-layout.min.js',
             'node_modules/coreui-table/dist/coreui-table.min.js',
             'node_modules/coreui-form/dist/coreui-form.min.js',
-            'node_modules/coreui-form/dist/coreui-form.min.js',
             'node_modules/coreui-chart/dist/coreui-chart.min.js',
 
-            'src/js/core.templates.js',
-            'src/js/core.tokens.js',
-            'src/js/core.main.js',
-            'src/js/core.tools.js',
-            'src/js/core.auth.js',
-            'src/js/core.menu.js',
+            'dist/core.min.js',
+        ]
+    },
+    js_core: {
+        file: 'core.js',
+        fileMin: 'core.min.js',
+        index: 'src/js/index.js',
+        src: [
+            'src/js/*.js',
+            'src/js/**/*.js',
         ]
     },
     tpl: {
         file: 'core.templates.js',
-        variable: 'coreTemplates',
+        dist: './src/js',
         src: [
             'src/html/**/*.html',
             'src/html/*.html'
@@ -74,72 +80,88 @@ var conf = {
     }
 };
 
+gulp.task('build_css', function(){
+    return gulp.src(conf.css.src)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(concat(conf.css.file))
+        .pipe(gulp.dest(conf.dist));
+});
+
+gulp.task('build_css_min', function(){
+    return gulp.src(conf.css.src)
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(concat(conf.css.fileMin))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(conf.dist));
+});
 
 gulp.task('build_js', function() {
     return gulp.src(conf.js.src)
+        .pipe(concat(conf.js.file, {newLine: ";\n"}))
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build_js_min', function() {
+    return gulp.src(conf.js_min.src)
         .pipe(sourcemaps.init())
         .pipe(uglify())
-        .pipe(concat(conf.js.file, {newLine: ";\n"}))
+        .pipe(concat(conf.js_min.file, {newLine: ";\n"}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build_js_fast', function() {
-    return gulp.src(conf.js.src)
+gulp.task('build_js_core', function() {
+    return rollup({
+        input: conf.js_core.index,
+        sourcemap: false,
+        format: 'umd',
+        name: "Core",
+        plugins: [babel()],
+        context: "window"
+    })
+        .pipe(source(conf.js_core.file))
+        .pipe(buffer())
+        .pipe(gulp.dest(conf.dist));
+});
+
+gulp.task('build_js_core_min', function() {
+    return rollup({
+        input: conf.js_core.index,
+        sourcemap: false,
+        format: 'umd',
+        name: "Core",
+        context: "window",
+    })
+        .pipe(source(conf.js_core.fileMin))
+        .pipe(buffer())
         .pipe(sourcemaps.init())
-        .pipe(concat(conf.js.file, {newLine: ";\n"}))
+        .pipe(babel({
+            "plugins": ["@babel/plugin-transform-template-literals"]
+        }))
+        .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest(conf.dist));
 });
-
 
 gulp.task('build_tpl', function() {
 
     return gulp.src(conf.tpl.src)
-        .pipe(minifyHtml({
-            collapseWhitespace: false,
-            ignoreCustomFragments: [ /<%[^%]+%>/ ]
-        }))
-        .pipe(html2js(conf.tpl.file, {
-            adapter: 'javascript',
-            base: 'templates',
-            name: conf.tpl.variable,
-            rename: function (moduleName) {
-                return moduleName.replace('../src/html/', '');
+        .pipe(htmlToJs({global: 'coreTpl', concat: conf.tpl.file}))
+        .pipe(wrapFile({
+            wrapper: function(content, file) {
+                return 'let ' + content + ";\nexport default coreTpl;"
             }
         }))
-        .pipe(gulp.dest('./src/js'));
+        .pipe(gulp.dest(conf.tpl.dist));
 });
-
-
-gulp.task('build_css', function(){
-    return gulp.src(conf.css.src)
-        .pipe(sourcemaps.init())
-        .pipe(cleanCSS())
-        .pipe(concat(conf.css.file))
-        .pipe(sourcemaps.write('.'))
-        .pipe(replace(';src:url(fonts/', ';src:url(../fonts/'))
-        .pipe(replace(';src:url("fonts/', ';src:url("../fonts/'))
-        .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('build_css_fast', function(){
-    return gulp.src(conf.css.src)
-        .pipe(sourcemaps.init())
-        .pipe(concat(conf.css.file))
-        .pipe(sourcemaps.write('.'))
-        .pipe(replace(';src:url(fonts/', ';src:url(../fonts/'))
-        .pipe(replace(';src:url("fonts/', ';src:url("../fonts/'))
-        .pipe(gulp.dest('./dist'));
-});
-
 
 
 gulp.task('build_watch', function() {
-    gulp.watch(conf.tpl.src, gulp.series(['build_tpl', 'build_js_fast']));
-    gulp.watch(conf.js.src, gulp.parallel(['build_js_fast']));
-    gulp.watch(conf.css.src, gulp.parallel(['build_css_fast']));
+    gulp.watch(conf.tpl.src, gulp.series(['build_tpl', 'build_js_core_min', 'build_js_min']));
+    gulp.watch(conf.js_core.src, gulp.series(['build_js_core_min', 'build_js_min']));
+    gulp.watch(conf.css.src, gulp.series(['build_css_min']));
 });
 
 
-gulp.task("default", gulp.series([ 'build_tpl', 'build_js', 'build_css']));
+gulp.task("default", gulp.series([ 'build_tpl', 'build_js_core', 'build_js_core_min', 'build_js', 'build_js_min', 'build_css_min', 'build_css']));

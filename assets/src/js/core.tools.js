@@ -1,7 +1,9 @@
 
-var coreTools = {
+import jwt_decode from '../../node_modules/jwt-decode/build/jwt-decode.esm';
+import '../../node_modules/@fingerprintjs/fingerprintjs/dist/fp.umd.min';
 
 
+let coreTools = {
 
     /**
      * Получение паравметров из хэша
@@ -11,7 +13,7 @@ var coreTools = {
     getParams: function (url) {
 
         if (typeof url === 'undefined') {
-            url = '/mod' + location.hash.substr(1);
+            url = '/mod' + location.hash.substring(1);
         }
 
         let params = url.match(/^\/mod\/([a-z0-9_]*)(?:\/|)([a-z0-9_]*)(?:(\?[^?]*)|)/);
@@ -87,17 +89,19 @@ var coreTools = {
     /**
      * Форматирование числа
      * @param   {number|string} numb
+     * @param   {string}       divider
      * @returns {string}
      * @private
      */
-    formatMoney: function(numb) {
+    formatMoney: function(numb, divider) {
 
         if (isNaN(numb)) {
             return this.formatNumber(numb);
 
         } else {
+            divider = divider || ' ';
             numb = Number(numb).toFixed(2).toString();
-            return numb.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+            return numb.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1' + divider);
         }
     },
 
@@ -201,3 +205,5 @@ var coreTools = {
         return jwt_decode(token);
     }
 }
+
+export default coreTools;

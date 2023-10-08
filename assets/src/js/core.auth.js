@@ -1,4 +1,12 @@
-var coreAuth = {
+
+import coreMain   from './core.main';
+import coreTools  from './core.tools';
+import coreTokens from './core.tokens';
+import coreTpl    from './core.templates';
+import '../../node_modules/md5/dist/md5.min';
+import '../../node_modules/@material/ripple/dist/mdc.ripple.min';
+
+let coreAuth = {
 
     /**
      * Получение страницы входа и регистрации
@@ -6,7 +14,7 @@ var coreAuth = {
      */
     getPageContent: function () {
 
-        return coreTemplates['auth/main.html'];
+        return coreTpl['auth/main.html'];
     },
 
 
@@ -21,12 +29,6 @@ var coreAuth = {
         let buttons = document.querySelectorAll('.page-auth .mdc-button');
         for (let button of buttons) {
             new mdc.ripple.MDCRipple(button);
-        }
-
-        // Инициализация текстовых полей
-        let inputs = document.querySelectorAll('.page-auth .mdc-text-field');
-        for (let input of inputs) {
-            new mdc.textfield.MDCTextField(input);
         }
 
         $('.container-login form').on('submit', function () {
@@ -471,11 +473,6 @@ var coreAuth = {
             theme.login.bg_color
         ) {
             styles.push('--login-bg: ' + theme.login.bg_color + ';');
-        } else if (typeof theme.login === 'object' &&
-            typeof theme.login.bg_color === 'string' &&
-            theme.login.bg_color
-        ) {
-            styles.push('--login-bg: ' + theme.login.bg_color + ';');
         }
 
         if (styles.length > 0) {
@@ -503,3 +500,5 @@ $(function () {
         }
     });
 });
+
+export default coreAuth;

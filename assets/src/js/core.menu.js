@@ -1,4 +1,16 @@
-var coreMenu = {
+
+import coreTpl     from './core.templates';
+import coreTokens  from './core.tokens';
+import coreTools   from './core.tools';
+import coreMain    from './core.main';
+
+import '../../node_modules/ejs/ejs.min';
+import '../../node_modules/@material/ripple/dist/mdc.ripple.min';
+import '../../node_modules/@material/linear-progress/dist/mdc.linearProgress.min';
+import '../../node_modules/@material/circular-progress/dist/mdc.circularProgress.min';
+
+
+let coreMenu = {
 
     _user: null,
     _system: null,
@@ -12,7 +24,7 @@ var coreMenu = {
      */
     getPageContent: function () {
 
-        return coreTemplates['menu/main.html'];
+        return coreTpl['menu/main.html'];
     },
 
 
@@ -148,6 +160,7 @@ var coreMenu = {
         $.ajax({
             url: coreMain.options.basePath + url,
             method: "GET",
+            dataType: 'text',
             success: function (response, textStatus, jqXHR) {
                 coreMenu.preloader.hide();
 
@@ -155,21 +168,16 @@ var coreMenu = {
                 coreMenu._setActiveModule(params.module, params.section);
 
                 let contentType = jqXHR.getResponseHeader('Content-type');
-                let content     = '';
+                let content     = response;
 
                 // Обработка json
-                if (/^application\/json($|$)/.test(contentType) &&
-                    typeof response === 'object'
-                ) {
+                if (/^application\/json/.test(contentType)) {
                     try {
-                        content = coreMenu._renderContent(response);
+                        content = coreMenu._renderContent(JSON.parse(response));
 
                     } catch (e) {
-                        content = e.message;
+                        console.warn(e)
                     }
-
-                } else {
-                    content = response;
                 }
 
                 $('.page-menu .main-content .main-wrapper').html(content)
@@ -221,9 +229,7 @@ var coreMenu = {
                 return false;
             }
 
-            options = typeof options === 'object' ? options : {};
-
-            $('.page-menu > header').append(coreTemplates['menu/loader.html']);
+            $('.page-menu > header').append(coreTpl['menu/loader.html']);
 
             let loaderElement = $('#loader .loader-progress');
             let linearProgress   = new mdc['linear-progress'].MDCLinearProgress(loaderElement[0]);
@@ -253,12 +259,12 @@ var coreMenu = {
          */
         show: function (options) {
             if ($('#preloader')[0]) {
-                return false;
+                this.hide();
             }
 
             options = typeof options === 'object' ? options : {};
 
-            $('.page-menu').prepend(ejs.render(coreTemplates['menu/preloader.html'], {
+            $('.page-menu').prepend(ejs.render(coreTpl['menu/preloader.html'], {
                 text: options.text || 'Загрузка...'
             }));
 
@@ -407,7 +413,7 @@ var coreMenu = {
                 if (typeof module.name !== 'string' || ! module.name ||
                     typeof module.title !== 'string' || ! module.title
                 ) {
-                    CoreUI.notify.danger('Не удалось показать некоторые модули из за ошибок!');
+                    CoreUI.notice.danger('Не удалось показать некоторые модули из за ошибок!');
                     return true;
                 }
 
@@ -421,7 +427,7 @@ var coreMenu = {
                     });
                 }
 
-                $('.page-menu > aside .menu-list.level-1').append(ejs.render(coreTemplates['menu/module.html'], {
+                $('.page-menu > aside .menu-list.level-1').append(ejs.render(coreTpl['menu/module.html'], {
                     module: module
                 }));
 
@@ -468,7 +474,7 @@ var coreMenu = {
 
 
         $('.page-menu .mdc-top-app-bar__section--align-end').empty();
-        $('.page-menu .mdc-top-app-bar__section--align-end').append(ejs.render(coreTemplates['menu/navbar.html'], {
+        $('.page-menu .mdc-top-app-bar__section--align-end').append(ejs.render(coreTpl['menu/navbar.html'], {
             user: coreMenu._user
         }));
 
@@ -775,3 +781,6 @@ $(function () {
         }
     });
 });
+
+
+export default coreMenu;

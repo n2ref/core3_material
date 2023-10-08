@@ -18,13 +18,14 @@
     z-index: 5;
     text-align: center;
     transition: all 100ms cubic-bezier(.4,0,.2,1);
-}
-.page-menu #preloader .loading-lock {
-    position: absolute;
-    width: calc(100% - 280px);
-    height: 100%;
-    background-color: rgb(255 255 255 / 50%);
-    transition: all 100ms cubic-bezier(.4,0,.2,1);
+
+    .loading-lock {
+        position: absolute;
+        width: calc(100% - 280px);
+        height: 100%;
+        background-color: rgb(255 255 255 / 50%);
+        transition: all 100ms cubic-bezier(.4,0,.2,1);
+    }
 }
 .page-menu.drawer-toggle #preloader {
     width: 100%;
@@ -79,6 +80,7 @@
     padding-left: 0;
     font-size: 18px;
     color: var(--menu-header-text);
+    line-height: 1.5rem;
 }
 .page-menu .mdc-top-app-bar .mdc-top-app-bar__subtitle {
     font-size: 12px;
@@ -302,7 +304,7 @@
     background-color: var(--menu-header);
 }
 .page-menu #loader .mdc-linear-progress__bar-inner {
-    border-color: #a262ff;
+    border-color: var(--menu-drawer);
 }
 
 
@@ -404,7 +406,7 @@
 .page-menu .btn-sm {
     --bs-btn-padding-y: .25rem;
     --bs-btn-padding-x: .5rem;
-    --bs-btn-font-size: .84rem;
+    --bs-btn-font-size: .88rem;
 }
 .page-menu .btn-xs {
     line-height: 1.4;
@@ -412,7 +414,11 @@
     --bs-btn-padding-x: .5rem;
     --bs-btn-font-size: .75rem;
 }
-
+.page-menu .coreui-panel-back {
+    --bs-btn-padding-y: .154rem;
+    --bs-btn-padding-x: .46rem;
+    --bs-btn-font-size: .88rem;
+}
 
 
 .menu-list::-webkit-scrollbar {

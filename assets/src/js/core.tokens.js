@@ -1,5 +1,9 @@
 
-var coreTokens = {
+import coreTools from './core.tools';
+import coreMain  from './core.main';
+
+
+let coreTokens = {
 
     _refreshInterval: 0,
 
@@ -70,7 +74,6 @@ var coreTokens = {
                     }
 
                 } else {
-
                     coreTokens.setAccessToken(response.access_token);
                     coreTokens.setRefreshToken(response.refresh_token);
 
@@ -184,4 +187,6 @@ var coreTokens = {
         localStorage.removeItem('core3_refresh_token');
     }
 }
+
+export default coreTokens;
 

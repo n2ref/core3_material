@@ -1,5 +1,7 @@
 
-var coreMain = {
+import coreTokens from './core.tokens';
+
+let coreMain = {
 
     activePage: null,
 
@@ -26,12 +28,10 @@ var coreMain = {
      */
     viewPage: function (pageName) {
 
-        let pageObjectName = 'core' +  pageName.charAt(0).toUpperCase() + pageName.slice(1);
-
-        if (window[pageObjectName]) {
-            let pageContent = window[pageObjectName].getPageContent();
+        if (Core[pageName]) {
+            let pageContent = Core[pageName].getPageContent();
             $('.main').append('<div class="page page-' + pageName + '">' + pageContent + '</div>');
-            window[pageObjectName].init();
+            Core[pageName].init();
 
             coreMain.activePage = pageName
 
@@ -122,3 +122,6 @@ $(function () {
         window.onhashchange = coreMain.hashChange;
     }
 });
+
+
+export default coreMain;

@@ -3,35 +3,40 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build_all": "gulp build_tpl && gulp build_js && gulp build_css",
+    "build_all": "gulp build_tpl && gulp build_js_core && gulp build_js_core_min && gulp build_js && gulp build_js_min && gulp build_css && gulp build_css_min && npm run test_js",
     "build_watch": "gulp build_watch",
 
-    "build_js": "gulp build_tpl && gulp build_js",
-    "build_js_fast": "gulp build_tpl && gulp build_js_fast",
+    "build_js_all": "gulp build_tpl && gulp build_js_core && gulp build_js_core_min && gulp build_js && gulp build_js_min",
+    "build_js": "gulp build_js_core && gulp build_js_core_min && gulp build_js",
+    "build_js_min": "gulp build_js_core_min && gulp build_js_min",
+    "build_js_core": "gulp build_tpl && gulp build_js_core && gulp build_js",
+    "build_js_core_min": "gulp build_tpl && gulp build_js_core_min && gulp build_js_min",
+    "build_tpl": "gulp build_tpl",
 
     "build_css": "gulp build_css",
-    "build_css_fast": "gulp build_css_fast",
+    "build_css_min": "gulp build_css_min",
 
-    "test_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./js"
+    "test_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./src/js"
   },
   "dependencies": {
+    "@material/animation": "14.*",
     "@material/ripple": "14.*",
-    "@material/button": "14.*",
-    "@material/card": "14.*",
-    "@material/textfield": "14.*",
     "@material/linear-progress": "14.*",
     "@material/circular-progress": "14.*",
     "@material/top-app-bar": "14.*",
+    "material-icons": "1.13.12",
+    "@fortawesome/fontawesome-free": "6.4.2",
+
     "@fingerprintjs/fingerprintjs": "3.3.*",
 
-    "bootstrap": "5.3.0-alpha3",
+    "bootstrap": "5.3.2",
     "bootstrap-icons": "1.*",
     "jquery": "3.6.4",
     "jwt-decode": "3.1.2",
     "md5": "2.3.0",
     "ejs": "3.1.*",
 
-    "coreui-panel": "1.0.7",
+    "coreui-panel": "1.0.8",
     "coreui-modal": "1.0.2",
     "coreui-alert": "1.0.2",
     "coreui-info": "1.0.1",
@@ -39,7 +44,7 @@
     "coreui-tabs": "1.0.0",
     "coreui-layout": "1.0.8",
     "coreui-table": "1.0.5",
-    "coreui-form": "1.0.1",
+    "coreui-form": "1.0.13",
     "coreui-chart": "1.0.3"
   },
   "devDependencies": {
@@ -47,10 +52,17 @@
     "gulp-concat": "2.*",
     "gulp-sourcemaps": "3.*",
     "gulp-uglify": "3.0.*",
-    "gulp-clean-css": "4.*",
-    "gulp-htmlmin": "5.0.1",
-    "gulp-html2js": "0.4.2",
-    "gulp-replace": "1.*"
+    "gulp-rename": "2.0.0",
+    "gulp-babel": "8.0.0",
+    "gulp-sass": "5.1.0",
+    "gulp-wrap-file": "0.1.2",
+    "gulp-html-to-js": "0.0.7",
+    "rollup-stream": "1.24.1",
+    "vinyl-source-stream": "2.0.0",
+    "vinyl-buffer": "1.0.1",
+    "sass": "1.69.0",
+    "eslint": "8.50.0",
+    "@babel/plugin-transform-template-literals": "7.22.5"
   },
   "keywords": [],
   "author": "shabuninil",
