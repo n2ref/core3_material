@@ -3,14 +3,13 @@ const concat     = require('gulp-concat');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify     = require('gulp-uglify');
 const htmlToJs   = require('gulp-html-to-js');
-const babel      = require("gulp-babel");
+//const babel      = require("gulp-babel");
 const sass       = require('gulp-sass')(require('sass'));
 const rollup     = require('rollup-stream');
+const babel      = require('rollup-plugin-babel');
 const source     = require('vinyl-source-stream');
 const buffer     = require("vinyl-buffer");
 const wrapFile   = require('gulp-wrap-file');
-
-
 
 const conf = {
     dist: "./dist",
@@ -72,7 +71,7 @@ const conf = {
     },
     tpl: {
         file: 'core.templates.js',
-        dist: './src/js',
+        dist: './src/js/core',
         src: [
             'src/html/**/*.html',
             'src/html/*.html'
@@ -131,14 +130,12 @@ gulp.task('build_js_core_min', function() {
         sourcemap: false,
         format: 'umd',
         name: "Core",
+        plugins: [babel()],
         context: "window",
     })
         .pipe(source(conf.js_core.fileMin))
         .pipe(buffer())
         .pipe(sourcemaps.init())
-        .pipe(babel({
-            "plugins": ["@babel/plugin-transform-template-literals"]
-        }))
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(conf.dist));

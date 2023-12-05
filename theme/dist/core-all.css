@@ -31826,6 +31826,10 @@ readers do not read off random characters that represent icons */
 }
 
 
+.coreui-panel {
+  min-width: min-content;
+}
+
 .coreui-panel .coreui-panel-back i {
   font-size: 1.09em;
 }
@@ -33514,6 +33518,10 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-end, body.swal2-toast-shown
   animation-name: fadeIn;
 }
 
+:root {
+  --coreui-table-bg-head: #FAFAFA;
+}
+
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table {
   min-height: 55px;
 }
@@ -33566,11 +33574,13 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-end, body.swal2-toast-shown
 
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table.table-bordered > thead > tr > td {
   border: 1px solid var(--bs-secondary-border-subtle);
+  background-color: var(--coreui-table-bg-head);
 }
 
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child,
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > thead > tr:first-child > td {
   border-top: none;
+  background-color: var(--coreui-table-bg-head);
 }
 
 .coreui-table > .coreui-table__container > .coreui-table__wrapper > table > tfoot > tr > td::before {
@@ -34425,9 +34435,7 @@ html, body {
 
 .page-menu .menu-drawer__header h3, .page-menu .menu-drawer__header .h3 {
   color: var(--menu-drawer-text);
-  height: 20px;
   margin: 0;
-  vertical-align: bottom;
   font-size: 20px;
   white-space: nowrap;
   overflow: hidden;
@@ -34463,7 +34471,7 @@ html, body {
 .page-menu .btn-xs {
   line-height: 1.4;
   --bs-btn-padding-y: 0rem;
-  --bs-btn-padding-x: .5rem;
+  --bs-btn-padding-x: .4rem;
   --bs-btn-font-size: .75rem;
 }
 

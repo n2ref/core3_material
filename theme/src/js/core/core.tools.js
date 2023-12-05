@@ -1,6 +1,6 @@
 
-import jwt_decode from '../../node_modules/jwt-decode/build/jwt-decode.esm';
-import '../../node_modules/@fingerprintjs/fingerprintjs/dist/fp.umd.min';
+import jwt_decode from '../../../node_modules/jwt-decode/build/jwt-decode.esm';
+import '../../../node_modules/@fingerprintjs/fingerprintjs/dist/fp.umd.min';
 
 
 let coreTools = {

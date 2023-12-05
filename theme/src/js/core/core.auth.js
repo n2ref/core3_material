@@ -3,8 +3,8 @@ import coreMain   from './core.main';
 import coreTools  from './core.tools';
 import coreTokens from './core.tokens';
 import coreTpl    from './core.templates';
-import '../../node_modules/md5/dist/md5.min';
-import '../../node_modules/@material/ripple/dist/mdc.ripple.min';
+import MD5        from '../../../node_modules/blueimp-md5-es6/js/md5';
+import '../../../node_modules/@material/ripple/dist/mdc.ripple.min';
 
 let coreAuth = {
 

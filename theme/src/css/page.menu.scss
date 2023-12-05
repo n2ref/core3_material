@@ -379,9 +379,7 @@
 }
 .page-menu .menu-drawer__header h3 {
     color: var(--menu-drawer-text);
-    height: 20px;
     margin: 0;
-    vertical-align: bottom;
     font-size: 20px;
     white-space: nowrap;
     overflow: hidden;
@@ -411,7 +409,7 @@
 .page-menu .btn-xs {
     line-height: 1.4;
     --bs-btn-padding-y: 0rem;
-    --bs-btn-padding-x: .5rem;
+    --bs-btn-padding-x: .4rem;
     --bs-btn-font-size: .75rem;
 }
 .page-menu .coreui-panel-back {

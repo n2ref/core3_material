@@ -3,11 +3,12 @@ import coreTpl     from './core.templates';
 import coreTokens  from './core.tokens';
 import coreTools   from './core.tools';
 import coreMain    from './core.main';
+import coreAuth    from './core.auth';
 
-import '../../node_modules/ejs/ejs.min';
-import '../../node_modules/@material/ripple/dist/mdc.ripple.min';
-import '../../node_modules/@material/linear-progress/dist/mdc.linearProgress.min';
-import '../../node_modules/@material/circular-progress/dist/mdc.circularProgress.min';
+import '../../../node_modules/ejs/ejs.min';
+import '../../../node_modules/@material/ripple/dist/mdc.ripple.min';
+import '../../../node_modules/@material/linear-progress/dist/mdc.linearProgress.min';
+import '../../../node_modules/@material/circular-progress/dist/mdc.circularProgress.min';
 
 
 let coreMenu = {
@@ -173,7 +174,15 @@ let coreMenu = {
                 // Обработка json
                 if (/^application\/json/.test(contentType)) {
                     try {
-                        content = coreMenu._renderContent(JSON.parse(response));
+                        let responseObj = JSON.parse(response);
+                        content = coreMenu._renderContent(responseObj);
+
+                        if (typeof responseObj === 'object' &&
+                            responseObj.hasOwnProperty('_buffer') &&
+                            responseObj._buffer !== ''
+                        ) {
+                            content = responseObj._buffer + content;
+                        }
 
                     } catch (e) {
                         console.warn(e)

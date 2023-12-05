@@ -1,8 +1,7 @@
 
-
 import core from "./core";
 
-import "./lang/core.translate.en";
+import "./lang/en";
 
 
 export default core;
