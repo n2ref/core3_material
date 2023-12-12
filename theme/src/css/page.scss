@@ -1,10 +1,3 @@
-html, body {
-  font-size: 16px;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  min-height: 100%;
-}
 :root {
   --menu-header: #fff;
   --menu-header-text: #444;
@@ -20,6 +13,14 @@ html, body {
   --menu-bg: #fafafa;
   --mdc-theme-primary: #2a4397;
   --mdc-theme-secondary: #36436e;
+}
+
+html, body {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
 }
 .main,
 .main .page {

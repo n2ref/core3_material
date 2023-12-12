@@ -1,8 +1,9 @@
 .page-disable {
     min-height: 100%;
     padding-top: 45px;
-}
-.page-disable .buffer-content {
-    height: 50px;
-    width: 100%;
+
+    .buffer-content {
+        height: 50px;
+        width: 100%;
+    }
 }

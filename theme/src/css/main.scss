@@ -3,6 +3,28 @@ $fa-font-path             : "../fonts";
 $material-icons-font-path : "../fonts/";
 $bootstrap-icons-font-dir : "../fonts";
 
+
+// Bootstrap
+$form-controls-border-color: #bababa;
+
+$form-check-input-border:  var(--bs-border-width) solid $form-controls-border-color;
+$input-border-color:       $form-controls-border-color;
+$form-select-border-color: $form-controls-border-color;
+$table-striped-bg-factor:  .02 !default;
+
+// Core UI
+$coreui-table-thead-bg: #f4f5fb;
+$coreui-table-tbody-bg: #FFF;
+$coreui-table-tfoot-bg: #f4f5fb;
+
+$coreui-table-thead-color: #373a4b;
+$coreui-table-tbody-color: #212529;
+$coreui-table-tfoot-color: #373a4b;
+
+$coreui-table-border-color: #cdcfe4;
+$coreui-table-border-radius: 0.25rem;
+
+
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../../node_modules/bootstrap-icons/font/bootstrap-icons';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
@@ -15,6 +37,7 @@ $bootstrap-icons-font-dir : "../fonts";
 @import '../../node_modules/@material/linear-progress/dist/mdc.linear-progress.min';
 @import '../../node_modules/@material/circular-progress/dist/mdc.circular-progress.min';
 @import '../../node_modules/@material/top-app-bar/dist/mdc.top-app-bar.min';
+
 
 
 @import '../../node_modules/coreui-panel/src/css/coreui.panel';

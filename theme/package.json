@@ -16,7 +16,7 @@
     "build_css_min": "gulp build_css_min",
 
     "build_watch": "gulp build_watch",
-    "test_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./src/js"
+    "test_js": "eslint -c .eslintrc.json --max-warnings 100 --ext .js ./dist"
   },
   "dependencies": {
     "@material/animation": "14.*",
@@ -40,8 +40,8 @@
     "coreui-notice": "1.0.0",
     "coreui-tabs": "1.0.0",
     "coreui-layout": "1.0.8",
-    "coreui-table": "1.0.9",
-    "coreui-form": "1.0.20",
+    "coreui-table": "1.0.11",
+    "coreui-form": "1.0.21",
     "coreui-chart": "1.0.3"
   },
   "devDependencies": {
@@ -55,6 +55,7 @@
     "gulp-html-to-js": "0.0.7",
     "rollup-stream": "1.24.1",
     "rollup-plugin-babel": "4.4.0",
+    "rollup-plugin-sourcemaps": "0.6.3",
     "vinyl-source-stream": "2.0.0",
     "vinyl-buffer": "1.0.1",
     "sass": "1.69.0",

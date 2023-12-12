@@ -1,15 +1,15 @@
-const gulp       = require('gulp');
-const concat     = require('gulp-concat');
-const sourcemaps = require('gulp-sourcemaps');
-const uglify     = require('gulp-uglify');
-const htmlToJs   = require('gulp-html-to-js');
-//const babel      = require("gulp-babel");
-const sass       = require('gulp-sass')(require('sass'));
-const rollup     = require('rollup-stream');
-const babel      = require('rollup-plugin-babel');
-const source     = require('vinyl-source-stream');
-const buffer     = require("vinyl-buffer");
-const wrapFile   = require('gulp-wrap-file');
+const gulp             = require('gulp');
+const concat           = require('gulp-concat');
+const sourcemaps       = require('gulp-sourcemaps');
+const uglify           = require('gulp-uglify');
+const htmlToJs         = require('gulp-html-to-js');
+const sass             = require('gulp-sass')(require('sass'));
+const rollup           = require('rollup-stream');
+const rollupSourcemaps = require('rollup-plugin-sourcemaps');
+const rollupBabel      = require('rollup-plugin-babel');
+const source           = require('vinyl-source-stream');
+const buffer           = require("vinyl-buffer");
+const wrapFile         = require('gulp-wrap-file');
 
 const conf = {
     dist: "./dist",
@@ -116,7 +116,7 @@ gulp.task('build_js_core', function() {
         sourcemap: false,
         format: 'umd',
         name: "Core",
-        plugins: [babel()],
+        plugins: [rollupBabel()],
         context: "window"
     })
         .pipe(source(conf.js_core.file))
@@ -130,14 +130,15 @@ gulp.task('build_js_core_min', function() {
         sourcemap: false,
         format: 'umd',
         name: "Core",
-        plugins: [babel()],
+        plugins: [
+            rollupSourcemaps(),
+            rollupBabel()
+        ],
         context: "window",
     })
         .pipe(source(conf.js_core.fileMin))
         .pipe(buffer())
-        .pipe(sourcemaps.init())
         .pipe(uglify())
-        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(conf.dist));
 });
 
@@ -147,6 +148,8 @@ gulp.task('build_tpl', function() {
         .pipe(htmlToJs({global: 'coreTpl', concat: conf.tpl.file}))
         .pipe(wrapFile({
             wrapper: function(content, file) {
+                content = content.replace(/\\n/g, ' ');
+                content = content.replace(/[ ]{2,}/g, ' ');
                 return 'let ' + content + ";\nexport default coreTpl;"
             }
         }))
