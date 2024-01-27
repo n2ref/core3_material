@@ -41,7 +41,7 @@
     "coreui-tabs": "1.0.0",
     "coreui-layout": "1.0.8",
     "coreui-table": "1.0.11",
-    "coreui-form": "1.0.21",
+    "coreui-form": "1.0.25",
     "coreui-chart": "1.0.3"
   },
   "devDependencies": {

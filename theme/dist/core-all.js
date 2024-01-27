@@ -5599,27 +5599,27 @@ function _typeof(o) {
 var tpl = Object.create(null);
 tpl['form-error.html'] = '<div class="coreui-form__error alert alert-danger alert-dismissible fade show mb-3 <%= options.class %>"> <%- message %> <% if (options.dismiss) { %> <button type="button" class="btn-close" data-bs-dismiss="alert"></button> <% } %> </div>';
 tpl['form-field-content.html'] = '<%- content %>';
-tpl['form-field-group.html'] = '<div id="coreui-form-<%= id %>" class="coreui-form__group_container mb-3"> <div class="coreui-form__group_label pe-2"> <h6 class="coreui-form__field_label_text col-form-label-sm"> <%- group.label %> <% if (group.showCollapsible) { %> <button type="button" class="btn btn-sm btn-link btn-collapsible text-dark"> <% if ( ! group.show) { %> <i class="bi bi-chevron-right"></i> <% } else { %> <i class="bi bi-chevron-down"></i> <% } %> </button> <% } %> </h6> </div> <div class="coreui-form__group_content"<% if ( ! group.show) { %> style="display:none"<% } %>> <%- content %> </div> </div>';
-tpl['form-field-label.html'] = '<div id="coreui-form-<%= id %>" class="coreui-form__field_container d-flex flex-column flex-md-row mb-3" <% if ( ! field.show) { %> style="display:none"<% } %>> <% if (field.labelWidth !== 0 && field.labelWidth !== \'0px\') { %> <div class="coreui-form__field_label text-md-end text-sm-start pe-2"<% if (field.labelWidth) { %> style="min-width:<%= field.labelWidth %>;width:<%= field.labelWidth %>"<% } %>> <div class="coreui-form__field_label_content col-form-label-sm"> <% if (field.required) { %> <span class="coreui-form__field_label_req text-danger">*</span> <% } %> <span class="coreui-form__field_label_text fw-medium"><%- field.label %></span> </div> <% if (field.description) { %> <div class="coreui-form__field_label_description text-muted"> <small><%- field.description %></small> </div> <% } %> </div> <% } %> <div class="coreui-form__field_content flex-fill pt-1"> <div class="d-inline-block content-<%= hash %>"> <%- content %> </div> <% if (field.outContent) { %> <span class="coreui-form__field-content-out d-inline-block align-top pt-1 ps-1"> <%- field.outContent %> </span> <% } %> <% if (attachFields && attachFields.length > 0) { %> <% $.each(attachFields, function(key, attachField) { %> <div class="<% if (attachField.hasOwnProperty(\'direction\') && attachField.direction === \'column\') { %>d-block mt-2<% } else { %>d-inline-block<% } %> content-<%= attachField.hash %>"> <%- attachField.content %> </div> <% }); %> <% } %> </div> </div>';
+tpl['form-field-group.html'] = '<div id="coreui-form-<%= id %>" class="coreui-form__group_container mb-3"> <div class="coreui-form__group_label pe-2"> <h6 class="coreui-form__field_label_text col-form-label"> <%- group.label %> <% if (group.showCollapsible) { %> <button type="button" class="btn btn-link btn-collapsible text-dark"> <% if ( ! group.show) { %> <i class="bi bi-chevron-right"></i> <% } else { %> <i class="bi bi-chevron-down"></i> <% } %> </button> <% } %> </h6> </div> <div class="coreui-form__group_content"<% if ( ! group.show) { %> style="display:none"<% } %>> <%- content %> </div> </div>';
+tpl['form-field-label.html'] = '<div id="coreui-form-<%= id %>" class="coreui-form__field_container d-flex flex-column flex-md-row mb-3" <% if ( ! field.show) { %> style="display:none"<% } %>> <% if (field.labelWidth !== 0 && field.labelWidth !== \'0px\') { %> <div class="coreui-form__field_label text-md-end text-sm-start pe-2"<% if (field.labelWidth) { %> style="min-width:<%= field.labelWidth %>;width:<%= field.labelWidth %>"<% } %>> <div class="coreui-form__field_label_content col-form-label"> <% if (field.required) { %> <span class="coreui-form__field_label_req text-danger">*</span> <% } %> <span class="coreui-form__field_label_text fw-medium"><%- field.label %></span> </div> <% if (field.description) { %> <div class="coreui-form__field_label_description text-muted"> <small><%- field.description %></small> </div> <% } %> </div> <% } %> <div class="coreui-form__field_content flex-fill"> <div class="d-inline-block content-<%= hash %>"> <%- content %> </div> <% if (field.outContent) { %> <span class="coreui-form__field-content-out d-inline-block align-top ps-1"> <%- field.outContent %> </span> <% } %> <% if (attachFields && attachFields.length > 0) { %> <% $.each(attachFields, function(key, attachField) { %> <div class="<% if (attachField.hasOwnProperty(\'direction\') && attachField.direction === \'column\') { %>d-block mt-2<% } else { %>d-inline-block<% } %> content-<%= attachField.hash %>"> <%- attachField.content %> </div> <% }); %> <% } %> </div> </div>';
 tpl['form.html'] = '<div id="coreui-form-<%= form.id %>" class="coreui-form mb-2" <% if (widthSizes) { %>style="<%= widthSizes.join(\';\') %>"<% } %>> <% if (form.title) { %> <h5 class="mb-4"><%- form.title %></h5> <% } %> <form action="<%= form.send.url %>" method="<%= form.send.method %>"<%- formAttr %>> <div class="coreui-form__fields d-flex justify-content-start flex-column flex-wrap"> <%- layout %> </div> <% if (controls) { %> <div class="coreui-form__controls d-flex justify-content-start flex-sm-wrap flex-md-nowrap"> <% if (form.controlsOffset !== 0 && form.controlsOffset !== \'0px\') { %> <div class="d-none d-md-block" style="width:<%= form.controlsOffset %>;min-width:<%= form.controlsOffset %>"></div> <% } %> <div class="d-flex justify-content-start flex-wrap gap-2"> <% $.each(controls, function(key, control) { %> <div id="coreui-form-<%= form.id %>-control-<%= control.index %>" class="coreui-form__control_container" <% if ( ! control.show) { %>style="display:none"<% } %>> <%- control.content %> </div> <% }); %> </div> </div> <% } %> </form> </div>';
-tpl['controls/button.html'] = '<button <%- render.attr %>><%- control.content %></button>';
-tpl['controls/link.html'] = '<a href="<%- control.href %>"<%- render.attr %>><%- control.content %></a>';
-tpl['fields/checkbox.html'] = '<% if (field.readonly) { %> <%- render.selectedItems.join(\', \') %> <% } else { %> <% $.each(render.options, function(key, option) { %> <div class="form-check<% if (field.inline) { %> form-check-inline<% } %>"> <input <%- option.attr %>/> <label class="form-check-label" for="<%= option.id %>"><%= option.text %></label> </div> <% }); %> <% } %>';
-tpl['fields/color.html'] = '<% if (field.readonly) { %> <div class="rounded-1" style="width: 14px;height: 14px;background-color: <%= value %>"></div> <% } else { %> <input <%- render.attr %>/> <% if (render.datalist.length > 0) { %> <datalist id="<%= datalistId %>"> <% $.each(render.datalist, function(key, item) { %> <option <%- item.attr %>/> <% }); %> </datalist> <% } %> <% } %>';
+tpl['fields/checkbox.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%- render.selectedItems.join(\', \') %></div> <% } else { %> <div class="pt-2"> <% $.each(render.options, function(key, option) { %> <div class="form-check<% if (field.inline) { %> form-check-inline<% } %>"> <input <%- option.attr %>/> <label class="form-check-label" for="<%= option.id %>"><%= option.text %></label> </div> <% }); %> </div> <% } %>';
+tpl['fields/color.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label rounded-1" style="width: 14px;height: 14px;background-color: <%= value %>"></div> <% } else { %> <input <%- render.attr %>/> <% if (render.datalist.length > 0) { %> <datalist id="<%= datalistId %>"> <% $.each(render.datalist, function(key, item) { %> <option <%- item.attr %>/> <% }); %> </datalist> <% } %> <% } %>';
 tpl['fields/custom.html'] = '<%- content %>';
 tpl['fields/dataset-row-readonly.html'] = '<tr class="coreui-form__field-dataset-item"> <% $.each(options, function(key, option) { %> <td class="pe-2 pb-1"> <%- option.value %> </td> <% }); %> </tr>';
-tpl['fields/dataset-row.html'] = '<tr class="coreui-form__field-dataset-item" id="dataset-item-<%= hashItem %>"> <% $.each(options, function(key, option) { %> <td class="pe-1 pb-1"> <% if (option.type === \'select\') { %> <select <%- option.attr %>> <% $.each(option.items, function(key, item) { %> <option <%- item.attr %>><%- item.title %></option> <% }); %> </select> <% } else if (option.type === \'switch\') { %> <div class="form-check form-switch"> <input <%- option.attr %>/> </div> <% } else { %> <input <%- option.attr %>> <% } %> </td> <% }); %> <td class="pb-1"> <button type="button" class="btn btn-sm btn-link btn-dataset-remove" data-item-id="dataset-item-<%= hashItem %>"> <i class="bi bi-x text-muted"></i> </button> </td> </tr>';
-tpl['fields/dataset.html'] = '<% if (field.readonly) { %> <table class="coreui-form__field-dataset-container" <% if (render.rows.length == 0) { %> style="display:none"<% } %>> <thead> <tr> <% $.each(render.headers, function(key, item) { %> <td class="text-muted pe-2"><small><%= item.title %></small></td> <% }); %> </tr> </thead> <tbody class="coreui-form__field-dataset-list"> <% $.each(render.rows, function(key, row) { %> <%- row %> <% }); %> </tbody> </table> <% } else { %> <table class="coreui-form__field-dataset-container" <% if (render.rows.length == 0) { %> style="display:none"<% } %>> <thead> <tr> <% $.each(render.headers, function(key, item) { %> <td class="text-muted"><small><%= item.title %></small></td> <% }); %> <td></td> </tr> </thead> <tbody class="coreui-form__field-dataset-list"> <% $.each(render.rows, function(key, row) { %> <%- row %> <% }); %> </tbody> </table> <button type="button" class="btn btn-sm btn-link btn-dataset-add"><%= lang.dataset_add %></button> <% } %>';
+tpl['fields/dataset-row.html'] = '<tr class="coreui-form__field-dataset-item" id="dataset-item-<%= hashItem %>"> <% $.each(options, function(key, option) { %> <td class="pe-1 pb-1"> <% if (option.type === \'select\') { %> <select <%- option.attr %>> <% $.each(option.items, function(key, item) { %> <option <%- item.attr %>><%- item.title %></option> <% }); %> </select> <% } else if (option.type === \'switch\') { %> <div class="form-check form-switch"> <input <%- option.attr %>/> </div> <% } else { %> <input <%- option.attr %>> <% } %> </td> <% }); %> <td class="pb-1"> <button type="button" class="btn btn-link btn-dataset-remove" data-item-id="dataset-item-<%= hashItem %>"> <i class="bi bi-x text-muted"></i> </button> </td> </tr>';
+tpl['fields/dataset.html'] = '<% if (field.readonly) { %> <table class="coreui-form__field-dataset-container" <% if (render.rows.length == 0) { %> style="display:none"<% } %>> <thead> <tr> <% $.each(render.headers, function(key, item) { %> <td class="text-muted pe-2"><small><%= item.title %></small></td> <% }); %> </tr> </thead> <tbody class="coreui-form__field-dataset-list"> <% $.each(render.rows, function(key, row) { %> <%- row %> <% }); %> </tbody> </table> <% } else { %> <table class="coreui-form__field-dataset-container" <% if (render.rows.length == 0) { %> style="display:none"<% } %>> <thead> <tr> <% $.each(render.headers, function(key, item) { %> <td class="text-muted"><small><%= item.title %></small></td> <% }); %> <td></td> </tr> </thead> <tbody class="coreui-form__field-dataset-list"> <% $.each(render.rows, function(key, row) { %> <%- row %> <% }); %> </tbody> </table> <button type="button" class="btn btn-link btn-dataset-add"><%= lang.dataset_add %></button> <% } %>';
 tpl['fields/hidden.html'] = '<% if ( ! field.readonly) { %> <input <%- render.attr %>/> <% } %>';
-tpl['fields/input.html'] = '<% if (field.readonly) { %> <%- value %> <% } else { %> <input <%- render.attr %>/> <% if (render.datalist.length > 0) { %> <datalist id="<%= datalistId %>"> <% $.each(render.datalist, function(key, item) { %> <option <%- item.attr %>/> <% }); %> </datalist> <% } %> <% } %>';
+tpl['fields/input.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%- value %></div> <% } else { %> <input <%- render.attr %>/> <% if (render.datalist.length > 0) { %> <datalist id="<%= datalistId %>"> <% $.each(render.datalist, function(key, item) { %> <option <%- item.attr %>/> <% }); %> </datalist> <% } %> <% } %>';
 tpl['fields/modal-loading.html'] = '<div class="py-4 d-flex justify-content-center align-items-center gap-2"> <div class="spinner-border mr-2"></div> <%= lang.modal_loading %> </div> ';
-tpl['fields/modal.html'] = '<% if (field.readonly) { %> <%= text %> <% } else { %> <div class="input-group"<% if (render.width) { %> style="width:<%= render.width %>"<% } %>> <input <%- render.attr %>/> <input type="hidden" name="<%= field.name %>" value="<%= value %>" class="coreui-form-modal-value"/> <% if ( ! field.required) { %> <button class="btn btn-sm btn-outline-secondary btn-modal-clear border-secondary-subtle" type="button"> <i class="bi bi-x"></i> </button> <% } %> <button class="btn btn-sm btn-outline-secondary btn-modal-select border-secondary-subtle" type="button"><%= lang.modal_select %></button> </div> <% } %>';
-tpl['fields/passwordRepeat.html'] = '<% if (field.readonly) { %> <%- value %> <% } else { %> <div class="d-flex gap-1 align-items-center"> <input <%- render.attr %>/> <small class="password-text-repeat"><%= lang.repeat %></small> <% if (field.showBtn) { %> <div class="input-group flex-nowrap"> <input <%- render.attr2 %>/> <button class="btn btn-sm btn-outline-secondary border-secondary-subtle btn-password-change" type="button" data-change="<%- lang.change %>" data-cancel="<%- lang.cancel %>"><%= btn_text %></button> </div> <% } else { %> <input <%- render.attr2 %>/> <% } %> </div> <% } %>';
-tpl['fields/radio.html'] = '<% if (field.readonly) { %> <%- render.selectedItem %> <% } else { %> <% $.each(render.options, function(key, option) { %> <div class="form-check<% if (field.inline) { %> form-check-inline<% } %>"> <input <%- option.attr %>/> <label class="form-check-label" for="<%= option.id %>"><%= option.text %></label> </div> <% }); %> <% } %>';
-tpl['fields/select.html'] = '<% if (field.readonly) { %> <%= render.selectedOptions.join(\', \') %> <% } else { %> <select <%- render.attr %>> <% $.each(render.options, function(key, option) { %> <% if (option.type === \'group\') { %> <optgroup<%- option.attr %>/> <% $.each(option.options, function(key, groupOption) { %> <option <%- groupOption.attr %>/><%= groupOption.text %></option> <% }); %> </optgroup> <% } else { %> <option <%- option.attr %>/><%= option.text %></option> <% } %> <% }); %> </select> <% } %>';
-tpl['fields/switch.html'] = '<% if (field.readonly) { %> <%= field.valueY == value ? lang.switch_yes : lang.switch_no %> <% } else { %> <div class="form-check form-switch"> <input <%- render.attr %>/> </div> <% } %>';
-tpl['fields/textarea.html'] = '<% if (field.readonly) { %> <%- value %> <% } else { %> <textarea <%- render.attr %>><%- value %></textarea> <% } %>';
-tpl['fields/wysiwyg.html'] = '<% if (field.readonly) { %> <%- value %> <% } else { %> <textarea name="<%= field.name %>" id="editor-<%= editorHash %>"><%- value %></textarea> <% } %>';
+tpl['fields/modal.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%= text %></div> <% } else { %> <div class="input-group"<% if (render.width) { %> style="width:<%= render.width %>"<% } %>> <input <%- render.attr %>/> <input type="hidden" name="<%= field.name %>" value="<%= value %>" class="coreui-form-modal-value"/> <% if ( ! field.required) { %> <button class="btn btn-outline-secondary btn-modal-clear border-secondary-subtle" type="button"> <i class="bi bi-x"></i> </button> <% } %> <button class="btn btn-outline-secondary btn-modal-select border-secondary-subtle" type="button"><%= lang.modal_select %></button> </div> <% } %>';
+tpl['fields/passwordRepeat.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%- value %></div> <% } else { %> <div class="d-flex gap-1 align-items-center"> <input <%- render.attr %>/> <% if (field.showBtn) { %> <div class="input-group flex-nowrap"> <input <%- render.attr2 %>/> <button class="btn btn-outline-secondary border-secondary-subtle btn-password-change" type="button" data-change="<%- lang.change %>" data-cancel="<%- lang.cancel %>"><%= btn_text %></button> </div> <% } else { %> <input <%- render.attr2 %>/> <% } %> </div> <% } %>';
+tpl['fields/radio.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%- render.selectedItem %></div> <% } else { %> <div class="pt-2"> <% $.each(render.options, function(key, option) { %> <div class="form-check<% if (field.inline) { %> form-check-inline<% } %>"> <input <%- option.attr %>/> <label class="form-check-label" for="<%= option.id %>"><%= option.text %></label> </div> <% }); %> </div> <% } %>';
+tpl['fields/select.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%= render.selectedOptions.join(\', \') %></div> <% } else { %> <select <%- render.attr %>> <% $.each(render.options, function(key, option) { %> <% if (option.type === \'group\') { %> <optgroup<%- option.attr %>/> <% $.each(option.options, function(key, groupOption) { %> <option <%- groupOption.attr %>/><%= groupOption.text %></option> <% }); %> </optgroup> <% } else { %> <option <%- option.attr %>/><%= option.text %></option> <% } %> <% }); %> </select> <% } %>';
+tpl['fields/switch.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%= field.valueY == value ? lang.switch_yes : lang.switch_no %></div> <% } else { %> <div class="form-check form-switch pt-2"> <input <%- render.attr %>/> </div> <% } %>';
+tpl['fields/textarea.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%- value %></div> <% } else { %> <textarea <%- render.attr %>><%- value %></textarea> <% } %>';
+tpl['fields/wysiwyg.html'] = '<% if (field.readonly) { %> <div class="coreui-form__field-readonly col-form-label"><%- value %></div> <% } else { %> <textarea name="<%= field.name %>" id="editor-<%= editorHash %>"><%- value %></textarea> <% } %>';
+tpl['controls/button.html'] = '<button <%- render.attr %>><%- control.content %></button>';
+tpl['controls/link.html'] = '<a href="<%- control.href %>"<%- render.attr %>><%- control.content %></a>';
 
 var coreuiFormUtils = {
   /**
@@ -6704,7 +6704,6 @@ coreuiForm$1.lang.ru = {
   "date_week": "неделя",
   "send_error": "Произошла ошибка. Попробуйте снова или обратитесь к администратору",
   "required_field": "Обязательное поле",
-  "repeat": "повторите",
   "change": "изменить",
   "cancel": "отмена"
 };
@@ -6719,7 +6718,6 @@ coreuiForm$1.lang.en = {
   "date_week": "week",
   "send_error": "An error has occurred. Please try again or contact your administrator",
   "required_field": "Required field",
-  "repeat": "repeat",
   "change": "change",
   "cancel": "cancel"
 };
@@ -6733,7 +6731,7 @@ coreuiForm$1.controls.button = {
     content: null,
     onClick: null,
     attr: {
-      "class": 'btn btn-sm btn-secondary'
+      "class": 'btn btn-secondary'
     }
   },
   /**
@@ -6876,7 +6874,7 @@ coreuiForm$1.controls.link = {
     content: null,
     onClick: null,
     attr: {
-      "class": 'btn btn-sm btn-link'
+      "class": 'btn btn-link'
     }
   },
   /**
@@ -6971,7 +6969,7 @@ coreuiForm$1.controls.submit = {
     onClick: null,
     show: true,
     attr: {
-      "class": 'btn btn-sm btn-primary'
+      "class": 'btn btn-primary'
     }
   },
   /**
@@ -7697,7 +7695,7 @@ coreuiForm$1.fields.dataset = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-select form-select-sm d-inline-block'
+      "class": 'form-select d-inline-block'
     },
     required: null,
     readonly: null,
@@ -7738,13 +7736,13 @@ coreuiForm$1.fields.dataset = {
           attributes.required = 'required';
         }
         if (type === 'select') {
-          attributes["class"] = attributes.hasOwnProperty('class') ? 'form-select form-select-sm ' + attributes["class"] : 'form-select form-select-sm';
+          attributes["class"] = attributes.hasOwnProperty('class') ? 'form-select ' + attributes["class"] : 'form-select';
         } else if (type === 'switch') {
           attributes["class"] = attributes.hasOwnProperty('class') ? 'form-check-input ' + attributes["class"] : 'form-check-input';
           attributes.type = 'checkbox';
           attributes.value = valueY;
         } else {
-          attributes["class"] = attributes.hasOwnProperty('class') ? 'form-control form-control-sm ' + attributes["class"] : 'form-control form-control-sm';
+          attributes["class"] = attributes.hasOwnProperty('class') ? 'form-control ' + attributes["class"] : 'form-control';
           attributes.type = type;
         }
         that._renderOptions.push({
@@ -8359,7 +8357,7 @@ coreuiForm$1.fields.input = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-control form-control-sm d-inline-block'
+      "class": 'form-control d-inline-block'
     },
     required: null,
     invalidText: null,
@@ -9188,7 +9186,7 @@ coreuiForm$1.fields.mask = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-control form-control-sm d-inline-block'
+      "class": 'form-control d-inline-block'
     },
     required: null,
     readonly: null,
@@ -9610,7 +9608,7 @@ coreuiForm$1.fields.modal = {
     var textAttr = {
       type: 'text',
       readonly: 'readonly',
-      "class": 'form-control form-control-sm coreui-form-modal-text',
+      "class": 'form-control coreui-form-modal-text',
       value: this._text !== null ? this._text : ''
     };
     if (fieldOptions.required) {
@@ -9729,7 +9727,7 @@ coreuiForm$1.fields.number = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-control form-control-sm d-inline-block',
+      "class": 'form-control d-inline-block',
       step: 'any'
     },
     required: null,
@@ -10452,7 +10450,7 @@ coreuiForm$1.fields.select = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-select form-select-sm d-inline-block'
+      "class": 'form-select d-inline-block'
     },
     required: null,
     readonly: null,
@@ -11027,7 +11025,7 @@ coreuiForm$1.fields.textarea = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-control form-control-sm d-inline-block'
+      "class": 'form-control d-inline-block'
     },
     required: null,
     readonly: null,
@@ -11451,7 +11449,7 @@ coreuiForm$1.fields.passwordRepeat = {
     attach: null,
     attr: {
       type: 'password',
-      "class": 'form-control form-control-sm d-inline-block flex-shrink-0'
+      "class": 'form-control d-inline-block flex-shrink-0'
     },
     required: null,
     invalidText: null,
@@ -11726,7 +11724,7 @@ coreuiForm$1.fields.file = {
     errorText: null,
     attach: null,
     attr: {
-      "class": 'form-control form-control-sm d-inline-block'
+      "class": 'form-control d-inline-block'
     },
     required: null,
     invalidText: null,
@@ -14184,7 +14182,7 @@ coreTpl['menu/loader.html'] = '<div id="loader"> <div role="progressbar" class="
 coreTpl['menu/main.html'] = '<header class="mdc-top-app-bar mdc-top-app-bar--fixed app-bar"> <div class="mdc-top-app-bar__row"> <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"> <button class="mdc-ripple-surface open-menu"><i class="fa-solid fa-bars"></i></button> <div class="header-title-container"> <span class="mdc-top-app-bar__title"></span> <span class="mdc-top-app-bar__subtitle"></span> </div> </section> <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar"></section> </div> </header> <aside class="menu-drawer"> <div class="menu-drawer__content"> <div class="menu-drawer__header"> <a class="module-home" href="#/"> <span class="fa-solid fa-house"></span> <h3 class="system-title"></h3> </a> </div> <ul class="menu-list level-1"></ul> </div> </aside> <div class="menu-drawer-scrim"></div> <div class="menu-drawer-swipe"></div> <div class="menu-drawer-app"> <main class="main-content"> <div class="main-wrapper"></div> </main> </div>';
 coreTpl['menu/module.html'] = '<li class="menu-list-item core-module core-module-<%= module.name %> <% if (module.sections && module.sections.length > 0) { %>menu-item-nested<% } %>"> <div class="item-control"> <a href="#/<%= module.name %>/<%= module.index %>" class="mdc-ripple-surface" data-module="<%= module.name %>" data-section="<%= module.index %>"> <% if (module.icon) { %> <i class="<%= module.icon %>"></i> <% } else { %> <span class="module-icon-letter"><%= module.title.trim().substring(0, 1) %></span> <% } %> <span class="menu-list-item__text"><%= module.title %></span> </a> <% if (module.sections && module.sections.length > 0) { %> <button class="menu-icon-button mdc-ripple-surface"><i class="fa-solid fa-sort-down"></i></button> <% } %> </div> <ul class="menu-list level-2"> <li class="menu-list-item core-module-section-index"> <a href="#/<%= module.name %>/<%= module.index %>" class="mdc-ripple-surface" data-module="<%= module.name %>" data-section="<%= module.index %>"> <%= module.title %> </a> </li> <% if (module.sections && module.sections.length > 0) { %> <% module.sections.forEach(function(section) { %> <li class="menu-list-item core-module-section core-module-<%= module.name %>-<%= section.name %>"> <a href="#/<%= module.name %>/<%= section.name %>" class="mdc-ripple-surface" data-module="<%= module.name %>" data-section="<%= section.name %>"> <span class="menu-list-item__text"><%= section.title %></span> </a> </li> <% }); %> <% } %> </ul> </li>';
 coreTpl['menu/navbar.html'] = '<ul class="navbar-nav"> <li class="nav-item dropdown cabinet-user"> <button class="btn btn-link text-dark dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown"> <% if (user.avatar) { %> <img src="<%= user.avatar %>" alt="avatar" class="rounded-circle" loading="lazy"/> <% } else { %> <i class="fa-solid fa-circle-user"></i> <% } %> </button> <ul class="dropdown-menu shadow"> <li class="cabinet-user-info"> <b class="cabinet-user-name"><%= user.name %></b><br> <span class="cabinet-user-login"><%= user.login %></span> </li> <li> <hr class="dropdown-divider"/> </li> <li> <a class="dropdown-item menu-logout" href="#"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти </a> </li> </ul> </li> </ul>';
-coreTpl['menu/preloader.html'] = '<div id="preloader"> <div class="loading-lock"></div> <div class="loading-block"> <div class="mdc-circular-progress" style="width:96px;height:48px;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1"> <div class="mdc-circular-progress__determinate-container"> <svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4"/> <circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097" stroke-width="4"/> </svg> </div> <div class="mdc-circular-progress__indeterminate-container"> <div class="mdc-circular-progress__spinner-layer"> <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left"> <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/> </svg> </div> <div class="mdc-circular-progress__gap-patch"> <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2"/> </svg> </div> <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"> <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/> </svg> </div> </div> </div> </div> <div class="loading-text"><%= text %></div> </div> </div>';
+coreTpl['menu/preloader.html'] = '<div id="preloader"> <div class="loading-lock"></div> <div class="loading-block"> <div class="mdc-circular-progress" style="width:26px;height:26px;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1"> <div class="mdc-circular-progress__determinate-container"> <svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4"/> <circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097" stroke-width="4"/> </svg> </div> <div class="mdc-circular-progress__indeterminate-container"> <div class="mdc-circular-progress__spinner-layer"> <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left"> <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/> </svg> </div> <div class="mdc-circular-progress__gap-patch"> <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2"/> </svg> </div> <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"> <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/> </svg> </div> </div> </div> </div> <div class="loading-text"><%= text %></div> </div> </div>';
 
 /*
  * JavaScript MD5
@@ -18201,7 +18199,7 @@ var coreMenu = {
 $(function () {
   coreMain.on('hashchange', function () {
     if ($('.page.page-menu')[0]) {
-      if (window.screen.width < 600) {
+      if (window.screen.width < 600 && $('.page.page-menu.drawer-toggle')[0]) {
         coreMenu._drawerToggle();
       }
       coreMenu.load('/mod' + location.hash.substring(1));

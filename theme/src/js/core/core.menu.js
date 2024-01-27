@@ -782,7 +782,7 @@ $(function () {
     coreMain.on('hashchange', function () {
 
         if ($('.page.page-menu')[0]) {
-            if (window.screen.width < 600) {
+            if (window.screen.width < 600 && $('.page.page-menu.drawer-toggle')[0]) {
                 coreMenu._drawerToggle();
             }
 
